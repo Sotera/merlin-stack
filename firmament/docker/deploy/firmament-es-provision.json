@@ -1,0 +1,89 @@
+{
+  "clusterPrefix"             : "merlin",
+  "dockerComposeYaml"         : {
+    "version" : "3.3",
+    "networks": {
+      "net": null
+    },
+    "services": {
+      "nginx"             : {
+        "image"   : "10.1.70.193:5000/nginx:1.13.8",
+        "deploy"  : {
+          "replicas"      : 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement"     : {
+            "constraints": [
+              "node.role == manager"
+            ]
+          }
+        },
+        "ports"   : [
+          "9200:9200"
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "elasticsearch"     : {
+        "image"  : "10.1.70.193:5000/elasticsearch:5.6.6",
+        "deploy" : {
+          "replicas"      : 3,
+          "endpoint_mode" : "dnsrr",
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement"     : {
+            "constraints": [
+              "node.role == manager"
+            ]
+          }
+        },
+        "networks": [
+          "net"
+        ],
+        "command": "elasticsearch -Enetwork.host=0.0.0.0 -Ediscovery.zen.ping.unicast.hosts=elasticsearch -Ediscovery.zen.minimum_master_nodes=1"
+      },
+      "elasticsearch-head": {
+        "image" : "10.1.70.193:5000/elasticsearch-head:5.x",
+        "deploy": {
+          "replicas"      : 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement"     : {
+            "constraints": [
+              "node.role == manager"
+            ]
+          }
+        },
+        "networks": [
+          "net"
+        ],
+        "ports" : [
+          "9100:9100"
+        ]
+      }
+    }
+  },
+  "workerHostCount"           : 0,
+  "dockerMachineWorkerOptions": {
+    "engineLabel": "role=worker"
+  },
+  "dockerMachineMasterOptions": {
+    "engineLabel": "role=master"
+  },
+  "dockerMachineDriverOptions": {
+    "driver"                 : "openstack",
+    "openstackUsername"      : "",
+    "openstackPassword"      : "",
+    "openstackAuthUrl"       : "http://10.1.70.100:5000/v2.0",
+    "openstackFlavorId"      : "d2ea7e52-5c57-4856-96c0-cab27c03e160",
+    "openstackImageId"       : "2a680ec7-fc97-4e9e-8b51-606907b9aa2b",
+    "openstackSecGroups"     : "All",
+    "openstackSshUser"       : "ubuntu",
+    "openstackFloatingipPool": "external-penet",
+    "openstackTenantName"    : "Newman"
+  }
+}

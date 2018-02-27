@@ -1,0 +1,49 @@
+version: "3.2"
+
+networks:
+  default:
+    external:
+      name: merlin_net
+services:
+  #HDFS and Spark Name Node Service
+  namenode:
+    image: 52.0.211.45:5000/merlin-hadoop-namenode
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - node.role == manager
+  #  volumes:
+  #    - $PWD/../share:/share
+    ports:
+      - "8088:8088"
+      - "50070:50070"
+      - "9000:9000"
+      - "8042:8042"
+      - "8020:8020"
+  #HDFS Data Nodes
+  datanode:
+    image: 52.0.211.45:5000/merlin-hadoop-base
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+  #Hadoop/spark workers on Yarn
+  sparkworker:
+    image: 52.0.211.45:5000/merlin-hadoop-base
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+    command: "/root/hadoop_entrypoint.sh -spark_worker"
+  #Hadoop/spark staging server
+  stagingserver:
+    image: 52.0.211.45:5000/merlin-hadoop-base
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+    command: "/root/hadoop_entrypoint.sh"
+

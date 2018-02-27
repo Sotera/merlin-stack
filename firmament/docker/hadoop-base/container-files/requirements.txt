@@ -1,0 +1,14 @@
+MySQL-python
+pymongo
+csv2es
+python-dateutil
+tangelo
+elasticsearch5
+elasticsearch_dsl
+xlrd
+pandas
+fuzzywuzzy
+python-Levenshtein
+bs4
+mysqlclient
+cherrypy
