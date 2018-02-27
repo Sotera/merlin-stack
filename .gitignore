@@ -1,2 +1,4 @@
-
+merlin-stack.iml
+*.jar
 \.idea/
+**/.DS_Store

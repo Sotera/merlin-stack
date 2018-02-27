@@ -15,13 +15,11 @@ services:
       placement:
         constraints:
           - node.role == manager
-  #  volumes:
-  #    - $PWD/../share:/share
     ports:
       - "8088:8088"
       - "50070:50070"
       - "9000:9000"
-      - "8042:8042"
+#      - "8042:8042"
       - "8020:8020"
   #HDFS Data Nodes
   datanode:
@@ -34,9 +32,14 @@ services:
   sparkworker:
     image: 52.0.211.45:5000/merlin-hadoop-base
     deploy:
-      replicas: 2
+      replicas: 1
       restart_policy:
         condition: on-failure
+    volumes:
+      - $PWD/merlin-etl_mount/share:/share
+      - $PWD/merlin-etl_mount/ingest:/ingest
+    ports:
+      - "8042:8042"
     command: "/root/hadoop_entrypoint.sh -spark_worker"
   #Hadoop/spark staging server
   stagingserver:
@@ -45,5 +48,8 @@ services:
       replicas: 2
       restart_policy:
         condition: on-failure
+    volumes:
+      - $PWD/merlin-etl_mount/share:/share
+      - $PWD/merlin-etl_mount/ingest:/ingest
     command: "/root/hadoop_entrypoint.sh"
 
