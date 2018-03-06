@@ -1,0 +1,114 @@
+{
+  "stackName":"merlin",
+  "clusterPrefix": "merlin",
+  "dockerComposeYaml": {
+    "version": "3.2",
+    "networks": {
+      "net": null
+    },
+    "services": {
+      "postgres": {
+        "image": "52.0.211.45:5000/postgres:9.5.10",
+        "environment": [
+          "POSTGRES_PASSWORD=password"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          }
+        },
+        "ports": [
+          "5432:5432"
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "amino3": {
+        "image": "52.0.211.45:5000/amino3:latest",
+        "environment": [
+          "NODE_ENV=production"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          }
+        },
+        "ports": [
+          "3000:3000"
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "elasticsearch": {
+        "image": "52.0.211.45:5000/elasticsearch:5.6.6",
+        "deploy": {
+          "replicas": 3,
+          "endpoint_mode": "dnsrr",
+          "restart_policy": {
+            "condition": "on-failure"
+          }
+        },
+        "networks": [
+          "net"
+        ]
+      },
+      "elasticsearch-head": {
+        "image": "52.0.211.45:5000/elasticsearch-head:5.x",
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          }
+        },
+        "ports": [
+          "9100:9100"
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "nginx": {
+        "image": "52.0.211.45:5000/nginx:1.13.8",
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          }
+        },
+        "ports": [
+          "9200:9200"
+        ],
+        "networks": [
+          "net"
+        ]
+      }
+    }
+  },
+  "workerHostCount": 1,
+  "dockerMachineWorkerOptions": {
+    "engineLabel": "role=worker"
+  },
+  "dockerMachineMasterOptions": {
+    "engineLabel": "role=master"
+  },
+  "dockerMachineDriverOptions": {
+    "driver": "virtualbox",
+    "virtualboxCpuCount": 2,
+    "virtualboxMemory": 8092,
+    "engineInsecureRegistry": "52.0.211.45:5000"
+  }
+}

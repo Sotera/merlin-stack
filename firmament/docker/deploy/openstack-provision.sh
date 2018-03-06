@@ -10,7 +10,7 @@ do
  esac
 done
 
-CLUSTER_PREFIX=merlin
+CLUSTER_PREFIX=volumetest
 SPOT_PRICE=0.067
 NUM_WORKER_HOSTS=1
 NUM_WORKERS=3
@@ -22,7 +22,7 @@ DRIVER_OPTIONS="\
 --openstack-password $PASSWORD \
 --openstack-auth-url http://10.1.70.100:5000/v2.0 \
 --openstack-flavor-id d2ea7e52-5c57-4856-96c0-cab27c03e160 \
---openstack-image-id f5f3f966-4a87-4b67-acdc-de347e76b0cf \
+--openstack-image-id 47159a88-91d8-486a-8f4f-6aa10b9b02d8 \
 --openstack-sec-groups All \
 --openstack-ssh-user ubuntu \
 --openstack-floatingip-pool external-penet \
@@ -61,5 +61,5 @@ eval $(docker-machine env $MASTER_MACHINE_NAME)
 
 docker-machine ls
 
-docker stack deploy -c merlin_openstack.yml merlin
-# docker stack deploy -c etl_os.yml etl
+docker stack deploy -c openstack-merlin.yml merlin
+docker stack deploy -c openstack-etl.yml etl

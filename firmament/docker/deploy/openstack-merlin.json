@@ -1,0 +1,153 @@
+{
+  "stackName": "merlin",
+  "clusterPrefix": "merlin",
+  "dockerComposeYaml": {
+    "version": "3.2",
+    "networks": {
+      "net": null
+    },
+    "services": {
+      "apache-stanbol": {
+        "image": "10.1.70.193:5000/apache-stanbol",
+        "environment": [
+          "JAVA_OPTS=-Xmx1g -XX:MaxPermSize=256m"
+        ],
+        "ports": [
+          "8080:8080"
+        ],
+        "deploy": {
+          "replicas": 2,
+          "restart_policy": {
+            "condition": "on-failure"
+          }
+        },
+        "networks": [
+          "net"
+        ]
+      },
+      "postgres": {
+        "image": "10.1.70.193:5000/postgres:9.5.10",
+        "environment": [
+          "POSTGRES_PASSWORD=password"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          }
+        },
+        "ports": [
+          "5432:5432"
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "amino3": {
+        "image": "10.1.70.193:5000/amino3:latest",
+        "environment": [
+          "NODE_ENV=production"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          }
+        },
+        "ports": [
+          "3000:3000"
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "elasticsearch": {
+        "image": "10.1.70.193:5000/elasticsearch:5.6.6",
+        "deploy": {
+          "replicas": 3,
+          "endpoint_mode": "dnsrr",
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == worker"
+            ]
+          }
+        },
+        "networks": [
+          "net"
+        ]
+      },
+      "elasticsearch-head": {
+        "image": "10.1.70.193:5000/elasticsearch-head:5.x",
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == worker"
+            ]
+          }
+        },
+        "ports": [
+          "9100:9100"
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "nginx": {
+        "image": "10.1.70.193:5000/nginx:1.13.8",
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == worker"
+            ]
+          }
+        },
+        "ports": [
+          "9200:9200"
+        ],
+        "networks": [
+          "net"
+        ]
+      }
+    }
+  },
+  "workerHostCount": 1,
+  "dockerMachineWorkerOptions": {
+    "engineLabel": "role=worker"
+  },
+  "dockerMachineMasterOptions": {
+    "engineLabel": "role=master"
+  },
+  "dockerMachineDriverOptions": {
+    "driver": "openstack",
+    "openstackUsername": "",
+    "openstackPassword": "",
+    "openstackAuthUrl": "http://10.1.70.100:5000/v2.0",
+    "openstackFlavorId": "d2ea7e52-5c57-4856-96c0-cab27c03e160",
+    "openstackImageId": "2a680ec7-fc97-4e9e-8b51-606907b9aa2b",
+    "openstackSecGroups": "All",
+    "openstackSshUser": "ubuntu",
+    "openstackFloatingipPool": "external-penet",
+    "openstackTenantName": "Newman"
+  }
+}
