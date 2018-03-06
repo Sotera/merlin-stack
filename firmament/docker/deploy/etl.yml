@@ -36,8 +36,8 @@ services:
       restart_policy:
         condition: on-failure
     volumes:
-      - $PWD/merlin-etl_mount/share:/share
-      - $PWD/merlin-etl_mount/ingest:/ingest
+      - $PWD/merlin-etl_mount/data:/data
+      - $PWD/merlin-etl_mount:/merlin-etl
     ports:
       - "8042:8042"
     command: "/root/hadoop_entrypoint.sh -spark_worker"
@@ -45,11 +45,11 @@ services:
   stagingserver:
     image: 52.0.211.45:5000/merlin-hadoop-base:dev
     deploy:
-      replicas: 2
+      replicas: 1
       restart_policy:
         condition: on-failure
     volumes:
-      - $PWD/merlin-etl_mount/share:/share
-      - $PWD/merlin-etl_mount/ingest:/ingest
+      - $PWD/merlin-etl_mount/data:/data
+      - $PWD/merlin-etl_mount:/merlin-etl
     command: "/root/hadoop_entrypoint.sh"
 
