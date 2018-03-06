@@ -4,6 +4,15 @@ networks:
   default:
     external:
       name: merlin_net
+
+volumes:
+  datavolume:
+    driver: local
+    driver_opts:
+      type: cifs
+      device: //10.1.70.252/merlin
+      o: username=,password=
+
 services:
   #HDFS and Spark Name Node Service
   namenode:
@@ -17,6 +26,8 @@ services:
           - node.role == manager
   #  volumes:
   #    - $PWD/../share:/share
+    volumes:
+      - datavolume:/mnt/merlin
     ports:
       - "8088:8088"
       - "50070:50070"
@@ -38,6 +49,8 @@ services:
       replicas: 2
       restart_policy:
         condition: on-failure
+    volumes:
+          - datavolume:/mnt/merlin
     command: "/root/hadoop_entrypoint.sh -spark_worker"
   #Hadoop/spark staging server
   stagingserver:
@@ -46,4 +59,6 @@ services:
       replicas: 1
       restart_policy:
         condition: on-failure
+    volumes:
+          - datavolume:/mnt/merlin
     command: "/root/hadoop_entrypoint.sh"

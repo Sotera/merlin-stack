@@ -2,18 +2,6 @@ version: "3.2"
 networks:
   net:
 services:
-  apache-stanbol:
-      image: 10.1.70.193:5000/apache-stanbol
-      environment:
-        - JAVA_OPTS=-Xmx1g -XX:MaxPermSize=256m
-      ports:
-        - "8080:8080"
-      deploy:
-        replicas: 2
-        restart_policy:
-          condition: on-failure
-      networks:
-        - net
   postgres:
       image: 10.1.70.193:5000/postgres:9.5.10
       environment:
@@ -30,7 +18,7 @@ services:
       networks:
         - net
   amino3:
-    image: 10.1.70.193:5000/amino3:latest
+    image: 10.1.70.193:5000/amino3:1.1-etl
     environment:
       - NODE_ENV=production
     deploy:
