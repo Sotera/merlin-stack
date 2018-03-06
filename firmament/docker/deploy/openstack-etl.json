@@ -1,5 +1,5 @@
 {
-  "stackName": "merlin",
+  "stackName": "etl",
   "clusterPrefix": "merlin",
   "dockerComposeYaml": {
     "version": "3.2",
