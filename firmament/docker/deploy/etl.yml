@@ -36,7 +36,6 @@ services:
       restart_policy:
         condition: on-failure
     volumes:
-      - $PWD/merlin-etl_mount/data:/data
       - $PWD/merlin-etl_mount:/merlin-etl
     ports:
       - "8042:8042"
@@ -49,7 +48,6 @@ services:
       restart_policy:
         condition: on-failure
     volumes:
-      - $PWD/merlin-etl_mount/data:/data
       - $PWD/merlin-etl_mount:/merlin-etl
     command: "/root/hadoop_entrypoint.sh"
 
