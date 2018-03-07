@@ -2,3 +2,5 @@ merlin-stack.iml
 *.jar
 \.idea/
 **/.DS_Store
+firmament/docker/deploy/merlin-amino3_mount
+firmament/docker/deploy/merlin-etl_mount
