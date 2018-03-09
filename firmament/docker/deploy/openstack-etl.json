@@ -57,7 +57,7 @@
       "sparkworker": {
         "image": "10.1.70.193:5000/merlin-hadoop-base",
         "deploy": {
-          "replicas": 2,
+          "replicas": 8,
           "restart_policy": {
             "condition": "on-failure"
           }

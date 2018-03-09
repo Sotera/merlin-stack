@@ -3,6 +3,7 @@ pymongo
 csv2es
 python-dateutil
 tangelo
+elasticsearch
 elasticsearch5
 elasticsearch_dsl
 xlrd
