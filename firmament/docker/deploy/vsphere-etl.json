@@ -1,0 +1,83 @@
+{
+  "stackName": "etl",
+  "clusterPrefix": "merlin",
+  "dockerComposeYaml": {
+    "version": "3.2",
+    "networks": {
+      "default": {
+        "external": {
+          "name": "merlin_net"
+        }
+      }
+    },
+    "services": {
+      "namenode": {
+        "image": "52.0.211.45:5000/merlin-hadoop-namenode",
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          }
+        },
+        "ports": [
+          "8088:8088",
+          "50070:50070",
+          "9000:9000",
+          "8042:8042",
+          "8020:8020"
+        ]
+      },
+      "datanode": {
+        "image": "52.0.211.45:5000/merlin-hadoop-base",
+        "deploy": {
+          "replicas": 2,
+          "restart_policy": {
+            "condition": "on-failure"
+          }
+        }
+      },
+      "sparkworker": {
+        "image": "52.0.211.45:5000/merlin-hadoop-base",
+        "deploy": {
+          "replicas": 5,
+          "restart_policy": {
+            "condition": "on-failure"
+          }
+        },
+        "command": "/root/hadoop_entrypoint.sh -spark_worker"
+      },
+      "stagingserver": {
+        "image": "52.0.211.45:5000/merlin-hadoop-base",
+        "deploy": {
+          "replicas": 2,
+          "restart_policy": {
+            "condition": "on-failure"
+          }
+        },
+        "command": "/root/hadoop_entrypoint.sh"
+      }
+    }
+  },
+  "workerHostCount": 1,
+  "dockerMachineWorkerOptions": {
+    "engineLabel": "role=worker"
+  },
+  "dockerMachineMasterOptions": {
+    "engineLabel": "role=master"
+  },
+  "dockerMachineDriverOptions": {
+    "engineInsecureRegistry": "52.0.211.45:5000",
+    "driver": "vmwarevsphere",
+    "vmwarevsphereUsername": "",
+    "vmwarevspherePassword": "",
+    "vmwarevsphereCpuCount": 2,
+    "vmwarevsphereDiskSize": 40000,
+    "vmwarevsphereMemorySize": 4096,
+    "vmwarevsphereVcenter": "192.168.96.200"
+  }
+}
