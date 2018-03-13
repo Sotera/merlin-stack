@@ -1,12 +1,22 @@
 {
   "stackName": "etl",
-  "clusterPrefix": "merlin",
+  "clusterPrefix": "merlin2",
   "dockerComposeYaml": {
     "version": "3.2",
     "networks": {
       "default": {
         "external": {
           "name": "merlin_net"
+        }
+      }
+    },
+    "volumes": {
+      "datavolume": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "cifs",
+          "device": "//192.168.104.74/share/merlin",
+          "o": "username=root,password=Stormcloud!"
         }
       }
     },
@@ -24,6 +34,9 @@
             ]
           }
         },
+        "volumes": [
+          "datavolume:/mnt/merlin"
+        ],
         "ports": [
           "8088:8088",
           "50070:50070",
@@ -39,7 +52,10 @@
           "restart_policy": {
             "condition": "on-failure"
           }
-        }
+        },
+        "volumes": [
+          "datavolume:/mnt/merlin"
+        ]
       },
       "sparkworker": {
         "image": "52.0.211.45:5000/merlin-hadoop-base",
@@ -49,6 +65,9 @@
             "condition": "on-failure"
           }
         },
+        "volumes": [
+          "datavolume:/mnt/merlin"
+        ],
         "command": "/root/hadoop_entrypoint.sh -spark_worker"
       },
       "stagingserver": {
@@ -59,6 +78,9 @@
             "condition": "on-failure"
           }
         },
+        "volumes": [
+          "datavolume:/mnt/merlin"
+        ],
         "command": "/root/hadoop_entrypoint.sh"
       }
     }
