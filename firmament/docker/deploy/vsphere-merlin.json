@@ -1,6 +1,6 @@
 {
   "stackName": "merlin",
-  "clusterPrefix": "merlin2",
+  "clusterPrefix": "merlin",
   "dockerComposeYaml": {
     "version": "3.2",
     "networks": {
@@ -31,7 +31,7 @@
         ]
       },
       "amino3": {
-        "image": "52.0.211.45:5000/amino3:1.1-etl",
+        "image": "52.0.211.45:5000/amino3:latest",
         "environment": [
           "NODE_ENV=production"
         ],
