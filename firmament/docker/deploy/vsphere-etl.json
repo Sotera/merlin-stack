@@ -16,7 +16,7 @@
         "driver_opts": {
           "type": "cifs",
           "device": "//192.168.104.74/share/merlin",
-          "o": "username=,password="
+          "o": "username=guest,password="
         }
       }
     },
