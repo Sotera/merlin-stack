@@ -1,6 +1,6 @@
 {
   "stackName": "merlin",
-  "clusterPrefix": "merlin2",
+  "clusterPrefix": "merlin",
   "dockerComposeYaml": {
     "version": "3.2",
     "networks": {
@@ -112,7 +112,7 @@
     "vmwarevspherePassword": "",
     "vmwarevsphereCpuCount": 2,
     "vmwarevsphereDiskSize": 40000,
-    "vmwarevsphereMemorySize": 4096,
+    "vmwarevsphereMemorySize": 32768,
     "vmwarevsphereVcenter": "192.168.96.200"
   }
 }

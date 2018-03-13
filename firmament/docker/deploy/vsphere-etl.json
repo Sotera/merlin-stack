@@ -1,6 +1,6 @@
 {
   "stackName": "etl",
-  "clusterPrefix": "merlin2",
+  "clusterPrefix": "merlin",
   "dockerComposeYaml": {
     "version": "3.2",
     "networks": {
@@ -16,7 +16,7 @@
         "driver_opts": {
           "type": "cifs",
           "device": "//192.168.104.74/share/merlin",
-          "o": "username=,password="
+          "o": "username=guest,password="
         }
       }
     },
@@ -99,7 +99,7 @@
     "vmwarevspherePassword": "",
     "vmwarevsphereCpuCount": 2,
     "vmwarevsphereDiskSize": 40000,
-    "vmwarevsphereMemorySize": 4096,
+    "vmwarevsphereMemorySize": 32768,
     "vmwarevsphereVcenter": "192.168.96.200"
   }
 }
