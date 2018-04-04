@@ -10,6 +10,16 @@
         }
       }
     },
+    "volumes": {
+      "datavolume": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "cifs",
+          "device": "//192.168.104.74/share/merlin",
+          "o": "username=guest,password="
+        }
+      }
+    },
     "configs": {
       "core-site": {
         "file": "./configs/core-site.xml"
