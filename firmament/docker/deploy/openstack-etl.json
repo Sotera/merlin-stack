@@ -20,9 +20,67 @@
         }
       }
     },
+    "configs": {
+      "core-site": {
+        "file": "./configs/core-site.xml"
+      },
+      "hdfs-site": {
+        "file": "./configs/hdfs-site.xml"
+      },
+      "hive-site": {
+        "file": "./configs/hive-site.xml"
+      },
+      "mapred-site": {
+        "file": "./configs/mapred-site.xml"
+      },
+      "spark-defaults": {
+        "file": "./configs/spark-defaults.conf"
+      },
+      "yarn-site": {
+        "file": "./configs/yarn-site.xml"
+      }
+    },
     "services": {
       "namenode": {
         "image": "10.1.70.193:5000/merlin-hadoop-namenode",
+        "configs": [
+          {
+            "source": "hive-site",
+            "target": "/usr/local/hive/conf/hive-site.xml"
+          },
+          {
+            "source": "hive-site",
+            "target": "/usr/local/spark/conf/hive-site.xml"
+          },
+          {
+            "source": "mapred-site",
+            "target": "/usr/local/spark/conf/mapred-site.xml"
+          },
+          {
+            "source": "spark-defaults",
+            "target": "/usr/local/spark/conf/spark-defaults.conf"
+          },
+          {
+            "source": "yarn-site",
+            "target": "/usr/local/spark/conf/yarn-site.xml"
+          },
+          {
+            "source": "core-site",
+            "target": "/usr/local/hadoop/conf/core-site.xml"
+          },
+          {
+            "source": "hdfs-site",
+            "target": "/usr/local/hadoop/conf/hdfs-site.xml"
+          },
+          {
+            "source": "mapred-site",
+            "target": "/usr/local/hadoop/conf/mapred-site.xml"
+          },
+          {
+            "source": "yarn-site",
+            "target": "/usr/local/hadoop/conf/yarn-site.xml"
+          }
+        ],
         "deploy": {
           "replicas": 1,
           "restart_policy": {
@@ -56,6 +114,44 @@
       },
       "sparkworker": {
         "image": "10.1.70.193:5000/merlin-hadoop-base",
+        "configs": [
+          {
+            "source": "hive-site",
+            "target": "/usr/local/hive/conf/hive-site.xml"
+          },
+          {
+            "source": "hive-site",
+            "target": "/usr/local/spark/conf/hive-site.xml"
+          },
+          {
+            "source": "mapred-site",
+            "target": "/usr/local/spark/conf/mapred-site.xml"
+          },
+          {
+            "source": "spark-defaults",
+            "target": "/usr/local/spark/conf/spark-defaults.conf"
+          },
+          {
+            "source": "yarn-site",
+            "target": "/usr/local/spark/conf/yarn-site.xml"
+          },
+          {
+            "source": "core-site",
+            "target": "/usr/local/hadoop/conf/core-site.xml"
+          },
+          {
+            "source": "hdfs-site",
+            "target": "/usr/local/hadoop/conf/hdfs-site.xml"
+          },
+          {
+            "source": "mapred-site",
+            "target": "/usr/local/hadoop/conf/mapred-site.xml"
+          },
+          {
+            "source": "yarn-site",
+            "target": "/usr/local/hadoop/conf/yarn-site.xml"
+          }
+        ],
         "deploy": {
           "replicas": 8,
           "restart_policy": {
@@ -69,6 +165,44 @@
       },
       "stagingserver": {
         "image": "10.1.70.193:5000/merlin-hadoop-base",
+        "configs": [
+          {
+            "source": "hive-site",
+            "target": "/usr/local/hive/conf/hive-site.xml"
+          },
+          {
+            "source": "hive-site",
+            "target": "/usr/local/spark/conf/hive-site.xml"
+          },
+          {
+            "source": "mapred-site",
+            "target": "/usr/local/spark/conf/mapred-site.xml"
+          },
+          {
+            "source": "spark-defaults",
+            "target": "/usr/local/spark/conf/spark-defaults.conf"
+          },
+          {
+            "source": "yarn-site",
+            "target": "/usr/local/spark/conf/yarn-site.xml"
+          },
+          {
+            "source": "core-site",
+            "target": "/usr/local/hadoop/conf/core-site.xml"
+          },
+          {
+            "source": "hdfs-site",
+            "target": "/usr/local/hadoop/conf/hdfs-site.xml"
+          },
+          {
+            "source": "mapred-site",
+            "target": "/usr/local/hadoop/conf/mapred-site.xml"
+          },
+          {
+            "source": "yarn-site",
+            "target": "/usr/local/hadoop/conf/yarn-site.xml"
+          }
+        ],
         "deploy": {
           "replicas": 1,
           "restart_policy": {
