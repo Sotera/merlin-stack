@@ -17,3 +17,5 @@ done
 mkdir -p /logs
 chmod -R 777 /logs
 smbd --foreground --log-stdout
+
+while true; do sleep 60; done
