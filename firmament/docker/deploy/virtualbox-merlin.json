@@ -7,6 +7,29 @@
       "net": null
     },
     "services": {
+      "portainer": {
+        "image": "52.0.211.45:5000/portainer:1.16.2",
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          }
+        },
+        "volumes":[
+          "/var/run/docker.sock:/var/run/docker.sock"
+        ],
+        "ports": [
+          "9000:9000"
+        ],
+        "networks": [
+          "net"
+        ]
+      },
       "postgres": {
         "image": "52.0.211.45:5000/postgres:9.5.10",
         "environment": [
@@ -98,7 +121,7 @@
       }
     }
   },
-  "workerHostCount": 1,
+  "workerHostCount": 2,
   "dockerMachineWorkerOptions": {
     "engineLabel": "role=worker"
   },
