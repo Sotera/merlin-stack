@@ -5,12 +5,15 @@
 
 for i in yarn hdfs hadoop zoo zookeeper spark root
 do
-   adduser -s /sbin/nologin -h /home/samba -H -D ${i}
+   if [ "${i}" != "root" ]; then
+	   adduser -s /sbin/nologin -h /home/samba -H -D ${i}
+   fi
    smbpasswd -a $i<<EOF
 $i
 $i
 EOF
 done
 
+mkdir -p /logs
 chmod -R 777 /logs
 smbd --foreground --log-stdout

@@ -22,9 +22,9 @@ EXPOSE 445/tcp
 
 
 # script to perform our user management
-COPY run.sh /
+COPY samba4_run.sh /
 
-#RUN /run.sh
-#CMD ["/run.sh"]
+#RUN /samba4_run.sh
+#CMD ["/samba4_run.sh"]
 #ENTRYPOINT ["smbd", "--foreground", "--log-stdout"]
-ENTRYPOINT [ "/run.sh" ]
+ENTRYPOINT [ "/samba4_run.sh" ]
