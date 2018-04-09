@@ -2,7 +2,7 @@
   "stackName":"merlin",
   "clusterPrefix": "merlin",
   "dockerComposeYaml": {
-    "version": "3.2",
+    "version": "3.3",
     "networks": {
       "net": null
     },
@@ -24,7 +24,7 @@
           "/var/run/docker.sock:/var/run/docker.sock"
         ],
         "ports": [
-          "9000:9000"
+          "9001:9000"
         ],
         "networks": [
           "net"
@@ -121,7 +121,7 @@
       }
     }
   },
-  "workerHostCount": 2,
+  "workerHostCount": 1,
   "dockerMachineWorkerOptions": {
     "engineLabel": "role=worker"
   },

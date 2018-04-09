@@ -2,7 +2,7 @@
   "stackName": "etl",
   "clusterPrefix": "merlin",
   "dockerComposeYaml": {
-    "version": "3.3",
+    "version": "3.4",
     "networks": {
       "default": {
         "external": {
@@ -14,9 +14,9 @@
       "datavolume": {
         "driver": "local",
         "driver_opts": {
-          "type": "cifs",
-          "device": "//192.168.104.74/share/merlin",
-          "o": "username=guest,password="
+          "type": "nfs",
+          "device": ":/mnt/datastore/share/merlin",
+          "o": "rw,addr=192.168.104.74,proto=tcp,async,soft,nolock"
         }
       }
     },
@@ -38,13 +38,24 @@
       },
       "yarn-site": {
         "file": "./configs/yarn-site.xml"
+      },
+      "yarn-env": {
+        "file": "./configs/yarn-env.sh"
       }
     },
     "services": {
       "namenode": {
         "image": "52.0.211.45:5000/merlin-hadoop-namenode",
         "volumes": [
-          "datavolume:/mnt/merlin"
+          {
+            "type": "volume",
+            "source": "datavolume",
+            "target": "/mnt/merlin",
+            "volume":{
+              "nocopy":true
+            }
+
+          }
         ],
         "deploy": {
           "replicas": 1,
@@ -93,6 +104,11 @@
           {
             "source": "yarn-site",
             "target": "/usr/local/hadoop/conf/yarn-site.xml"
+          },
+          {
+            "source": "yarn-env",
+            "target": "/usr/local/hadoop/etc/hadoop/yarn-env.sh",
+            "mode": 777
           }
         ],
         "ports": [
@@ -106,7 +122,15 @@
       "datanode": {
         "image": "52.0.211.45:5000/merlin-hadoop-base",
         "volumes": [
-          "datavolume:/mnt/merlin"
+          {
+            "type": "volume",
+            "source": "datavolume",
+            "target": "/mnt/merlin",
+            "volume":{
+              "nocopy":true
+            }
+
+          }
         ],
         "configs": [
           {
@@ -144,6 +168,11 @@
           {
             "source": "yarn-site",
             "target": "/usr/local/hadoop/conf/yarn-site.xml"
+          },
+          {
+            "source": "yarn-env",
+            "target": "/usr/local/hadoop/etc/hadoop/yarn-env.sh",
+            "mode": 777
           }
         ],
         "deploy": {
@@ -156,7 +185,15 @@
       "sparkworker": {
         "image": "52.0.211.45:5000/merlin-hadoop-base",
         "volumes": [
-          "datavolume:/mnt/merlin"
+          {
+            "type": "volume",
+            "source": "datavolume",
+            "target": "/mnt/merlin",
+            "volume":{
+              "nocopy":true
+            }
+
+          }
         ],
         "configs": [
           {
@@ -194,6 +231,11 @@
           {
             "source": "yarn-site",
             "target": "/usr/local/hadoop/conf/yarn-site.xml"
+          },
+          {
+            "source": "yarn-env",
+            "target": "/usr/local/hadoop/etc/hadoop/yarn-env.sh",
+            "mode": 777
           }
         ],
         "deploy": {
@@ -207,7 +249,15 @@
       "stagingserver": {
         "image": "52.0.211.45:5000/merlin-hadoop-base",
         "volumes": [
-          "datavolume:/mnt/merlin"
+          {
+            "type": "volume",
+            "source": "datavolume",
+            "target": "/mnt/merlin",
+            "volume":{
+              "nocopy":true
+            }
+
+          }
         ],
         "configs": [
           {
@@ -245,6 +295,11 @@
           {
             "source": "yarn-site",
             "target": "/usr/local/hadoop/conf/yarn-site.xml"
+          },
+          {
+            "source": "yarn-env",
+            "target": "/usr/local/hadoop/etc/hadoop/yarn-env.sh",
+            "mode": 777
           }
         ],
         "deploy": {
