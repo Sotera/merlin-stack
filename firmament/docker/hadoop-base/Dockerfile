@@ -16,7 +16,7 @@ COPY Dockerfile /root/merlin-hadoop-base-Dockerfile
 #
 ################################
 RUN apt-get update && apt-get install -y \
-    python-pip python-dev libmysqlclient-dev libpst-dev screen
+    python-pip python-dev libmysqlclient-dev libpst-dev screen readpst
 RUN pip install --upgrade pip
 COPY ./container-files/requirements.txt requirements.txt
 RUN pip install -r requirements.txt
