@@ -2,7 +2,7 @@
   "stackName": "etl",
   "clusterPrefix": "merlin",
   "dockerComposeYaml": {
-    "version": "3.2",
+    "version": "3.3",
     "networks": {
       "default": {
         "external": {
