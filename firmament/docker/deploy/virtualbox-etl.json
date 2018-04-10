@@ -14,8 +14,16 @@
       "datavolume": {
         "driver": "local",
         "driver_opts": {
+          "type": "cifs",
+          "device": "//192.168.104.74/share/merlin",
+          "o": "username=guest,password="
+        }
+      },
+      "logvolume": {
+        "driver": "local",
+        "driver_opts": {
           "type": "nfs",
-          "device": ":/mnt/datastore/share/merlin",
+          "device": ":/mnt/datastore/merlin_logs",
           "o": "rw,addr=192.168.104.74,proto=tcp,async,soft,nolock"
         }
       }
@@ -51,6 +59,15 @@
             "type": "volume",
             "source": "datavolume",
             "target": "/mnt/merlin",
+            "volume":{
+              "nocopy":true
+            }
+
+          },
+          {
+            "type": "volume",
+            "source": "logvolume",
+            "target": "/mnt/logs",
             "volume":{
               "nocopy":true
             }
@@ -103,6 +120,10 @@
           },
           {
             "source": "yarn-site",
+            "target": "/usr/local/hadoop/etc/hadoop/yarn-site.xml"
+          },
+          {
+            "source": "yarn-site",
             "target": "/usr/local/hadoop/conf/yarn-site.xml"
           },
           {
@@ -126,6 +147,15 @@
             "type": "volume",
             "source": "datavolume",
             "target": "/mnt/merlin",
+            "volume":{
+              "nocopy":true
+            }
+
+          },
+          {
+            "type": "volume",
+            "source": "logvolume",
+            "target": "/mnt/logs",
             "volume":{
               "nocopy":true
             }
@@ -164,6 +194,10 @@
           {
             "source": "mapred-site",
             "target": "/usr/local/hadoop/conf/mapred-site.xml"
+          },
+          {
+            "source": "yarn-site",
+            "target": "/usr/local/hadoop/etc/hadoop/yarn-site.xml"
           },
           {
             "source": "yarn-site",
@@ -193,66 +227,11 @@
               "nocopy":true
             }
 
-          }
-        ],
-        "configs": [
-          {
-            "source": "hive-site",
-            "target": "/usr/local/hive/conf/hive-site.xml"
           },
-          {
-            "source": "hive-site",
-            "target": "/usr/local/spark/conf/hive-site.xml"
-          },
-          {
-            "source": "mapred-site",
-            "target": "/usr/local/spark/conf/mapred-site.xml"
-          },
-          {
-            "source": "spark-defaults",
-            "target": "/usr/local/spark/conf/spark-defaults.conf"
-          },
-          {
-            "source": "yarn-site",
-            "target": "/usr/local/spark/conf/yarn-site.xml"
-          },
-          {
-            "source": "core-site",
-            "target": "/usr/local/hadoop/conf/core-site.xml"
-          },
-          {
-            "source": "hdfs-site",
-            "target": "/usr/local/hadoop/conf/hdfs-site.xml"
-          },
-          {
-            "source": "mapred-site",
-            "target": "/usr/local/hadoop/conf/mapred-site.xml"
-          },
-          {
-            "source": "yarn-site",
-            "target": "/usr/local/hadoop/conf/yarn-site.xml"
-          },
-          {
-            "source": "yarn-env",
-            "target": "/usr/local/hadoop/etc/hadoop/yarn-env.sh",
-            "mode": 777
-          }
-        ],
-        "deploy": {
-          "replicas": 2,
-          "restart_policy": {
-            "condition": "on-failure"
-          }
-        },
-        "command": "/root/hadoop_entrypoint.sh -spark_worker"
-      },
-      "stagingserver": {
-        "image": "52.0.211.45:5000/merlin-hadoop-base",
-        "volumes": [
           {
             "type": "volume",
-            "source": "datavolume",
-            "target": "/mnt/merlin",
+            "source": "logvolume",
+            "target": "/mnt/logs",
             "volume":{
               "nocopy":true
             }
@@ -297,6 +276,87 @@
             "target": "/usr/local/hadoop/conf/yarn-site.xml"
           },
           {
+            "source": "yarn-site",
+            "target": "/usr/local/hadoop/etc/hadoop/yarn-site.xml"
+          },
+          {
+            "source": "yarn-env",
+            "target": "/usr/local/hadoop/etc/hadoop/yarn-env.sh",
+            "mode": 777
+          }
+        ],
+        "deploy": {
+          "replicas": 2,
+          "restart_policy": {
+            "condition": "on-failure"
+          }
+        },
+        "command": "/root/hadoop_entrypoint.sh -spark_worker"
+      },
+      "stagingserver": {
+        "image": "52.0.211.45:5000/merlin-hadoop-base",
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "datavolume",
+            "target": "/mnt/merlin",
+            "volume":{
+              "nocopy":true
+            }
+
+          },
+          {
+            "type": "volume",
+            "source": "logvolume",
+            "target": "/mnt/logs",
+            "volume":{
+              "nocopy":true
+            }
+
+          }
+        ],
+        "configs": [
+          {
+            "source": "hive-site",
+            "target": "/usr/local/hive/conf/hive-site.xml"
+          },
+          {
+            "source": "hive-site",
+            "target": "/usr/local/spark/conf/hive-site.xml"
+          },
+          {
+            "source": "mapred-site",
+            "target": "/usr/local/spark/conf/mapred-site.xml"
+          },
+          {
+            "source": "spark-defaults",
+            "target": "/usr/local/spark/conf/spark-defaults.conf"
+          },
+          {
+            "source": "yarn-site",
+            "target": "/usr/local/spark/conf/yarn-site.xml"
+          },
+          {
+            "source": "core-site",
+            "target": "/usr/local/hadoop/conf/core-site.xml"
+          },
+          {
+            "source": "hdfs-site",
+            "target": "/usr/local/hadoop/conf/hdfs-site.xml"
+          },
+          {
+            "source": "mapred-site",
+            "target": "/usr/local/hadoop/conf/mapred-site.xml"
+          },
+          {
+            "source": "yarn-site",
+            "target": "/usr/local/hadoop/conf/yarn-site.xml"
+          },
+          {
+            "source": "yarn-site",
+            "target": "/usr/local/hadoop/etc/hadoop/yarn-site.xml"
+          },
+          {
             "source": "yarn-env",
             "target": "/usr/local/hadoop/etc/hadoop/yarn-env.sh",
             "mode": 777
@@ -312,7 +372,7 @@
       }
     }
   },
-  "workerHostCount": 1,
+  "workerHostCount": 0,
   "dockerMachineWorkerOptions": {
     "engineLabel": "role=worker"
   },

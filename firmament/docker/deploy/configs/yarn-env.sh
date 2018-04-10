@@ -90,7 +90,7 @@ IFS=
 
 # default log directory & file
 if [ "$YARN_LOG_DIR" = "" ]; then
-  YARN_LOG_DIR="/mnt/merlin/yarn"
+  YARN_LOG_DIR="/mnt/logs"
 fi
 if [ "$YARN_LOGFILE" = "" ]; then
   YARN_LOGFILE='yarn.log'

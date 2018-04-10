@@ -121,7 +121,7 @@
       }
     }
   },
-  "workerHostCount": 1,
+  "workerHostCount": 0,
   "dockerMachineWorkerOptions": {
     "engineLabel": "role=worker"
   },
@@ -131,7 +131,7 @@
   "dockerMachineDriverOptions": {
     "driver": "virtualbox",
     "virtualboxCpuCount": 2,
-    "virtualboxMemory": 8092,
+    "virtualboxMemory": 32768,
     "engineInsecureRegistry": "52.0.211.45:5000"
   }
 }

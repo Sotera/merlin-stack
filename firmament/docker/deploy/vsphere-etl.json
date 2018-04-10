@@ -18,6 +18,14 @@
           "device": "//192.168.104.74/share/merlin",
           "o": "username=guest,password="
         }
+      },
+      "logvolume": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/mnt/datastore/merlin_logs",
+          "o": "rw,addr=192.168.104.74,proto=tcp,async,soft,nolock"
+        }
       }
     },
     "configs": {
@@ -38,6 +46,9 @@
       },
       "yarn-site": {
         "file": "./configs/yarn-site.xml"
+      },
+      "yarn-env": {
+        "file": "./configs/yarn-env.sh"
       }
     },
     "services": {
@@ -78,7 +89,16 @@
           },
           {
             "source": "yarn-site",
+            "target": "/usr/local/hadoop/etc/hadoop/yarn-site.xml"
+          },
+          {
+            "source": "yarn-site",
             "target": "/usr/local/hadoop/conf/yarn-site.xml"
+          },
+          {
+            "source": "yarn-env",
+            "target": "/usr/local/hadoop/etc/hadoop/yarn-env.sh",
+            "mode": 777
           }
         ],
         "deploy": {
@@ -93,7 +113,24 @@
           }
         },
         "volumes": [
-          "datavolume:/mnt/merlin"
+          {
+            "type": "volume",
+            "source": "datavolume",
+            "target": "/mnt/merlin",
+            "volume":{
+              "nocopy":true
+            }
+
+          },
+          {
+            "type": "volume",
+            "source": "logvolume",
+            "target": "/mnt/logs",
+            "volume":{
+              "nocopy":true
+            }
+
+          }
         ],
         "ports": [
           "8088:8088",
@@ -140,7 +177,16 @@
           },
           {
             "source": "yarn-site",
+            "target": "/usr/local/hadoop/etc/hadoop/yarn-site.xml"
+          },
+          {
+            "source": "yarn-site",
             "target": "/usr/local/hadoop/conf/yarn-site.xml"
+          },
+          {
+            "source": "yarn-env",
+            "target": "/usr/local/hadoop/etc/hadoop/yarn-env.sh",
+            "mode": 777
           }
         ],
         "deploy": {
@@ -150,7 +196,24 @@
           }
         },
         "volumes": [
-          "datavolume:/mnt/merlin"
+          {
+            "type": "volume",
+            "source": "datavolume",
+            "target": "/mnt/merlin",
+            "volume":{
+              "nocopy":true
+            }
+
+          },
+          {
+            "type": "volume",
+            "source": "logvolume",
+            "target": "/mnt/logs",
+            "volume":{
+              "nocopy":true
+            }
+
+          }
         ]
       },
       "sparkworker": {
@@ -190,7 +253,16 @@
           },
           {
             "source": "yarn-site",
+            "target": "/usr/local/hadoop/etc/hadoop/yarn-site.xml"
+          },
+          {
+            "source": "yarn-site",
             "target": "/usr/local/hadoop/conf/yarn-site.xml"
+          },
+          {
+            "source": "yarn-env",
+            "target": "/usr/local/hadoop/etc/hadoop/yarn-env.sh",
+            "mode": 777
           }
         ],
         "deploy": {
@@ -200,7 +272,24 @@
           }
         },
         "volumes": [
-          "datavolume:/mnt/merlin"
+          {
+            "type": "volume",
+            "source": "datavolume",
+            "target": "/mnt/merlin",
+            "volume":{
+              "nocopy":true
+            }
+
+          },
+          {
+            "type": "volume",
+            "source": "logvolume",
+            "target": "/mnt/logs",
+            "volume":{
+              "nocopy":true
+            }
+
+          }
         ],
         "command": "/root/hadoop_entrypoint.sh -spark_worker"
       },
@@ -241,7 +330,16 @@
           },
           {
             "source": "yarn-site",
+            "target": "/usr/local/hadoop/etc/hadoop/yarn-site.xml"
+          },
+          {
+            "source": "yarn-site",
             "target": "/usr/local/hadoop/conf/yarn-site.xml"
+          },
+          {
+            "source": "yarn-env",
+            "target": "/usr/local/hadoop/etc/hadoop/yarn-env.sh",
+            "mode": 777
           }
         ],
         "deploy": {
@@ -251,7 +349,24 @@
           }
         },
         "volumes": [
-          "datavolume:/mnt/merlin"
+          {
+            "type": "volume",
+            "source": "datavolume",
+            "target": "/mnt/merlin",
+            "volume":{
+              "nocopy":true
+            }
+
+          },
+          {
+            "type": "volume",
+            "source": "logvolume",
+            "target": "/mnt/logs",
+            "volume":{
+              "nocopy":true
+            }
+
+          }
         ],
         "command": "/root/hadoop_entrypoint.sh"
       }
