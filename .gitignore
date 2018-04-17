@@ -1,8 +1,7 @@
 
-\.idea/
+.idea/
 *.iml
+
 firmament/docker/joshua/container-files/apache-joshua-ar-en-2016-11-18\.tgz
-
 firmament/docker/joshua/container-files/apache-joshua-es-en-2016-11-18\.tgz
-
 firmament/docker/joshua/container-files/apache-joshua-fa-en-2016-11-18\.tgz
