@@ -14,17 +14,17 @@
       "datavolume": {
         "driver": "local",
         "driver_opts": {
-          "type": "cifs",
-          "device": "//192.168.104.74/share/merlin",
-          "o": "username=guest,password="
+          "type": "nfs",
+          "device": ":/nfs-public/merlin",
+          "o": "rw,addr=192.168.104.5,proto=tcp,async,soft,nolock"
         }
       },
       "logvolume": {
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/mnt/datastore/merlin_logs",
-          "o": "rw,addr=192.168.104.74,proto=tcp,async,soft,nolock"
+          "device": ":/nfs-public/merlin_logs",
+          "o": "rw,addr=192.168.104.5,proto=tcp,async,soft,nolock"
         }
       }
     },
