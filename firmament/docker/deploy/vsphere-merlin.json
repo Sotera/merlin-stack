@@ -30,8 +30,28 @@
           "net"
         ]
       },
+      "pgadmin4": {
+        "image": "52.0.211.45:5000/pgadmin4:2.1",
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          }
+        },
+        "ports": [
+          "5050:5050"
+        ],
+        "networks": [
+          "net"
+        ]
+      },
       "amino3": {
-        "image": "52.0.211.45:5000/amino3:etl-4.0",
+        "image": "52.0.211.45:5000/amino3:1.1",
         "environment": [
           "NODE_ENV=production"
         ],
