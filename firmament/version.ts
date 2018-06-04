@@ -8,7 +8,7 @@ import * as path from 'path';
 import * as _ from 'lodash';
 import {ExecutionGraph, ShellCommand} from "firmament-bash/js/custom-typings";
 
-const version = '0.07.8';
+const version = '0.07.9';
 const doAsyncBuild = false;
 
 const processCommandJson = kernel.get<ProcessCommandJson>('ProcessCommandJson');
