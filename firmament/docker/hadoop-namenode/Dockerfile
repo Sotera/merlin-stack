@@ -1,4 +1,4 @@
-FROM 52.0.211.45:5000/merlin-hadoop-base
+FROM 52.0.211.45:5000/merlin-hadoop-base:0.07.8
 
 ################################
 # Copy the Dockerfile this image was built

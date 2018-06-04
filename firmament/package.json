@@ -1,0 +1,37 @@
+{
+  "name": "version",
+  "version": "1.0.0",
+  "description": "Little util to alter version of all parrot stack containers",
+  "main": "version.js",
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sotera/parrot-stack.git"
+  },
+  "keywords": [
+    "parrot",
+    "version",
+    "sotera"
+  ],
+  "author": "john.reeme@keywcorp.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sotera/parrot-stack/issues"
+  },
+  "homepage": "https://github.com/sotera/parrot-stack#readme",
+  "dependencies": {
+    "@types/node": "8.10.16",
+    "async": "^2.6.1",
+    "find": "^0.2.9",
+    "firmament-bash": "^1.1.14",
+    "line-driver": "^1.1.9",
+    "lodash": "^4.17.10"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.109",
+    "typescript": "^2.8.3"
+  }
+}
