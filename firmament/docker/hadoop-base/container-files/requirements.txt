@@ -16,3 +16,9 @@ cherrypy
 pydoop
 chardet
 phonenumbers
+igraph
+geoip2
+exifread
+langdetect
+dill
+xmltodict
