@@ -1,4 +1,4 @@
-FROM 52.0.211.45:5000/hadoop-base:0.07.9
+FROM 52.0.211.45:5000/hadoop-base:0.07.11
 MAINTAINER Robert Embleton <robert.embleton@keywcorp.com> and Justin Lueders <justin.lueders@keywcorp.com>
 USER root
 WORKDIR /usr/local
