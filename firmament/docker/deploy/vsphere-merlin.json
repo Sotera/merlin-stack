@@ -8,7 +8,7 @@
     },
     "services": {
       "postgres": {
-        "image": "52.0.211.45:5000/postgres:9.5.10",
+        "image": "52.0.211.45:5000/postgres:0.07.11",
         "environment": [
           "POSTGRES_PASSWORD=password"
         ],
@@ -31,7 +31,7 @@
         ]
       },
       "pgadmin4": {
-        "image": "52.0.211.45:5000/pgadmin4:2.1",
+        "image": "52.0.211.45:5000/pgadmin4:0.07.11",
         "deploy": {
           "replicas": 1,
           "restart_policy": {
@@ -51,7 +51,7 @@
         ]
       },
       "amino3": {
-        "image": "52.0.211.45:5000/amino3:1.1",
+        "image": "52.0.211.45:5000/amino3:0.07.11",
         "environment": [
           "NODE_ENV=production"
         ],
@@ -74,7 +74,7 @@
         ]
       },
       "elasticsearch": {
-        "image": "52.0.211.45:5000/elasticsearch:5.6.6",
+        "image": "52.0.211.45:5000/elasticsearch:0.07.11",
         "deploy": {
           "replicas": 3,
           "endpoint_mode": "dnsrr",
@@ -87,7 +87,7 @@
         ]
       },
       "elasticsearch-head": {
-        "image": "52.0.211.45:5000/elasticsearch-head:5.x",
+        "image": "52.0.211.45:5000/elasticsearch-head:0.07.11",
         "deploy": {
           "replicas": 1,
           "restart_policy": {
@@ -102,7 +102,7 @@
         ]
       },
       "nginx": {
-        "image": "52.0.211.45:5000/nginx:1.13.8",
+        "image": "52.0.211.45:5000/nginx:0.07.11",
         "deploy": {
           "replicas": 1,
           "restart_policy": {

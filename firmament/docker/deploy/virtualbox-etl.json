@@ -1,6 +1,6 @@
 {
   "stackName": "etl",
-  "clusterPrefix": "merlin",
+  "clusterPrefix": "merlin-local",
   "dockerComposeYaml": {
     "version": "3.4",
     "networks": {
@@ -14,17 +14,17 @@
       "datavolume": {
         "driver": "local",
         "driver_opts": {
-          "type": "cifs",
-          "device": "//192.168.104.74/share/merlin",
-          "o": "username=guest,password="
+          "type": "nfs",
+          "device": ":/var/nfs/merlin",
+          "o": "rw,addr=localhost,proto=tcp,async,soft,nolock"
         }
       },
       "logvolume": {
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/mnt/datastore/merlin_logs",
-          "o": "rw,addr=192.168.104.74,proto=tcp,async,soft,nolock"
+          "device": ":/var/nfs/merlin_logs",
+          "o": "rw,addr=localhost,proto=tcp,async,soft,nolock"
         }
       }
     },
@@ -53,7 +53,7 @@
     },
     "services": {
       "namenode": {
-        "image": "52.0.211.45:5000/merlin-hadoop-namenode",
+        "image": "52.0.211.45:5000/merlin-hadoop-namenode:0.07.11",
         "volumes": [
           {
             "type": "volume",
@@ -141,7 +141,7 @@
         ]
       },
       "datanode": {
-        "image": "52.0.211.45:5000/merlin-hadoop-base",
+        "image": "52.0.211.45:5000/merlin-hadoop-base:0.07.11",
         "volumes": [
           {
             "type": "volume",
@@ -217,7 +217,7 @@
         }
       },
       "sparkworker": {
-        "image": "52.0.211.45:5000/merlin-hadoop-base",
+        "image": "52.0.211.45:5000/merlin-hadoop-base:0.07.11",
         "volumes": [
           {
             "type": "volume",
@@ -294,7 +294,7 @@
         "command": "/root/hadoop_entrypoint.sh -spark_worker"
       },
       "stagingserver": {
-        "image": "52.0.211.45:5000/merlin-hadoop-base",
+        "image": "52.0.211.45:5000/merlin-hadoop-base:0.07.11",
         "volumes": [
           {
             "type": "volume",

@@ -53,7 +53,7 @@
     },
     "services": {
       "namenode": {
-        "image": "10.1.70.193:5000/merlin-hadoop-namenode",
+        "image": "10.1.70.193:5000/merlin-hadoop-namenode:0.07.11",
         "configs": [
           {
             "source": "hive-site",
@@ -141,7 +141,7 @@
         ]
       },
       "datanode": {
-        "image": "10.1.70.193:5000/merlin-hadoop-base",
+        "image": "10.1.70.193:5000/merlin-hadoop-base:0.07.11",
         "configs": [
           {
             "source": "hive-site",
@@ -197,7 +197,7 @@
         }
       },
       "sparkworker": {
-        "image": "10.1.70.193:5000/merlin-hadoop-base",
+        "image": "10.1.70.193:5000/merlin-hadoop-base:0.07.11",
         "configs": [
           {
             "source": "hive-site",
@@ -274,7 +274,7 @@
         "command": "/root/hadoop_entrypoint.sh -spark_worker"
       },
       "stagingserver": {
-        "image": "10.1.70.193:5000/merlin-hadoop-base",
+        "image": "10.1.70.193:5000/merlin-hadoop-base:0.07.11",
         "configs": [
           {
             "source": "hive-site",
