@@ -42,7 +42,7 @@
         "file": "./configs/mapred-site.xml"
       },
       "spark-defaults": {
-        "file": "./configs/spark-defaults.conf"
+        "file": "./configs/spark-defaults-static.conf"
       },
       "yarn-site": {
         "file": "./configs/yarn-site.xml"
