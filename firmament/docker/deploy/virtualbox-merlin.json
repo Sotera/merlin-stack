@@ -11,7 +11,7 @@
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/var/nfs/merlin/postgresql",
+          "device": ":/var/nfs/merlin/db/postgresql",
           "o": "rw,addr=<YOUR NFS SERVER IP HERE>,proto=tcp,async,soft,nolock"
         }
       },
@@ -19,7 +19,7 @@
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/var/nfs/merlin/es1",
+          "device": ":/var/nfs/merlin/db/es1",
           "o": "rw,addr=<YOUR NFS SERVER IP HERE>,proto=tcp,async,soft,nolock"
         }
       },
@@ -27,7 +27,7 @@
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/var/nfs/merlin/es2",
+          "device": ":/var/nfs/merlin/db/es2",
           "o": "rw,addr=<YOUR NFS SERVER IP HERE>,proto=tcp,async,soft,nolock"
         }
       },
@@ -35,7 +35,7 @@
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/var/nfs/merlin/es3",
+          "device": ":/var/nfs/merlin/db/es3",
           "o": "rw,addr=<YOUR NFS SERVER IP HERE>,proto=tcp,async,soft,nolock"
         }
       }
