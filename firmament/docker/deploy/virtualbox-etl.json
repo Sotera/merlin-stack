@@ -16,7 +16,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin",
-          "o": "rw,addr=localhost,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=<YOUR NFS SERVER IP HERE>,proto=tcp,async,soft,nolock"
         }
       },
       "logvolume": {
@@ -24,7 +24,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin_logs",
-          "o": "rw,addr=localhost,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=<YOUR NFS SERVER IP HERE>,proto=tcp,async,soft,nolock"
         }
       }
     },

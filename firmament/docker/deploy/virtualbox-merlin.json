@@ -6,6 +6,40 @@
     "networks": {
       "net": null
     },
+    "volumes": {
+      "pg-datavolume": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/var/nfs/merlin/postgresql",
+          "o": "rw,addr=<YOUR NFS SERVER IP HERE>,proto=tcp,async,soft,nolock"
+        }
+      },
+      "es-datavolume-1": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/var/nfs/merlin/es1",
+          "o": "rw,addr=<YOUR NFS SERVER IP HERE>,proto=tcp,async,soft,nolock"
+        }
+      },
+      "es-datavolume-2": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/var/nfs/merlin/es2",
+          "o": "rw,addr=<YOUR NFS SERVER IP HERE>,proto=tcp,async,soft,nolock"
+        }
+      },
+      "es-datavolume-3": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/var/nfs/merlin/es3",
+          "o": "rw,addr=<YOUR NFS SERVER IP HERE>,proto=tcp,async,soft,nolock"
+        }
+      }
+    },
     "services": {
       "portainer": {
         "image": "52.0.211.45:5000/portainer:0.07.11",
@@ -49,6 +83,16 @@
         "ports": [
           "5432:5432"
         ],
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "pg-datavolume",
+            "target": "/var/lib/postgresql/data",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
         "networks": [
           "net"
         ]
@@ -79,12 +123,68 @@
       "elasticsearch": {
         "image": "52.0.211.45:5000/elasticsearch:0.07.11",
         "deploy": {
-          "replicas": 3,
+          "replicas": 1,
           "endpoint_mode": "dnsrr",
           "restart_policy": {
             "condition": "on-failure"
           }
         },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "es-datavolume-1",
+            "target": "/usr/share/elasticsearch/data",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "elasticsearch2": {
+        "image": "52.0.211.45:5000/elasticsearch:0.07.11",
+        "deploy": {
+          "replicas": 1,
+          "endpoint_mode": "dnsrr",
+          "restart_policy": {
+            "condition": "on-failure"
+          }
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "es-datavolume-2",
+            "target": "/usr/share/elasticsearch/data",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "elasticsearch3": {
+        "image": "52.0.211.45:5000/elasticsearch:0.07.11",
+        "deploy": {
+          "replicas": 1,
+          "endpoint_mode": "dnsrr",
+          "restart_policy": {
+            "condition": "on-failure"
+          }
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "es-datavolume-3",
+            "target": "/usr/share/elasticsearch/data",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
         "networks": [
           "net"
         ]
