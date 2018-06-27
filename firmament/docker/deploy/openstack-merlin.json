@@ -2,9 +2,43 @@
   "stackName": "merlin",
   "clusterPrefix": "merlin",
   "dockerComposeYaml": {
-    "version": "3.2",
+    "version": "3.3",
     "networks": {
       "net": null
+    },
+    "volumes": {
+      "pg-datavolume": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/merlin-lts/db/postgresql",
+          "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
+        }
+      },
+      "es-datavolume-1": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/merlin-lts/db/es1",
+          "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
+        }
+      },
+      "es-datavolume-2": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/merlin-lts/db/es2",
+          "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
+        }
+      },
+      "es-datavolume-3": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/merlin-lts/db/es3",
+          "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
+        }
+      }
     },
     "services": {
       "portainer": {
@@ -49,6 +83,16 @@
         "ports": [
           "5432:5432"
         ],
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "pg-datavolume",
+            "target": "/var/lib/postgresql/data",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
         "networks": [
           "net"
         ]
@@ -79,7 +123,7 @@
       "elasticsearch": {
         "image": "10.1.70.193:5000/elasticsearch:0.07.11",
         "deploy": {
-          "replicas": 3,
+          "replicas": 1,
           "endpoint_mode": "dnsrr",
           "restart_policy": {
             "condition": "on-failure"
@@ -90,6 +134,72 @@
             ]
           }
         },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "es-datavolume-1",
+            "target": "/usr/share/elasticsearch/data",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "elasticsearch2": {
+        "image": "10.1.70.193:5000/elasticsearch:0.07.11",
+        "deploy": {
+          "replicas": 1,
+          "endpoint_mode": "dnsrr",
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == worker"
+            ]
+          }
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "es-datavolume-2",
+            "target": "/usr/share/elasticsearch/data",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "elasticsearch3": {
+        "image": "10.1.70.193:5000/elasticsearch:0.07.11",
+        "deploy": {
+          "replicas": 1,
+          "endpoint_mode": "dnsrr",
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == worker"
+            ]
+          }
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "es-datavolume-3",
+            "target": "/usr/share/elasticsearch/data",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
         "networks": [
           "net"
         ]
