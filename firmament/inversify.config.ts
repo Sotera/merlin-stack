@@ -1,0 +1,1 @@
+../../parrot-stack/firmament/inversify.config.ts
