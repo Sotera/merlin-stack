@@ -13,10 +13,11 @@
     "driver": "vmwarevsphere",
     "vmwarevsphereUsername": "root",
     "vmwarevspherePassword": "run2walk!",
+    "vmwarevsphereDatastore": "datastore1",
     "vmwarevsphereCpuCount": 2,
     "vmwarevsphereDiskSize": 40000,
     "vmwarevsphereMemorySize": 4096,
-    "vmwarevsphereVcenter": "vmware-rp.parrot.keyw"
+    "vmwarevsphereVcenter": "vmware.parrot-rp.keyw"
   },
   "dockerComposeYaml": {
     "version": "3.6",
