@@ -48,7 +48,7 @@
             "traefik.enable=true",
             "traefik.port=5050",
             "traefik.backend=pgadmin4",
-            "traefik.frontend.rule=Host: pgadmin4.parrot-rw.keyw"
+            "traefik.frontend.rule=Host: pgadmin4.parrot-rp.keyw"
           ]
         },
         "ports": [
@@ -87,7 +87,7 @@
             "traefik.enable=true",
             "traefik.port=5432",
             "traefik.backend=postgres",
-            "traefik.frontend.rule=Host: postgres.parrot-rw.keyw"
+            "traefik.frontend.rule=Host: postgres.parrot-rp.keyw"
           ]
         },
         "ports": [

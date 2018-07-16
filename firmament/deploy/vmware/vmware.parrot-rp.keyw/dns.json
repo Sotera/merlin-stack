@@ -25,7 +25,6 @@
       "net": null
     },
     "volumes": {
-      "docker-registry-volume": null,
       "dns-bind-conf-volume": null,
       "dns-bind-data-volume": null
     },
@@ -69,73 +68,6 @@
             "target": "/var/bind",
             "volume": {
               "nocopy": false
-            }
-          }
-        ],
-        "networks": [
-          "net"
-        ]
-      },
-      "docker-registry-frontend": {
-        "image": "52.0.211.45:5000/docker-registry-frontend:0.07.9",
-        "environment": [
-          "ENV_DOCKER_REGISTRY_HOST=docker-registry",
-          "ENV_DOCKER_REGISTRY_PORT=5000"
-        ],
-        "deploy": {
-          "replicas": 1,
-          "restart_policy": {
-            "condition": "on-failure"
-          },
-          "placement": {
-            "constraints": [
-              "node.role == manager"
-            ]
-          },
-          "labels": [
-            "traefik.port=80",
-            "traefik.backend=docker-registry-frontend",
-            "traefik.frontend.rule=PathPrefixStrip: /docker-registry-frontend/"
-          ]
-        },
-        "ports": [
-          "5050:80"
-        ],
-        "networks": [
-          "net"
-        ]
-      },
-      "docker-registry": {
-        "image": "52.0.211.45:5000/docker-registry:0.07.9",
-        "environment": [
-          "HOPE=SpringsEternal"
-        ],
-        "deploy": {
-          "replicas": 1,
-          "restart_policy": {
-            "condition": "on-failure"
-          },
-          "placement": {
-            "constraints": [
-              "node.role == manager"
-            ]
-          },
-          "labels": [
-            "traefik.port=5000",
-            "traefik.backend=docker-registry",
-            "traefik.frontend.rule=PathPrefixStrip: /docker-registry/"
-          ]
-        },
-        "ports": [
-          "5000:5000"
-        ],
-        "volumes": [
-          {
-            "type": "volume",
-            "source": "docker-registry-volume",
-            "target": "/var/lib/registry",
-            "volume": {
-              "nocopy": true
             }
           }
         ],
