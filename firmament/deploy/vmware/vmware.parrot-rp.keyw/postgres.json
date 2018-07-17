@@ -26,7 +26,14 @@
       "net": null
     },
     "volumes": {
-      "pg-datavolume": null
+      "pg-datavolume": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/nfs-public/postgres",
+          "o": "rw,addr=nfs.parrot-rp.keyw,proto=tcp,async,soft,nolock"
+        }
+      }
     },
     "services": {
       "pgadmin4": {
