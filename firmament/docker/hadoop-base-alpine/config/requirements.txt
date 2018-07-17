@@ -1,4 +1,5 @@
 elasticsearch5
+elasticsearch_dsl
 pymongo
 python-dateutil
 tangelo
