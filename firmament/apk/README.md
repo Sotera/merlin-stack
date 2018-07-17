@@ -1,1 +1,1 @@
-/home/jreeme/src/parrot-stack/firmament/apk/README.md
+../../../parrot-stack/firmament/apk/README.md

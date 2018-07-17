@@ -25,9 +25,6 @@
     "networks": {
       "net": null
     },
-    "volumes": {
-      "pg-datavolume": null
-    },
     "services": {
       "amino3": {
         "image": "docker-registry.parrot-rp.keyw:5000/amino3:0.07.12",

@@ -1,1 +1,1 @@
-/home/jreeme/src/parrot-stack/firmament/apk/_build_pst.sh
+../../../parrot-stack/firmament/apk/_build_pst.sh
