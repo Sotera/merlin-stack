@@ -7,7 +7,7 @@ WORKDIR /usr/local
 # Install additional requirements to hadoop-base-alpine base image
 COPY ./config/requirements.txt requirements.txt
 COPY ./config/libpst-0.6.71-r0.apk libpst-0.6.71-r0.apk
-RUN apk add --no-cache screen
+RUN apk add --no-cache screen file
 RUN apk add --no-cache --allow-untrusted libpst-0.6.71-r0.apk
 RUN pip install -r requirements.txt
 
