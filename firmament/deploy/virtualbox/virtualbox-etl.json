@@ -11,7 +11,7 @@
       }
     },
     "volumes": {
-      "datavolume": {
+      "hadoop-datavolume": {
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
@@ -19,7 +19,7 @@
           "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
         }
       },
-      "logvolume": {
+      "hadoop-logvolume": {
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
@@ -29,30 +29,11 @@
       }
     },
     "services": {
+
       "namenode": {
-        "image": "docker-registry.parrot-rp.keyw:5000/merlin-hadoop-base-alpine:0.07.12",
+        "image": "docker-registry.parrot-rp.keyw:5000/hadoop-base-alpine:0.07.12",
         "environment": [
           "HADOOP_MACHINE_ROLE=namenode"
-        ],
-        "volumes": [
-          {
-            "type": "volume",
-            "source": "datavolume",
-            "target": "/mnt/merlin",
-            "volume":{
-              "nocopy":true
-            }
-
-          },
-          {
-            "type": "volume",
-            "source": "logvolume",
-            "target": "/mnt/logs",
-            "volume":{
-              "nocopy":true
-            }
-
-          }
         ],
         "deploy": {
           "replicas": 1,
@@ -63,111 +44,146 @@
             "constraints": [
               "node.role == manager"
             ]
-          }
+          },
+          "labels": [
+            "traefik.enable=true",
+            "traefik.port=8088",
+            "traefik.backend=namenode",
+            "traefik.frontend.rule=Host: namenode.vbox.keyw"
+          ]
         },
-        "ports": [
-          "8088:8088",
-          "50070:50070",
-          "9000:9000",
-          "8042:8042",
-          "8020:8020"
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "hadoop-datavolume",
+            "target": "/mnt/merlin",
+            "volume": {
+              "nocopy": true
+            }
+          },
+          {
+            "type": "volume",
+            "source": "hadoop-logvolume",
+            "target": "/mnt/logs",
+            "volume": {
+              "nocopy": true
+            }
+          }
         ]
       },
       "datanode": {
-        "image": "docker-registry.parrot-rp.keyw:5000/merlin-hadoop-base-alpine:0.07.12",
+        "image": "docker-registry.parrot-rp.keyw:5000/hadoop-base-alpine:0.07.12",
         "environment": [
           "HADOOP_MACHINE_ROLE=datanode"
-        ],
-        "volumes": [
-          {
-            "type": "volume",
-            "source": "datavolume",
-            "target": "/mnt/merlin",
-            "volume":{
-              "nocopy":true
-            }
-
-          },
-          {
-            "type": "volume",
-            "source": "logvolume",
-            "target": "/mnt/logs",
-            "volume":{
-              "nocopy":true
-            }
-
-          }
-        ],
-        "deploy": {
-          "replicas": 2,
-          "restart_policy": {
-            "condition": "on-failure"
-          }
-        }
-      },
-      "sparkworker": {
-        "image": "docker-registry.parrot-rp.keyw:5000/merlin-hadoop-base-alpine:0.07.12",
-        "environment": [
-          "HADOOP_MACHINE_ROLE=sparkworker"
-        ],
-        "volumes": [
-          {
-            "type": "volume",
-            "source": "datavolume",
-            "target": "/mnt/merlin",
-            "volume":{
-              "nocopy":true
-            }
-
-          },
-          {
-            "type": "volume",
-            "source": "logvolume",
-            "target": "/mnt/logs",
-            "volume":{
-              "nocopy":true
-            }
-
-          }
-        ],
-        "deploy": {
-          "replicas": 2,
-          "restart_policy": {
-            "condition": "on-failure"
-          }
-        }
-      },
-      "stagingserver": {
-        "image": "docker-registry.parrot-rp.keyw:5000/merlin-hadoop-base-alpine:0.07.12",
-        "environment": [
-          "HADOOP_MACHINE_ROLE=stagingserver"
-        ],
-        "volumes": [
-          {
-            "type": "volume",
-            "source": "datavolume",
-            "target": "/mnt/merlin",
-            "volume":{
-              "nocopy":true
-            }
-
-          },
-          {
-            "type": "volume",
-            "source": "logvolume",
-            "target": "/mnt/logs",
-            "volume":{
-              "nocopy":true
-            }
-
-          }
         ],
         "deploy": {
           "replicas": 1,
           "restart_policy": {
             "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=false"
+          ]
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "hadoop-datavolume",
+            "target": "/mnt/merlin",
+            "volume": {
+              "nocopy": true
+            }
+          },
+          {
+            "type": "volume",
+            "source": "hadoop-logvolume",
+            "target": "/mnt/logs",
+            "volume": {
+              "nocopy": true
+            }
           }
-        }
+        ]
+      },
+      "sparkworker": {
+        "image": "docker-registry.parrot-rp.keyw:5000/hadoop-base-alpine:0.07.12",
+        "environment": [
+          "HADOOP_MACHINE_ROLE=sparkworker"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=false"
+          ]
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "hadoop-datavolume",
+            "target": "/mnt/merlin",
+            "volume": {
+              "nocopy": true
+            }
+          },
+          {
+            "type": "volume",
+            "source": "hadoop-logvolume",
+            "target": "/mnt/logs",
+            "volume": {
+              "nocopy": true
+            }
+          }
+        ]
+      },
+      "stagingserver": {
+        "image": "docker-registry.parrot-rp.keyw:5000/hadoop-base-alpine:0.07.12",
+        "environment": [
+          "HADOOP_MACHINE_ROLE=stagingserver"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=false"
+          ]
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "hadoop-datavolume",
+            "target": "/mnt/merlin",
+            "volume": {
+              "nocopy": true
+            }
+          },
+          {
+            "type": "volume",
+            "source": "hadoop-logvolume",
+            "target": "/mnt/logs",
+            "volume": {
+              "nocopy": true
+            }
+          }
+        ]
       }
     }
   },

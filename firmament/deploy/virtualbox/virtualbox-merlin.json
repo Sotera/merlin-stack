@@ -20,7 +20,7 @@
           "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
         }
       },
-      "es-datavolume-1": {
+      "elasticsearch-datavolume1": {
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
@@ -28,7 +28,7 @@
           "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
         }
       },
-      "es-datavolume-2": {
+      "elasticsearch-datavolume2": {
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
@@ -36,7 +36,7 @@
           "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
         }
       },
-      "es-datavolume-3": {
+      "elasticsearch-datavolume3": {
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
@@ -65,7 +65,7 @@
             "traefik.enable=true",
             "traefik.port=5050",
             "traefik.backend=pgadmin4",
-            "traefik.frontend.rule=Host: pgadmin4.parrot-rp.keyw"
+            "traefik.frontend.rule=Host: pgadmin4.vbox.keyw"
           ]
         },
         "volumes": [
@@ -94,7 +94,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == worker"
+              "node.role == manager"
             ]
           },
           "labels": [
@@ -102,7 +102,7 @@
             "traefik.port=3000",
             "traefik.backend=amino3",
             "traefik.backend.loadbalancer.stickiness=true",
-            "traefik.frontend.rule=Host: amino3.parrot-rp.keyw"
+            "traefik.frontend.rule=Host: amino3.vbox.keyw"
           ]
         },
         "networks": [
@@ -128,7 +128,7 @@
             "traefik.enable=true",
             "traefik.port=5432",
             "traefik.backend=postgres",
-            "traefik.frontend.rule=Host: postgres.parrot-rp.keyw"
+            "traefik.frontend.rule=Host: postgres.vbox.keyw"
           ]
         },
         "volumes": [
@@ -204,7 +204,7 @@
             "traefik.enable=true",
             "traefik.port=9100",
             "traefik.backend=elasticsearch-head",
-            "traefik.frontend.rule=Host: elasticsearch-head.parrot-rp.keyw"
+            "traefik.frontend.rule=Host: elasticsearch-head.vbox.keyw"
           ]
         },
         "networks": [
@@ -230,7 +230,7 @@
             "traefik.enable=true",
             "traefik.port=9200",
             "traefik.backend=elasticsearch",
-            "traefik.frontend.rule=Host: elasticsearch.parrot-rp.keyw"
+            "traefik.frontend.rule=Host: elasticsearch.vbox.keyw"
           ]
         },
         "volumes": [
@@ -259,7 +259,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == worker"
+              "node.role == manager"
             ]
           }
         },
@@ -289,7 +289,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == worker"
+              "node.role == manager"
             ]
           }
         },
