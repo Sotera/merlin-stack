@@ -123,14 +123,11 @@
             "constraints": [
               "node.role == manager"
             ]
-          },
-          "labels": [
-            "traefik.enable=true",
-            "traefik.port=5432",
-            "traefik.backend=postgres",
-            "traefik.frontend.rule=Host: postgres.vbox.keyw"
-          ]
+          }
         },
+        "ports": [
+          "5432:5432"
+        ],
         "volumes": [
           {
             "type": "volume",
