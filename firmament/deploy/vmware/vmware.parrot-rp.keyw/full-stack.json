@@ -1,0 +1,187 @@
+{
+  "stackName": "parrot-rp",
+  "clusterPrefix": "parrot-rp-cp",
+  "hostMachineDnsServer": "192.168.104.47",
+  "workerHostCount": 1,
+  "dockerMachineWorkerOptions": {
+    "engineLabel": "role=worker"
+  },
+  "dockerMachineMasterOptions": {
+    "engineLabel": "role=master"
+  },
+  "dockerMachineDriverOptions": {
+    "engineInsecureRegistry": "docker-registry.parrot-rp.keyw:5000",
+    "driver": "vmwarevsphere",
+    "vmwarevsphereUsername": "root",
+    "vmwarevspherePassword": "run2walk!",
+    "vmwarevsphereDatastore": "datastore1",
+    "vmwarevsphereCpuCount": 2,
+    "vmwarevsphereDiskSize": 40000,
+    "vmwarevsphereMemorySize": 16384,
+    "vmwarevsphereVcenter": "vmware.parrot-rp.keyw"
+  },
+  "dockerComposeYaml": {
+    "version": "3.4",
+    "networks": {
+      "net": null
+    },
+    "volumes": {
+      "elasticsearch-datavolume0": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/nfs-public/elasticsearch0",
+          "o": "rw,addr=nfs.parrot-rp.keyw,proto=tcp,async,soft,nolock"
+        }
+      },
+      "elasticsearch-datavolume1": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/nfs-public/elasticsearch1",
+          "o": "rw,addr=nfs.parrot-rp.keyw,proto=tcp,async,soft,nolock"
+        }
+      },
+      "elasticsearch-datavolume2": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/nfs-public/elasticsearch2",
+          "o": "rw,addr=nfs.parrot-rp.keyw,proto=tcp,async,soft,nolock"
+        }
+      }
+    },
+    "services": {
+      "elasticsearch-head": {
+        "image": "docker-registry.parrot-rp.keyw:5000/elasticsearch-head:0.07.12",
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=true",
+            "traefik.port=9100",
+            "traefik.backend=elasticsearch-head",
+            "traefik.frontend.rule=Host: elasticsearch-head.parrot-rp.keyw"
+          ]
+        },
+        "ports": [
+          "9100:9100"
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "elasticsearch": {
+        "image": "docker-registry.parrot-rp.keyw:5000/elasticsearch:0.07.12",
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=true",
+            "traefik.port=9200",
+            "traefik.backend=elasticsearch",
+            "traefik.frontend.rule=Host: elasticsearch.parrot-rp.keyw"
+          ]
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "elasticsearch-datavolume0",
+            "target": "/usr/share/elasticsearch/data",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
+        "ports": [
+          "9200:9200",
+          "9300:9300"
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "elasticsearch1": {
+        "image": "docker-registry.parrot-rp.keyw:5000/elasticsearch:0.07.12",
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == worker"
+            ]
+          }
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "elasticsearch-datavolume1",
+            "target": "/usr/share/elasticsearch/data",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "elasticsearch2": {
+        "image": "docker-registry.parrot-rp.keyw:5000/elasticsearch:0.07.12",
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == worker"
+            ]
+          }
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "elasticsearch-datavolume2",
+            "target": "/usr/share/elasticsearch/data",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      }
+    }
+  }
+}
+
