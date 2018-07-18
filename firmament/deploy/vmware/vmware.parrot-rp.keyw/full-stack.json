@@ -25,7 +25,20 @@
     "networks": {
       "net": null
     },
+    "configs": {
+      "traefik-config": {
+        "file": "../../config/traefik.toml"
+      }
+    },
     "volumes": {
+      "pg-datavolume": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/nfs-public/postgres",
+          "o": "rw,addr=nfs.parrot-rp.keyw,proto=tcp,async,soft,nolock"
+        }
+      },
       "elasticsearch-datavolume0": {
         "driver": "local",
         "driver_opts": {
@@ -52,6 +65,145 @@
       }
     },
     "services": {
+      "pgadmin4": {
+        "image": "docker-registry.parrot-rp.keyw:5000/pgadmin4:0.07.12",
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=true",
+            "traefik.port=5050",
+            "traefik.backend=pgadmin4",
+            "traefik.frontend.rule=Host: pgadmin4.parrot-rp.keyw"
+          ]
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "pg-datavolume",
+            "target": "/var/lib/postgresql/data",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "amino3": {
+        "image": "docker-registry.parrot-rp.keyw:5000/amino3:0.07.12",
+        "environment": [
+          "AMINO3_REPLACE_BAD_DATA_SOURCE_WITH_MEMORY_DATA_SOURCE=false"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=true",
+            "traefik.port=3000",
+            "traefik.backend=amino3",
+            "traefik.backend.loadbalancer.stickiness=true",
+            "traefik.frontend.rule=Host: amino3.parrot-rp.keyw"
+          ]
+        },
+        "networks": [
+          "net"
+        ]
+      },
+      "postgres": {
+        "image": "docker-registry.parrot-rp.keyw:5000/postgres:0.07.12",
+        "environment": [
+          "POSTGRES_PASSWORD=password"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=true",
+            "traefik.port=5432",
+            "traefik.backend=postgres",
+            "traefik.frontend.rule=Host: postgres.parrot-rp.keyw"
+          ]
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "pg-datavolume",
+            "target": "/var/lib/postgresql/data",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "traefik": {
+        "image": "docker-registry.parrot-rp.keyw:5000/traefik:0.07.12",
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "volumes": [
+          {
+            "type": "bind",
+            "source": "/var/run/docker.sock",
+            "target": "/var/run/docker.sock"
+          }
+        ],
+        "configs": [
+          {
+            "source": "traefik-config",
+            "target": "/etc/traefik/traefik.toml"
+          }
+        ],
+        "ports": [
+          "80:80",
+          "8080:8080"
+        ],
+        "networks": [
+          "net"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=false"
+          ]
+        }
+      },
       "elasticsearch-head": {
         "image": "docker-registry.parrot-rp.keyw:5000/elasticsearch-head:0.07.12",
         "environment": [
@@ -74,9 +226,6 @@
             "traefik.frontend.rule=Host: elasticsearch-head.parrot-rp.keyw"
           ]
         },
-        "ports": [
-          "9100:9100"
-        ],
         "networks": [
           "net"
         ]
@@ -112,10 +261,6 @@
               "nocopy": false
             }
           }
-        ],
-        "ports": [
-          "9200:9200",
-          "9300:9300"
         ],
         "networks": [
           "net"
