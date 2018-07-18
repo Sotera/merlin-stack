@@ -139,7 +139,10 @@
             "constraints": [
               "node.role == worker"
             ]
-          }
+          },
+          "labels": [
+            "traefik.enable=false"
+          ]
         },
         "volumes": [
           {
@@ -177,7 +180,10 @@
             "constraints": [
               "node.role == worker"
             ]
-          }
+          },
+          "labels": [
+            "traefik.enable=false"
+          ]
         },
         "volumes": [
           {
@@ -215,7 +221,10 @@
             "constraints": [
               "node.role == worker"
             ]
-          }
+          },
+          "labels": [
+            "traefik.enable=false"
+          ]
         },
         "volumes": [
           {
