@@ -1,0 +1,187 @@
+{
+  "stackName": "etl",
+  "clusterPrefix": "merlin-local",
+  "dockerComposeYaml": {
+    "version": "3.4",
+    "networks": {
+      "default": {
+        "external": {
+          "name": "merlin_net"
+        }
+      }
+    },
+    "volumes": {
+      "datavolume": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/var/nfs/merlin",
+          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+        }
+      },
+      "logvolume": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/var/nfs/merlin_logs",
+          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+        }
+      }
+    },
+    "services": {
+      "namenode": {
+        "image": "docker-registry.parrot-rp.keyw:5000/merlin-hadoop-base-alpine:0.07.12",
+        "environment": [
+          "HADOOP_MACHINE_ROLE=namenode"
+        ],
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "datavolume",
+            "target": "/mnt/merlin",
+            "volume":{
+              "nocopy":true
+            }
+
+          },
+          {
+            "type": "volume",
+            "source": "logvolume",
+            "target": "/mnt/logs",
+            "volume":{
+              "nocopy":true
+            }
+
+          }
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          }
+        },
+        "ports": [
+          "8088:8088",
+          "50070:50070",
+          "9000:9000",
+          "8042:8042",
+          "8020:8020"
+        ]
+      },
+      "datanode": {
+        "image": "docker-registry.parrot-rp.keyw:5000/merlin-hadoop-base-alpine:0.07.12",
+        "environment": [
+          "HADOOP_MACHINE_ROLE=datanode"
+        ],
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "datavolume",
+            "target": "/mnt/merlin",
+            "volume":{
+              "nocopy":true
+            }
+
+          },
+          {
+            "type": "volume",
+            "source": "logvolume",
+            "target": "/mnt/logs",
+            "volume":{
+              "nocopy":true
+            }
+
+          }
+        ],
+        "deploy": {
+          "replicas": 2,
+          "restart_policy": {
+            "condition": "on-failure"
+          }
+        }
+      },
+      "sparkworker": {
+        "image": "docker-registry.parrot-rp.keyw:5000/merlin-hadoop-base-alpine:0.07.12",
+        "environment": [
+          "HADOOP_MACHINE_ROLE=sparkworker"
+        ],
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "datavolume",
+            "target": "/mnt/merlin",
+            "volume":{
+              "nocopy":true
+            }
+
+          },
+          {
+            "type": "volume",
+            "source": "logvolume",
+            "target": "/mnt/logs",
+            "volume":{
+              "nocopy":true
+            }
+
+          }
+        ],
+        "deploy": {
+          "replicas": 2,
+          "restart_policy": {
+            "condition": "on-failure"
+          }
+        }
+      },
+      "stagingserver": {
+        "image": "docker-registry.parrot-rp.keyw:5000/merlin-hadoop-base-alpine:0.07.12",
+        "environment": [
+          "HADOOP_MACHINE_ROLE=stagingserver"
+        ],
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "datavolume",
+            "target": "/mnt/merlin",
+            "volume":{
+              "nocopy":true
+            }
+
+          },
+          {
+            "type": "volume",
+            "source": "logvolume",
+            "target": "/mnt/logs",
+            "volume":{
+              "nocopy":true
+            }
+
+          }
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          }
+        }
+      }
+    }
+  },
+  "workerHostCount": 0,
+  "dockerMachineWorkerOptions": {
+    "engineLabel": "role=worker"
+  },
+  "dockerMachineMasterOptions": {
+    "engineLabel": "role=master"
+  },
+  "dockerMachineDriverOptions": {
+    "driver": "virtualbox",
+    "virtualboxCpuCount": 2,
+    "virtualboxMemory": 8092,
+    "engineInsecureRegistry": "docker-registry.parrot-rp.keyw:5000"
+  }
+}
