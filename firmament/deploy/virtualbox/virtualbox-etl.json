@@ -47,9 +47,10 @@
           },
           "labels": [
             "traefik.enable=true",
-            "traefik.port=8088",
-            "traefik.backend=namenode",
-            "traefik.frontend.rule=Host: namenode.vbox.keyw"
+            "traefik.namenode.port=8088",
+            "traefik.namenode.frontend.rule=Host:namenode.vbox.keyw",
+            "traefik.hdfs.port=50070",
+            "traefik.hdfs.frontend.rule=Host:hdfs.vbox.keyw"
           ]
         },
         "volumes": [
