@@ -30,7 +30,7 @@
     },
     "services": {
       "namenode": {
-        "image": "docker-registry.parrot-rp.keyw:5000/hadoop-base-alpine:0.07.13",
+        "image": "52.0.211.45:5000/merlin-hadoop-base-alpine:0.07.13",
         "environment": [
           "HADOOP_MACHINE_ROLE=namenode"
         ],
@@ -72,7 +72,7 @@
         ]
       },
       "datanode": {
-        "image": "docker-registry.parrot-rp.keyw:5000/hadoop-base-alpine:0.07.13",
+        "image": "52.0.211.45:5000/merlin-hadoop-base-alpine:0.07.13",
         "environment": [
           "HADOOP_MACHINE_ROLE=datanode"
         ],
@@ -110,7 +110,7 @@
         ]
       },
       "sparkworker": {
-        "image": "docker-registry.parrot-rp.keyw:5000/hadoop-base-alpine:0.07.13",
+        "image": "52.0.211.45:5000/merlin-hadoop-base-alpine:0.07.13",
         "environment": [
           "HADOOP_MACHINE_ROLE=sparkworker"
         ],
@@ -148,7 +148,7 @@
         ]
       },
       "stagingserver": {
-        "image": "docker-registry.parrot-rp.keyw:5000/hadoop-base-alpine:0.07.13",
+        "image": "52.0.211.45:5000/merlin-hadoop-base-alpine:0.07.13",
         "environment": [
           "HADOOP_MACHINE_ROLE=stagingserver"
         ],
@@ -198,6 +198,7 @@
     "driver": "virtualbox",
     "virtualboxCpuCount": 2,
     "virtualboxMemory": 8092,
-    "engineInsecureRegistry": "docker-registry.parrot-rp.keyw:5000"
+    "virtualboxBoot2dockerUrl": "https://s3.amazonaws.com/merlin-jreeme/boot2docker.iso",
+    "engineInsecureRegistry": "52.0.211.45:5000"
   }
 }
