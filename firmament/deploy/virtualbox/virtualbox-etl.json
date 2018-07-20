@@ -29,7 +29,6 @@
       }
     },
     "services": {
-
       "namenode": {
         "image": "docker-registry.parrot-rp.keyw:5000/hadoop-base-alpine:0.07.13",
         "environment": [
