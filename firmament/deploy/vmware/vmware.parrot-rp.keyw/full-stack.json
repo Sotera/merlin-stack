@@ -11,6 +11,7 @@
   },
   "dockerMachineDriverOptions": {
     "engineInsecureRegistry": "docker-registry.parrot-rp.keyw:5000",
+    "vmwarevsphereBoot2dockerUrl": "https://s3.amazonaws.com/merlin-jreeme/boot2docker.iso",
     "driver": "vmwarevsphere",
     "vmwarevsphereUsername": "root",
     "vmwarevspherePassword": "run2walk!",
