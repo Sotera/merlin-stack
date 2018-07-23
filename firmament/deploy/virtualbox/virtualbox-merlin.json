@@ -1,0 +1,323 @@
+{
+  "stackName":"merlin",
+  "clusterPrefix": "merlin-local",
+  "dockerComposeYaml": {
+    "version": "3.3",
+    "networks": {
+      "net": null
+    },
+    "configs": {
+      "traefik-config": {
+        "file": "../config/traefik.toml"
+      }
+    },
+    "volumes": {
+      "pg-datavolume": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/var/nfs/merlin/db/postgresql",
+          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+        }
+      },
+      "elasticsearch-datavolume1": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/var/nfs/merlin/db/es1",
+          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+        }
+      },
+      "elasticsearch-datavolume2": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/var/nfs/merlin/db/es2",
+          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+        }
+      },
+      "elasticsearch-datavolume3": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/var/nfs/merlin/db/es3",
+          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+        }
+      }
+    },
+    "services": {
+      "pgadmin4": {
+        "image": "docker-registry.parrot.keyw:5000/pgadmin4:0.07.13",
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=true",
+            "traefik.port=5050",
+            "traefik.backend=pgadmin4",
+            "traefik.frontend.rule=Host: pgadmin4.vbox.keyw"
+          ]
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "pg-datavolume",
+            "target": "/var/lib/postgresql/data",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "amino3": {
+        "image": "docker-registry.parrot.keyw:5000/amino3:0.07.13",
+        "environment": [
+          "AMINO3_REPLACE_BAD_DATA_SOURCE_WITH_MEMORY_DATA_SOURCE=false"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=true",
+            "traefik.port=3000",
+            "traefik.backend=amino3",
+            "traefik.backend.loadbalancer.stickiness=true",
+            "traefik.frontend.rule=Host: amino3.vbox.keyw"
+          ]
+        },
+        "networks": [
+          "net"
+        ]
+      },
+      "postgres": {
+        "image": "docker-registry.parrot.keyw:5000/postgres:0.07.13",
+        "environment": [
+          "POSTGRES_PASSWORD=password"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          }
+        },
+        "ports": [
+          "5432:5432"
+        ],
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "pg-datavolume",
+            "target": "/var/lib/postgresql/data",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "traefik": {
+        "image": "docker-registry.parrot.keyw:5000/traefik:0.07.13",
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "volumes": [
+          {
+            "type": "bind",
+            "source": "/var/run/docker.sock",
+            "target": "/var/run/docker.sock"
+          }
+        ],
+        "configs": [
+          {
+            "source": "traefik-config",
+            "target": "/etc/traefik/traefik.toml"
+          }
+        ],
+        "ports": [
+          "80:80",
+          "8080:8080"
+        ],
+        "networks": [
+          "net"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=false"
+          ]
+        }
+      },
+      "elasticsearch-head": {
+        "image": "docker-registry.parrot.keyw:5000/elasticsearch-head:0.07.13",
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=true",
+            "traefik.port=9100",
+            "traefik.backend=elasticsearch-head",
+            "traefik.frontend.rule=Host: elasticsearch-head.vbox.keyw"
+          ]
+        },
+        "networks": [
+          "net"
+        ]
+      },
+      "elasticsearch": {
+        "image": "docker-registry.parrot.keyw:5000/elasticsearch:0.07.13",
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=true",
+            "traefik.port=9200",
+            "traefik.backend=elasticsearch",
+            "traefik.frontend.rule=Host: elasticsearch.vbox.keyw"
+          ]
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "elasticsearch-datavolume1",
+            "target": "/usr/share/elasticsearch/data",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "elasticsearch1": {
+        "image": "docker-registry.parrot.keyw:5000/elasticsearch:0.07.13",
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          }
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "elasticsearch-datavolume2",
+            "target": "/usr/share/elasticsearch/data",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "elasticsearch2": {
+        "image": "docker-registry.parrot.keyw:5000/elasticsearch:0.07.13",
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          }
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "elasticsearch-datavolume3",
+            "target": "/usr/share/elasticsearch/data",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      }
+    }
+  },
+  "workerHostCount": 0,
+  "dockerMachineWorkerOptions": {
+    "engineLabel": "role=worker"
+  },
+  "dockerMachineMasterOptions": {
+    "engineLabel": "role=master"
+  },
+  "dockerMachineDriverOptions": {
+    "driver": "virtualbox",
+    "virtualboxCpuCount": 2,
+    "virtualboxMemory": 32768,
+    "virtualboxBoot2dockerUrl": "https://s3.amazonaws.com/merlin-jreeme/boot2docker.iso",
+    "engineInsecureRegistry": "docker-registry.parrot.keyw:5000"
+  }
+}

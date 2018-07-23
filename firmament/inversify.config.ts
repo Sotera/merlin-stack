@@ -1,5 +1,1 @@
-import {kernel} from 'firmament-bash';
-
-//noinspection JSUnusedGlobalSymbols
-export default kernel;
-
+../../parrot-stack/firmament/inversify.config.ts

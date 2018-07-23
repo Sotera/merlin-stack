@@ -1,0 +1,77 @@
+{
+  "stackName": "parrot-rp",
+  "clusterPrefix": "parrot-rp-cp",
+  "hostMachineDnsServer": "192.168.104.47",
+  "workerHostCount": 0,
+  "dockerMachineWorkerOptions": {
+    "engineLabel": "role=worker"
+  },
+  "dockerMachineMasterOptions": {
+    "engineLabel": "role=master"
+  },
+  "dockerMachineDriverOptions": {
+    "engineInsecureRegistry": "docker-registry.parrot-rp.keyw:5000",
+    "driver": "vmwarevsphere",
+    "vmwarevsphereUsername": "root",
+    "vmwarevspherePassword": "run2walk!",
+    "vmwarevsphereDatastore": "datastore1",
+    "vmwarevsphereCpuCount": 2,
+    "vmwarevsphereDiskSize": 40000,
+    "vmwarevsphereMemorySize": 4096,
+    "vmwarevsphereVcenter": "vmware.parrot-rp.keyw"
+  },
+  "dockerComposeYaml": {
+    "version": "3.4",
+    "networks": {
+      "net": null
+    },
+    "configs": {
+      "traefik-config": {
+        "file": "../../config/traefik.toml"
+      }
+    },
+    "services": {
+      "traefik": {
+        "image": "docker-registry.parrot-rp.keyw:5000/traefik:0.07.12",
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "volumes": [
+          {
+            "type": "bind",
+            "source": "/var/run/docker.sock",
+            "target": "/var/run/docker.sock"
+          }
+        ],
+        "configs": [
+          {
+            "source": "traefik-config",
+            "target": "/etc/traefik/traefik.toml"
+          }
+        ],
+        "ports": [
+          "80:80",
+          "8080:8080"
+        ],
+        "networks": [
+          "net"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=false"
+          ]
+        }
+      }
+    }
+  }
+}
+

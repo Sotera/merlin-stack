@@ -1,0 +1,62 @@
+{
+  "stackName": "parrot-rp",
+  "clusterPrefix": "parrot-rp-cp",
+  "hostMachineDnsServer": "192.168.104.47",
+  "workerHostCount": 0,
+  "dockerMachineWorkerOptions": {
+    "engineLabel": "role=worker"
+  },
+  "dockerMachineMasterOptions": {
+    "engineLabel": "role=master"
+  },
+  "dockerMachineDriverOptions": {
+    "engineInsecureRegistry": "docker-registry.parrot-rp.keyw:5000",
+    "driver": "vmwarevsphere",
+    "vmwarevsphereUsername": "root",
+    "vmwarevspherePassword": "run2walk!",
+    "vmwarevsphereDatastore": "datastore1",
+    "vmwarevsphereCpuCount": 2,
+    "vmwarevsphereDiskSize": 40000,
+    "vmwarevsphereMemorySize": 4096,
+    "vmwarevsphereVcenter": "vmware.parrot-rp.keyw"
+  },
+  "dockerComposeYaml": {
+    "version": "3.4",
+    "networks": {
+      "net": null
+    },
+    "services": {
+      "amino3": {
+        "image": "docker-registry.parrot-rp.keyw:5000/amino3:0.07.12",
+        "environment": [
+          "AMINO3_REPLACE_BAD_DATA_SOURCE_WITH_MEMORY_DATA_SOURCE=false"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=true",
+            "traefik.port=3000",
+            "traefik.backend=amino3",
+            "traefik.backend.loadbalancer.stickiness=true",
+            "traefik.frontend.rule=Host: amino3.parrot-rp.keyw"
+          ]
+        },
+        "ports": [
+          "3000:3000"
+        ],
+        "networks": [
+          "net"
+        ]
+      }
+    }
+  }
+}
+

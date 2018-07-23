@@ -1,0 +1,156 @@
+version: '3.6'
+networks:
+  net: null
+#configs:
+#  core-site:
+#    file: ./configs/core-site.xml
+#  hdfs-site:
+#    file: ./configs/hdfs-site.xml
+#  hive-site:
+#    file: ./configs/hive-site.xml
+#  mapred-site:
+#    file: ./configs/mapred-site.xml
+#  spark-defaults:
+#    file: ./configs/spark-defaults.conf
+#  yarn-site:
+#    file: ./configs/yarn-site.xml
+#  yarn-env:
+#    file: ./configs/yarn-env.sh
+volumes:
+  datavolume: null
+#    driver: local
+#    driver_opts:
+#      type: nfs
+#      device: ':/merlin-lts'
+#      o: 'rw,addr=10.1.70.252,proto=tcp,async,soft,nolock'
+  logvolume: null
+#    driver: local
+#    driver_opts:
+#      type: nfs
+#      device: ':/merlin-lts-logs'
+#      o: 'rw,addr=10.1.70.252,proto=tcp,async,soft,nolock'
+services:
+  postgres:
+    image: 52.0.211.45:5000/postgres:9.5.10
+    environment:
+      - POSTGRES_PASSWORD=password
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - 'node.role == manager'
+    ports:
+      - '5432:5432'
+    networks:
+      - net
+  namenode:
+    image: '52.0.211.45:5000/hadoop-base-alpine:0.07.11'
+    environment:
+      - HOPE=SpringsEternal
+      - HADOOP_MACHINE_ROLE=namenode
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - 'node.role == manager'
+      labels:
+        - traefik.enable=false
+    ports:
+      - '8088:8088'
+      - '50070:50070'
+      - '9000:9000'
+      - '8042:8042'
+      - '8020:8020'
+    networks:
+      - net
+    volumes:
+      -
+        type: volume
+        source: datavolume
+        target: /mnt/merlin
+        volume:
+          nocopy: true
+      -
+        type: volume
+        source: logvolume
+        target: /mnt/logs
+        volume:
+          nocopy: true
+  datanode:
+    image: '52.0.211.45:5000/hadoop-base-alpine:0.07.11'
+    environment:
+      - HOPE=SpringsEternal
+      - HADOOP_MACHINE_ROLE=datanode
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - 'node.role == manager'
+      labels:
+        - traefik.enable=false
+    networks:
+      - net
+  sparkworker:
+    image: '52.0.211.45:5000/hadoop-base-alpine:0.07.11'
+    environment:
+      - HOPE=SpringsEternal
+      - HADOOP_MACHINE_ROLE=sparkworker
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - 'node.role == manager'
+      labels:
+        - traefik.enable=false
+    networks:
+      - net
+    volumes:
+      -
+        type: volume
+        source: datavolume
+        target: /mnt/merlin
+        volume:
+          nocopy: true
+      -
+        type: volume
+        source: logvolume
+        target: /mnt/logs
+        volume:
+          nocopy: true
+  stagingserver:
+    image: '52.0.211.45:5000/hadoop-base-alpine:0.07.11'
+    environment:
+      - HOPE=SpringsEternal
+      - HADOOP_MACHINE_ROLE=stagingserver
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - 'node.role == manager'
+      labels:
+        - traefik.enable=false
+    networks:
+      - net
+    volumes:
+      -
+        type: volume
+        source: datavolume
+        target: /mnt/merlin
+        volume:
+          nocopy: true
+      -
+        type: volume
+        source: logvolume
+        target: /mnt/logs
+        volume:
+          nocopy: true
