@@ -83,7 +83,7 @@
     },
     "services": {
       "namenode": {
-        "image": "docker-registry.parrot-les:5000/hadoop-base-alpine:0.07.13",
+        "image": "docker-registry.parrot-les.keyw:5000/hadoop-base-alpine:0.07.13",
         "environment": [
           "HADOOP_MACHINE_ROLE=namenode"
         ],
@@ -128,7 +128,7 @@
         ]
       },
       "datanode": {
-        "image": "docker-registry.parrot-les:5000/hadoop-base-alpine:0.07.13",
+        "image": "docker-registry.parrot-les.keyw:5000/hadoop-base-alpine:0.07.13",
         "environment": [
           "HADOOP_MACHINE_ROLE=datanode"
         ],
@@ -169,7 +169,7 @@
         ]
       },
       "sparkworker": {
-        "image": "docker-registry.parrot-les:5000/hadoop-base-alpine:0.07.13",
+        "image": "docker-registry.parrot-les.keyw:5000/hadoop-base-alpine:0.07.13",
         "environment": [
           "HADOOP_MACHINE_ROLE=sparkworker"
         ],
@@ -210,7 +210,7 @@
         ]
       },
       "stagingserver": {
-        "image": "docker-registry.parrot-les:5000/hadoop-base-alpine:0.07.13",
+        "image": "docker-registry.parrot-les.keyw:5000/hadoop-base-alpine:0.07.13",
         "environment": [
           "HADOOP_MACHINE_ROLE=stagingserver"
         ],
@@ -251,7 +251,7 @@
         ]
       },
       "pgadmin4": {
-        "image": "docker-registry.parrot-les:5000/pgadmin4:0.07.13",
+        "image": "docker-registry.parrot-les.keyw:5000/pgadmin4:0.07.13",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -287,7 +287,7 @@
         ]
       },
       "amino3": {
-        "image": "docker-registry.parrot-les:5000/amino3:0.07.13",
+        "image": "docker-registry.parrot-les.keyw:5000/amino3:0.07.13",
         "environment": [
           "AMINO3_REPLACE_BAD_DATA_SOURCE_WITH_MEMORY_DATA_SOURCE=false"
         ],
@@ -314,7 +314,7 @@
         ]
       },
       "postgres": {
-        "image": "docker-registry.parrot-les:5000/postgres:0.07.13",
+        "image": "docker-registry.parrot-les.keyw:5000/postgres:0.07.13",
         "environment": [
           "POSTGRES_PASSWORD=password"
         ],
@@ -350,7 +350,7 @@
         ]
       },
       "traefik": {
-        "image": "docker-registry.parrot-les:5000/traefik:0.07.13",
+        "image": "docker-registry.parrot-les.keyw:5000/traefik:0.07.13",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -390,7 +390,7 @@
         }
       },
       "elasticsearch-head": {
-        "image": "docker-registry.parrot-les:5000/elasticsearch-head:0.07.13",
+        "image": "docker-registry.parrot-les.keyw:5000/elasticsearch-head:0.07.13",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -416,7 +416,7 @@
         ]
       },
       "elasticsearch": {
-        "image": "docker-registry.parrot-les:5000/elasticsearch:0.07.13",
+        "image": "docker-registry.parrot-les.keyw:5000/elasticsearch:0.07.13",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -452,7 +452,7 @@
         ]
       },
       "elasticsearch1": {
-        "image": "docker-registry.parrot-les:5000/elasticsearch:0.07.13",
+        "image": "docker-registry.parrot-les.keyw:5000/elasticsearch:0.07.13",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -482,7 +482,7 @@
         ]
       },
       "elasticsearch2": {
-        "image": "docker-registry.parrot-les:5000/elasticsearch:0.07.13",
+        "image": "docker-registry.parrot-les.keyw:5000/elasticsearch:0.07.13",
         "environment": [
           "HOPE=SpringsEternal"
         ],
