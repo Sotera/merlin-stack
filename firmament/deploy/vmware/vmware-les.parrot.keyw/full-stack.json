@@ -43,7 +43,7 @@
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/nfs-public/hadoop-datavolume",
+          "device": ":/nfs-public/hadoop-logvolume",
           "o": "rw,addr=nfs.parrot-les.keyw,proto=tcp,async,soft,nolock"
         }
       },
