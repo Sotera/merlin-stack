@@ -1,7 +1,7 @@
 {
-  "stackName": "parrot-rp",
-  "clusterPrefix": "parrot-rp-cp",
-  "hostMachineDnsServer": "192.168.104.47",
+  "stackName": "merlin",
+  "clusterPrefix": "merlin-rp",
+  "hostMachineDnsServer": "192.168.104.100",
   "workerHostCount": 1,
   "dockerMachineWorkerOptions": {
     "engineLabel": "role=worker"
