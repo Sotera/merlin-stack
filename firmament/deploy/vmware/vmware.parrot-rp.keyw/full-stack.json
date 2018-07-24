@@ -27,6 +27,24 @@
       "net": null
     },
     "configs": {
+      "nginx-es-config": {
+        "file": "../../config/elasticsearch-nginx.conf"
+      },
+      "nginx-es-head-config": {
+        "file": "../../config/elasticsearch-head-nginx.conf"
+      },
+      "nginx-pgadmin-config": {
+        "file": "../../config/pgadmin-nginx.conf"
+      },
+      "nginx-amino3-config": {
+        "file": "../../config/amino3-nginx.conf"
+      },
+      "nginx-namenode-config": {
+        "file": "../../config/namenode-nginx.conf"
+      },
+      "nginx-hdfs-config": {
+        "file": "../../config/hdfs-nginx.conf"
+      },
       "traefik-config": {
         "file": "../../config/traefik.toml"
       }
@@ -508,6 +526,54 @@
         ],
         "networks": [
           "net"
+        ]
+      },
+      "nginx": {
+        "image": "docker-registry.parrot.keyw:5000/nginx:0.07.13",
+        "configs": [
+          {
+            "source": "nginx-amino3-config",
+            "target": "/etc/nginx/conf.d/amino3-nginx.conf"
+          },
+          {
+            "source": "nginx-es-head-config",
+            "target": "/etc/nginx/conf.d/elasticsearch-head-nginx.conf"
+          },
+          {
+            "source": "nginx-es-config",
+            "target": "/etc/nginx/conf.d/elasticsearch-nginx.conf"
+          },
+          {
+            "source": "nginx-hdfs-config",
+            "target": "/etc/nginx/conf.d/hdfs-nginx.conf"
+          },
+          {
+            "source": "nginx-namenode-config",
+            "target": "/etc/nginx/conf.d/namenode-nginx.conf"
+          },
+          {
+            "source": "nginx-pgadmin-config",
+            "target": "/etc/nginx/conf.d/pgadmin-nginx.conf"
+          }
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          }
+        },
+        "ports": [
+          "9200:9200",
+          "9100:9100",
+          "3000:3000",
+          "8088:8088",
+          "50070:50070",
+          "5050:5050"
         ]
       }
     }
