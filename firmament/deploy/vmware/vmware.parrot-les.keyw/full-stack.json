@@ -530,7 +530,7 @@
         ]
       },
       "nginx": {
-        "image": "docker-registry.parrot.keyw:5000/nginx:0.07.13",
+        "image": "docker-registry.parrot-les.keyw:5000/nginx:0.07.13",
         "configs": [
           {
             "source": "nginx-amino3-config",
