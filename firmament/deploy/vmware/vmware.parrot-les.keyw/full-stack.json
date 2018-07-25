@@ -18,7 +18,7 @@
     "vmwarevsphereDatastore": "datastore1",
     "vmwarevsphereCpuCount": 2,
     "vmwarevsphereDiskSize": 40000,
-    "vmwarevsphereMemorySize": 16384,
+    "vmwarevsphereMemorySize": 24576,
     "vmwarevsphereVcenter": "vmware.parrot-les.keyw"
   },
   "dockerComposeYaml": {
