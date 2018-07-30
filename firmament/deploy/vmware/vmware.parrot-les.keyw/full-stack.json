@@ -28,22 +28,22 @@
     },
     "configs": {
       "nginx-es-config": {
-        "file": "../../config/elasticsearch-nginx.conf"
+        "file": "../../config/nginx-elasticsearch.conf"
       },
       "nginx-es-head-config": {
-        "file": "../../config/elasticsearch-head-nginx.conf"
+        "file": "../../config/nginx-elasticsearch-head.conf"
       },
-      "nginx-pgadmin-config": {
-        "file": "../../config/pgadmin-nginx.conf"
+      "nginx-pgadmin4-config": {
+        "file": "../../config/nginx-pgadmin4.conf"
       },
       "nginx-amino3-config": {
-        "file": "../../config/amino3-nginx.conf"
+        "file": "../../config/nginx-amino3.conf"
       },
       "nginx-namenode-config": {
-        "file": "../../config/namenode-nginx.conf"
+        "file": "../../config/nginx-namenode.conf"
       },
       "nginx-hdfs-config": {
-        "file": "../../config/hdfs-nginx.conf"
+        "file": "../../config/nginx-hdfs.conf"
       },
       "traefik-config": {
         "file": "../../config/traefik.toml"
@@ -534,27 +534,27 @@
         "configs": [
           {
             "source": "nginx-amino3-config",
-            "target": "/etc/nginx/conf.d/amino3-nginx.conf"
+            "target": "/etc/nginx/conf.d/nginx-amino3.conf"
           },
           {
             "source": "nginx-es-head-config",
-            "target": "/etc/nginx/conf.d/elasticsearch-head-nginx.conf"
+            "target": "/etc/nginx/conf.d/nginx-elasticsearch-head.conf"
           },
           {
             "source": "nginx-es-config",
-            "target": "/etc/nginx/conf.d/elasticsearch-nginx.conf"
+            "target": "/etc/nginx/conf.d/nginx-elasticsearch.conf"
           },
           {
             "source": "nginx-hdfs-config",
-            "target": "/etc/nginx/conf.d/hdfs-nginx.conf"
+            "target": "/etc/nginx/conf.d/nginx-hdfs.conf"
           },
           {
             "source": "nginx-namenode-config",
-            "target": "/etc/nginx/conf.d/namenode-nginx.conf"
+            "target": "/etc/nginx/conf.d/nginx-namenode.conf"
           },
           {
-            "source": "nginx-pgadmin-config",
-            "target": "/etc/nginx/conf.d/pgadmin-nginx.conf"
+            "source": "nginx-pgadmin4-config",
+            "target": "/etc/nginx/conf.d/nginx-pgadmin4.conf"
           }
         ],
         "deploy": {
