@@ -100,6 +100,22 @@
           "device": ":/nfs-public/reeme/elasticsearch2",
           "o": "rw,addr=nfs.parrot-rp.keyw,proto=tcp,async,soft,nolock"
         }
+      },
+      "hadoop-datavolume": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/nfs-public/reeme/hadoop-datavolume",
+          "o": "rw,addr=nfs.parrot-rp.keyw,proto=tcp,async,soft,nolock"
+        }
+      },
+      "hadoop-logvolume": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/nfs-public/reeme/hadoop-logvolume",
+          "o": "rw,addr=nfs.parrot-rp.keyw,proto=tcp,async,soft,nolock"
+        }
       }
     },
     "services": {
