@@ -2,6 +2,7 @@
   "stackName": "full-stack-merlin",
   "clusterPrefix": "merlin-rp",
   "hostMachineDnsServer": "192.168.104.100",
+  "traefikZoneName": "parrot-rp.keyw",
   "workerHostCount": 1,
   "dockerMachineWorkerOptions": {
     "engineLabel": "role=worker"
@@ -181,10 +182,7 @@
             ]
           },
           "labels": [
-            "traefik.enable=true",
-            "traefik.port=5050",
-            "traefik.backend=pgadmin4",
-            "traefik.frontend.rule=Host: pgadmin4.parrot-rp.keyw"
+            "traefik.port=5050"
           ]
         },
         "volumes": [
@@ -217,11 +215,8 @@
             ]
           },
           "labels": [
-            "traefik.enable=true",
             "traefik.port=3000",
-            "traefik.backend=amino3",
-            "traefik.backend.loadbalancer.stickiness=true",
-            "traefik.frontend.rule=Host: amino3.parrot-rp.keyw"
+            "traefik.backend.loadbalancer.stickiness=true"
           ]
         },
         "networks": [
@@ -244,10 +239,7 @@
             ]
           },
           "labels": [
-            "traefik.enable=true",
-            "traefik.port=5432",
-            "traefik.backend=postgres",
-            "traefik.frontend.rule=Host: postgres.parrot-rp.keyw"
+            "traefik.port=5432"
           ]
         },
         "volumes": [
@@ -319,10 +311,7 @@
             ]
           },
           "labels": [
-            "traefik.enable=true",
-            "traefik.port=9100",
-            "traefik.backend=elasticsearch-head",
-            "traefik.frontend.rule=Host: elasticsearch-head.parrot-rp.keyw"
+            "traefik.port=9100"
           ]
         },
         "networks": [
@@ -345,10 +334,7 @@
             ]
           },
           "labels": [
-            "traefik.enable=true",
-            "traefik.port=9200",
-            "traefik.backend=elasticsearch",
-            "traefik.frontend.rule=Host: elasticsearch.parrot-rp.keyw"
+            "traefik.port=9200"
           ]
         },
         "volumes": [
@@ -441,10 +427,7 @@
             ]
           },
           "labels": [
-            "traefik.enable=true",
-            "traefik.port=8088",
-            "traefik.backend=namenode",
-            "traefik.frontend.rule=Host: namenode.parrot-rp.keyw"
+            "traefik.port=8088"
           ]
         },
         "volumes": [
