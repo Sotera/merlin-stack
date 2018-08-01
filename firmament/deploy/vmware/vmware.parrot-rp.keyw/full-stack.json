@@ -17,9 +17,9 @@
     "vmwarevsphereUsername": "root",
     "vmwarevspherePassword": "run2walk!",
     "vmwarevsphereDatastore": "datastore1",
-    "vmwarevsphereCpuCount": 2,
+    "vmwarevsphereCpuCount": 4,
     "vmwarevsphereDiskSize": 40000,
-    "vmwarevsphereMemorySize": 16384,
+    "vmwarevsphereMemorySize": 24576,
     "vmwarevsphereVcenter": "vmware.parrot-rp.keyw"
   },
   "dockerComposeYaml": {
