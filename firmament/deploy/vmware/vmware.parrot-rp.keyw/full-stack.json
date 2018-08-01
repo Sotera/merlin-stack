@@ -2,6 +2,8 @@
   "stackName": "full-stack-merlin",
   "clusterPrefix": "merlin-rp",
   "hostMachineDnsServer": "192.168.104.100",
+  "defaultDockerRegistry": "docker-registry.parrot-rp.keyw:5000",
+  "defaultDockerImageTag": "0.07.14",
   "traefikZoneName": "parrot-rp.keyw",
   "workerHostCount": 1,
   "dockerMachineWorkerOptions": {
@@ -121,7 +123,6 @@
     },
     "services": {
       "dns-bind": {
-        "image": "docker-registry.parrot-rp.keyw:5000/dns-bind:0.07.13",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -167,7 +168,6 @@
         ]
       },
       "pgadmin4": {
-        "image": "docker-registry.parrot-rp.keyw:5000/pgadmin4:0.07.13",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -200,7 +200,6 @@
         ]
       },
       "amino3": {
-        "image": "docker-registry.parrot-rp.keyw:5000/amino3:0.07.13",
         "environment": [
           "AMINO3_REPLACE_BAD_DATA_SOURCE_WITH_MEMORY_DATA_SOURCE=false"
         ],
@@ -224,7 +223,6 @@
         ]
       },
       "postgres": {
-        "image": "docker-registry.parrot-rp.keyw:5000/postgres:0.07.13",
         "environment": [
           "POSTGRES_PASSWORD=password"
         ],
@@ -257,7 +255,6 @@
         ]
       },
       "traefik": {
-        "image": "docker-registry.parrot-rp.keyw:5000/traefik:0.07.13",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -296,7 +293,6 @@
         }
       },
       "elasticsearch-head": {
-        "image": "docker-registry.parrot-rp.keyw:5000/elasticsearch-head:0.07.13",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -319,7 +315,7 @@
         ]
       },
       "elasticsearch": {
-        "image": "docker-registry.parrot-rp.keyw:5000/elasticsearch:0.07.13",
+        "image": "elasticsearch",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -352,7 +348,7 @@
         ]
       },
       "elasticsearch1": {
-        "image": "docker-registry.parrot-rp.keyw:5000/elasticsearch:0.07.13",
+        "image": "elasticsearch",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -382,7 +378,7 @@
         ]
       },
       "elasticsearch2": {
-        "image": "docker-registry.parrot-rp.keyw:5000/elasticsearch:0.07.13",
+        "image": "elasticsearch",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -412,7 +408,7 @@
         ]
       },
       "namenode": {
-        "image": "docker-registry.parrot-rp.keyw:5000/merlin-hadoop-base-alpine:0.07.13",
+        "image": "merlin-hadoop-base-alpine",
         "environment": [
           "HADOOP_MACHINE_ROLE=namenode"
         ],
@@ -453,7 +449,7 @@
         ]
       },
       "datanode": {
-        "image": "docker-registry.parrot-rp.keyw:5000/merlin-hadoop-base-alpine:0.07.13",
+        "image": "merlin-hadoop-base-alpine",
         "environment": [
           "HADOOP_MACHINE_ROLE=datanode"
         ],
@@ -494,7 +490,7 @@
         ]
       },
       "sparkworker": {
-        "image": "docker-registry.parrot-rp.keyw:5000/merlin-hadoop-base-alpine:0.07.13",
+        "image": "merlin-hadoop-base-alpine",
         "environment": [
           "HADOOP_MACHINE_ROLE=sparkworker"
         ],
@@ -535,7 +531,7 @@
         ]
       },
       "stagingserver": {
-        "image": "docker-registry.parrot-rp.keyw:5000/merlin-hadoop-base-alpine:0.07.13",
+        "image": "merlin-hadoop-base-alpine",
         "environment": [
           "HADOOP_MACHINE_ROLE=stagingserver"
         ],
@@ -576,7 +572,6 @@
         ]
       },
       "nginx": {
-        "image": "docker-registry.parrot-rp.keyw:5000/nginx:0.07.13",
         "configs": [
           {
             "source": "nginx-elasticsearch-config",
