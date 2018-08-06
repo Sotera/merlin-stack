@@ -11,8 +11,8 @@
   },
   "dockerMachineDriverOptions": {
     "driver": "amazonec2",
-    "engineInsecureRegistry": "52.0.211.45:5000",
-    "amazonec2-instance-type": "t2.xlarge",
+    "engineInsecureRegistry": "172.31.16.194:5000",
+    "amazonec2-instance-type": "m4.4xlarge",
     "amazonec2-region":"us-east-1",
     "amazonec2-security-group":"docker-machine",
     "amazonec2-ami":"ami-6a3b2315"
@@ -50,54 +50,54 @@
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/nfs-public/hadoop-datavolume",
-          "o": "rw,addr=nfs.parrot-aws.keyw,proto=tcp,async,soft,nolock"
+          "device": ":/var/nfs/merlin",
+          "o": "rw,addr=172.31.47.43,proto=tcp,async,soft,nolock"
         }
       },
       "hadoop-logvolume": {
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/nfs-public/hadoop-logvolume",
-          "o": "rw,addr=nfs.parrot-aws.keyw,proto=tcp,async,soft,nolock"
+          "device": ":/var/nfs/merlin_logs",
+          "o": "rw,addr=172.31.47.43,proto=tcp,async,soft,nolock"
         }
       },
       "pg-datavolume": {
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/nfs-public/postgres",
-          "o": "rw,addr=nfs.parrot-aws.keyw,proto=tcp,async,soft,nolock"
+          "device": ":/var/nfs/postgresql",
+          "o": "rw,addr=172.31.47.43,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume0": {
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/nfs-public/elasticsearch0",
-          "o": "rw,addr=nfs.parrot-aws.keyw,proto=tcp,async,soft,nolock"
+          "device": ":/var/nfs/elasticsearch0",
+          "o": "rw,addr=172.31.47.43,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume1": {
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/nfs-public/elasticsearch1",
-          "o": "rw,addr=nfs.parrot-aws.keyw,proto=tcp,async,soft,nolock"
+          "device": ":/var/nfs/elasticsearch1",
+          "o": "rw,addr=172.31.47.43,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume2": {
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/nfs-public/elasticsearch2",
-          "o": "rw,addr=nfs.parrot-aws.keyw,proto=tcp,async,soft,nolock"
+          "device": ":/var/nfs/elasticsearch2",
+          "o": "rw,addr=172.31.47.43,proto=tcp,async,soft,nolock"
         }
       }
     },
     "services": {
       "namenode": {
-        "image": "52.0.211.45:5000/merlin-hadoop-base-alpine:0.07.13",
+        "image": "172.31.16.194:5000/merlin-hadoop-base-alpine:0.07.14",
         "environment": [
           "HADOOP_MACHINE_ROLE=namenode"
         ],
@@ -142,7 +142,7 @@
         ]
       },
       "datanode": {
-        "image": "52.0.211.45:5000/merlin-hadoop-base-alpine:0.07.13",
+        "image": "172.31.16.194:5000/merlin-hadoop-base-alpine:0.07.14",
         "environment": [
           "HADOOP_MACHINE_ROLE=datanode"
         ],
@@ -153,7 +153,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == worker"
+              "node.role == manager"
             ]
           },
           "labels": [
@@ -183,7 +183,7 @@
         ]
       },
       "sparkworker": {
-        "image": "52.0.211.45:5000/merlin-hadoop-base-alpine:0.07.13",
+        "image": "172.31.16.194:5000/merlin-hadoop-base-alpine:0.07.14",
         "environment": [
           "HADOOP_MACHINE_ROLE=sparkworker"
         ],
@@ -194,7 +194,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == worker"
+              "node.role == manager"
             ]
           },
           "labels": [
@@ -224,7 +224,7 @@
         ]
       },
       "stagingserver": {
-        "image": "52.0.211.45:5000/merlin-hadoop-base-alpine:0.07.13",
+        "image": "172.31.16.194:5000/merlin-hadoop-base-alpine:0.07.14",
         "environment": [
           "HADOOP_MACHINE_ROLE=stagingserver"
         ],
@@ -235,7 +235,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == worker"
+              "node.role == manager"
             ]
           },
           "labels": [
@@ -265,7 +265,7 @@
         ]
       },
       "pgadmin4": {
-        "image": "52.0.211.45:5000/pgadmin4:0.07.13",
+        "image": "172.31.16.194:5000/pgadmin4:0.07.14",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -301,7 +301,7 @@
         ]
       },
       "amino3": {
-        "image": "52.0.211.45:5000/amino3:0.07.13",
+        "image": "172.31.16.194:5000/amino3:0.07.14",
         "environment": [
           "AMINO3_REPLACE_BAD_DATA_SOURCE_WITH_MEMORY_DATA_SOURCE=false"
         ],
@@ -312,7 +312,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == worker"
+              "node.role == manager"
             ]
           },
           "labels": [
@@ -328,7 +328,7 @@
         ]
       },
       "postgres": {
-        "image": "52.0.211.45:5000/postgres:0.07.13",
+        "image": "172.31.16.194:5000/postgres:0.07.14",
         "environment": [
           "POSTGRES_PASSWORD=password"
         ],
@@ -364,7 +364,7 @@
         ]
       },
       "traefik": {
-        "image": "52.0.211.45:5000/traefik:0.07.13",
+        "image": "172.31.16.194:5000/traefik:0.07.14",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -404,7 +404,7 @@
         }
       },
       "elasticsearch-head": {
-        "image": "52.0.211.45:5000/elasticsearch-head:0.07.13",
+        "image": "172.31.16.194:5000/elasticsearch-head:0.07.14",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -430,7 +430,7 @@
         ]
       },
       "elasticsearch": {
-        "image": "52.0.211.45:5000/elasticsearch:0.07.13",
+        "image": "172.31.16.194:5000/elasticsearch:0.07.14",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -466,7 +466,7 @@
         ]
       },
       "elasticsearch1": {
-        "image": "52.0.211.45:5000/elasticsearch:0.07.13",
+        "image": "172.31.16.194:5000/elasticsearch:0.07.14",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -477,7 +477,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == worker"
+              "node.role == manager"
             ]
           }
         },
@@ -496,7 +496,7 @@
         ]
       },
       "elasticsearch2": {
-        "image": "52.0.211.45:5000/elasticsearch:0.07.13",
+        "image": "172.31.16.194:5000/elasticsearch:0.07.14",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -507,7 +507,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == worker"
+              "node.role == manager"
             ]
           }
         },
@@ -526,7 +526,7 @@
         ]
       },
       "nginx": {
-        "image": "52.0.211.45:5000/nginx:0.07.13",
+        "image": "172.31.16.194:5000/nginx:0.07.14",
         "configs": [
           {
             "source": "nginx-amino3-config",
@@ -571,6 +571,9 @@
           "8088:8088",
           "50070:50070",
           "5050:5050"
+        ],
+        "networks": [
+          "net"
         ]
       }
     }
