@@ -1,10 +1,10 @@
 {
-  "stackName": "merlin",
-  "clusterPrefix": "merlin-les",
+  "stackName": "reeme",
+  "clusterPrefix": "reeme-les",
   "hostMachineDnsServer": "192.168.104.100",
   "defaultDockerRegistry": "docker-registry.parrot-les.keyw:5000",
   "defaultDockerImageTag": "0.07.14",
-  "traefikZoneName": "parrot-rp.keyw",
+  "traefikZoneName": "parrot-les.keyw",
   "workerHostCount": 1,
   "dockerMachineWorkerOptions": {
     "engineLabel": "role=worker"
@@ -61,7 +61,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/nfs-public/reeme/dns-bind-conf-volume",
-          "o": "rw,addr=nfs.parrot-rp.keyw,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=nfs.parrot-les.keyw,proto=tcp,async,soft,nolock"
         }
       },
       "dns-bind-data-volume": {
@@ -69,7 +69,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/nfs-public/reeme/dns-bind-data-volume",
-          "o": "rw,addr=nfs.parrot-rp.keyw,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=nfs.parrot-les.keyw,proto=tcp,async,soft,nolock"
         }
       },
       "pg-datavolume": {
@@ -77,7 +77,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/nfs-public/reeme/postgres",
-          "o": "rw,addr=nfs.parrot-rp.keyw,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=nfs.parrot-les.keyw,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume0": {
@@ -85,7 +85,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/nfs-public/reeme/elasticsearch0",
-          "o": "rw,addr=nfs.parrot-rp.keyw,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=nfs.parrot-les.keyw,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume1": {
@@ -93,7 +93,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/nfs-public/reeme/elasticsearch1",
-          "o": "rw,addr=nfs.parrot-rp.keyw,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=nfs.parrot-les.keyw,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume2": {
@@ -101,7 +101,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/nfs-public/reeme/elasticsearch2",
-          "o": "rw,addr=nfs.parrot-rp.keyw,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=nfs.parrot-les.keyw,proto=tcp,async,soft,nolock"
         }
       },
       "hadoop-datavolume": {
@@ -109,7 +109,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/nfs-public/reeme/hadoop-datavolume",
-          "o": "rw,addr=nfs.parrot-rp.keyw,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=nfs.parrot-les.keyw,proto=tcp,async,soft,nolock"
         }
       },
       "hadoop-logvolume": {
@@ -117,7 +117,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/nfs-public/reeme/hadoop-logvolume",
-          "o": "rw,addr=nfs.parrot-rp.keyw,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=nfs.parrot-les.keyw,proto=tcp,async,soft,nolock"
         }
       }
     },
