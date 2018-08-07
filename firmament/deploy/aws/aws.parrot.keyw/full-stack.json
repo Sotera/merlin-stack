@@ -2,7 +2,7 @@
   "stackName": "merlin",
   "clusterPrefix": "merlin-aws",
   "hostMachineDnsServer": "192.168.104.100",
-  "workerHostCount": 0,
+  "workerHostCount": 2,
   "dockerMachineWorkerOptions": {
     "engineLabel": "role=worker"
   },
@@ -13,9 +13,13 @@
     "driver": "amazonec2",
     "engineInsecureRegistry": "172.31.16.194:5000",
     "amazonec2-instance-type": "m4.4xlarge",
-    "amazonec2-region":"us-east-1",
     "amazonec2-security-group":"docker-machine",
-    "amazonec2-ami":"ami-80a1b9ff"
+    "amazonec2-ami":"ami-b9978cc6",
+    "amazonec2-vpc-id":"vpc-44a0d421",
+    "amazonec2-subnet-id":"subnet-eebf2999",
+    "amazonec2-region":"us-east-1",
+    "amazonec2-zone":"b",
+    "amazonec2-use-private-address":true
   },
   "dockerComposeYaml": {
     "version": "3.4",
@@ -153,7 +157,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "node.role == worker"
             ]
           },
           "labels": [
@@ -194,7 +198,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "node.role == worker"
             ]
           },
           "labels": [
@@ -477,7 +481,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "node.role == worker"
             ]
           }
         },
@@ -507,7 +511,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "node.role == worker"
             ]
           }
         },
