@@ -423,7 +423,11 @@
             ]
           },
           "labels": [
-            "traefik.port=8088"
+            "traefik.enabled=true",
+            "traefik.namenode.port=8088",
+            "traefik.namenode.frontend.rule=Host:namenode.parrot-les.keyw",
+            "traefik.hdfs.port=50070",
+            "traefik.hdfs.frontend.rule=Host:hdfs.parrot-les.keyw"
           ]
         },
         "volumes": [
