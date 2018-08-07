@@ -15,7 +15,7 @@
     "amazonec2-instance-type": "m4.4xlarge",
     "amazonec2-region":"us-east-1",
     "amazonec2-security-group":"docker-machine",
-    "amazonec2-ami":"ami-6a3b2315"
+    "amazonec2-ami":"ami-80a1b9ff"
   },
   "dockerComposeYaml": {
     "version": "3.4",
