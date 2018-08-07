@@ -15,4 +15,3 @@ dill
 xmltodict
 pandas
 python-Levenshtein
-igraph

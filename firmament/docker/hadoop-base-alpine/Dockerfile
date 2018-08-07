@@ -6,9 +6,8 @@ WORKDIR /usr/local
 
 # Install additional requirements to hadoop-base-alpine base image
 COPY ./config/requirements.txt requirements.txt
-COPY ./config/libpst-0.6.71-r0.apk libpst-0.6.71-r0.apk
-RUN apk add --no-cache screen file p7zip
-RUN apk add --no-cache --allow-untrusted libpst-0.6.71-r0.apk
+RUN apt-get install -y libigraph0-dev python-pip build-essential python-dev libpst-dev readpst
+
 RUN pip install -r requirements.txt
 RUN curl -o /usr/local/hadoop/share/hadoop/yarn/lib/elasticsearch-spark-20_2.11-6.3.2.jar https://repo.maven.apache.org/maven2/org/elasticsearch/elasticsearch-spark-20_2.11/6.3.2/elasticsearch-spark-20_2.11-6.3.2.jar
 RUN echo "alias etl='cd /mnt/merlin/merlin-etl'" >> /root/.bashrc
