@@ -6,7 +6,9 @@ WORKDIR /usr/local
 
 # Install additional requirements to hadoop-base-alpine base image
 COPY ./config/requirements.txt requirements.txt
-RUN apt-get install -y libigraph0-dev python-pip build-essential python-dev libpst-dev readpst
+RUN apt-get install -y libigraph0-dev python-pip libpst-dev readpst python-igraph
+
+
 
 RUN pip install -r requirements.txt
 RUN curl -o /usr/local/hadoop/share/hadoop/yarn/lib/elasticsearch-spark-20_2.11-6.3.2.jar https://repo.maven.apache.org/maven2/org/elasticsearch/elasticsearch-spark-20_2.11/6.3.2/elasticsearch-spark-20_2.11-6.3.2.jar
