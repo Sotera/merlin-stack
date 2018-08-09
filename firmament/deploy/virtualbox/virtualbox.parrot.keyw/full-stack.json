@@ -1,11 +1,11 @@
 {
   "stackName": "full-stack-merlin",
-  "clusterPrefix": "parrot-amd",
+  "clusterPrefix": "full-stack-reeme",
   "hostMachineDnsServer": "192.168.104.100",
   "defaultDockerRegistry": "docker-registry.parrot.keyw:5000",
   "defaultDockerImageTag": "0.07.14",
-  "traefikZoneName": "parrot.keyw",
-  "workerHostCount": 1,
+  "traefikZoneName": "parrot-reeme.keyw",
+  "workerHostCount": 0,
   "dockerMachineWorkerOptions": {
     "engineLabel": "role=worker"
   },
@@ -14,15 +14,10 @@
   },
   "dockerMachineDriverOptions": {
     "engineInsecureRegistry": "docker-registry.parrot.keyw:5000",
-    "vmwarevsphereBoot2dockerUrl": "https://s3.amazonaws.com/merlin-jreeme/boot2docker.iso",
-    "driver": "vmwarevsphere",
-    "vmwarevsphereUsername": "root",
-    "vmwarevspherePassword": "run2walk!",
-    "vmwarevsphereDatastore": "datastore1",
-    "vmwarevsphereCpuCount": 4,
-    "vmwarevsphereDiskSize": 40000,
-    "vmwarevsphereMemorySize": 24576,
-    "vmwarevsphereVcenter": "vmware.parrot.keyw"
+    "virtualboxBoot2dockerUrl": "https://s3.amazonaws.com/merlin-jreeme/boot2docker.iso",
+    "driver": "virtualbox",
+    "virtualboxCpuCount": 2,
+    "virtualboxMemory": 16384
   },
   "dockerComposeYaml": {
     "version": "3.6",
@@ -57,67 +52,59 @@
     },
     "volumes": {
       "dns-bind-conf-volume": {
-        "driver": "local",
         "driver_opts": {
-          "type": "nfs",
-          "device": ":/nfs-public/parrot-amd-test/dns-bind-conf-volume",
-          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
+          "type": "none",
+          "device": "$PWD/dns-bind-conf-volume",
+          "o": "bind"
         }
       },
       "dns-bind-data-volume": {
-        "driver": "local",
         "driver_opts": {
-          "type": "nfs",
-          "device": ":/nfs-public/parrot-amd-test/dns-bind-data-volume",
-          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
+          "type": "none",
+          "device": "$PWD/dns-bind-data-volume",
+          "o": "bind"
         }
       },
       "pg-datavolume": {
-        "driver": "local",
         "driver_opts": {
-          "type": "nfs",
-          "device": ":/nfs-public/parrot-amd-test/postgres",
-          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
+          "type": "none",
+          "device": "$PWD/postgres",
+          "o": "bind"
         }
       },
       "elasticsearch-datavolume0": {
-        "driver": "local",
         "driver_opts": {
-          "type": "nfs",
-          "device": ":/nfs-public/parrot-amd-test/elasticsearch0",
-          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
+          "type": "none",
+          "device": "$PWD/elasticsearch0",
+          "o": "bind"
         }
       },
       "elasticsearch-datavolume1": {
-        "driver": "local",
         "driver_opts": {
-          "type": "nfs",
-          "device": ":/nfs-public/parrot-amd-test/elasticsearch1",
-          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
+          "type": "none",
+          "device": "$PWD/elasticsearch1",
+          "o": "bind"
         }
       },
       "elasticsearch-datavolume2": {
-        "driver": "local",
         "driver_opts": {
-          "type": "nfs",
-          "device": ":/nfs-public/parrot-amd-test/elasticsearch2",
-          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
+          "type": "none",
+          "device": "$PWD/elasticsearch2",
+          "o": "bind"
         }
       },
       "hadoop-datavolume": {
-        "driver": "local",
         "driver_opts": {
-          "type": "nfs",
-          "device": ":/nfs-public/parrot-amd-test/hadoop-datavolume",
-          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
+          "type": "none",
+          "device": "$PWD/hadoop-datavolume",
+          "o": "bind"
         }
       },
       "hadoop-logvolume": {
-        "driver": "local",
         "driver_opts": {
-          "type": "nfs",
-          "device": ":/nfs-public/parrot-amd-test/hadoop-logvolume",
-          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
+          "type": "none",
+          "device": "$PWD/hadoop-logvolume",
+          "o": "bind"
         }
       }
     },
@@ -210,7 +197,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == worker"
+              "node.role == master"
             ]
           },
           "labels": [
@@ -359,7 +346,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == worker"
+              "node.role == master"
             ]
           }
         },
@@ -389,7 +376,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == worker"
+              "node.role == master"
             ]
           }
         },
@@ -464,7 +451,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == worker"
+              "node.role == master"
             ]
           },
           "labels": [
@@ -505,7 +492,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == worker"
+              "node.role == master"
             ]
           },
           "labels": [
@@ -546,7 +533,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == worker"
+              "node.role == master"
             ]
           },
           "labels": [

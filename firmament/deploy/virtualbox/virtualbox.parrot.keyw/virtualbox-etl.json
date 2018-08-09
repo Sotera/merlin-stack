@@ -12,22 +12,22 @@
     },
     "configs": {
       "nginx-es-config": {
-        "file": "../config/nginx-elasticsearch.conf"
+        "file": "../../config/nginx-elasticsearch.conf"
       },
       "nginx-es-head-config": {
-        "file": "../config/nginx-elasticsearch-head.conf"
+        "file": "../../config/nginx-elasticsearch-head.conf"
       },
       "nginx-pgadmin4-config": {
-        "file": "../config/nginx-pgadmin4.conf"
+        "file": "../../config/nginx-pgadmin4.conf"
       },
       "nginx-amino3-config": {
-        "file": "../config/nginx-amino3.conf"
+        "file": "../../config/nginx-amino3.conf"
       },
       "nginx-namenode-config": {
-        "file": "../config/nginx-namenode.conf"
+        "file": "../../config/nginx-namenode.conf"
       },
       "nginx-hdfs-config": {
-        "file": "../config/nginx-hdfs.conf"
+        "file": "../../config/nginx-hdfs.conf"
       }
     },
     "volumes": {

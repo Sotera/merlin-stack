@@ -8,7 +8,7 @@
     },
     "configs": {
       "traefik-config": {
-        "file": "../config/traefik.toml"
+        "file": "../../config/traefik.toml"
       }
     },
     "volumes": {
