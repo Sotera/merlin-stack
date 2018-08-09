@@ -10,7 +10,7 @@
     "engineLabel": "role=worker"
   },
   "dockerMachineMasterOptions": {
-    "engineLabel": "role=master"
+    "engineLabel": "role=manager"
   },
   "dockerMachineDriverOptions": {
     "engineInsecureRegistry": "docker-registry.parrot.keyw:5000",
@@ -52,59 +52,67 @@
     },
     "volumes": {
       "dns-bind-conf-volume": {
+        "driver": "local",
         "driver_opts": {
-          "type": "none",
-          "device": "$PWD/dns-bind-conf-volume",
-          "o": "bind"
+          "type": "nfs",
+          "device": ":/nfs-public/delete-me-after-09-AUG-00/dns-bind-conf-volume",
+          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
         }
       },
       "dns-bind-data-volume": {
+        "driver": "local",
         "driver_opts": {
-          "type": "none",
-          "device": "$PWD/dns-bind-data-volume",
-          "o": "bind"
+          "type": "nfs",
+          "device": ":/nfs-public/delete-me-after-09-AUG-00/dns-bind-data-volume",
+          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
         }
       },
       "pg-datavolume": {
+        "driver": "local",
         "driver_opts": {
-          "type": "none",
-          "device": "$PWD/postgres",
-          "o": "bind"
+          "type": "nfs",
+          "device": ":/nfs-public/delete-me-after-09-AUG-00/postgres",
+          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume0": {
+        "driver": "local",
         "driver_opts": {
-          "type": "none",
-          "device": "$PWD/elasticsearch0",
-          "o": "bind"
+          "type": "nfs",
+          "device": ":/nfs-public/delete-me-after-09-AUG-00/elasticsearch0",
+          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume1": {
+        "driver": "local",
         "driver_opts": {
-          "type": "none",
-          "device": "$PWD/elasticsearch1",
-          "o": "bind"
+          "type": "nfs",
+          "device": ":/nfs-public/delete-me-after-09-AUG-00/elasticsearch1",
+          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume2": {
+        "driver": "local",
         "driver_opts": {
-          "type": "none",
-          "device": "$PWD/elasticsearch2",
-          "o": "bind"
+          "type": "nfs",
+          "device": ":/nfs-public/delete-me-after-09-AUG-00/elasticsearch2",
+          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
         }
       },
       "hadoop-datavolume": {
+        "driver": "local",
         "driver_opts": {
-          "type": "none",
-          "device": "$PWD/hadoop-datavolume",
-          "o": "bind"
+          "type": "nfs",
+          "device": ":/nfs-public/delete-me-after-09-AUG-00/hadoop-datavolume",
+          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
         }
       },
       "hadoop-logvolume": {
+        "driver": "local",
         "driver_opts": {
-          "type": "none",
-          "device": "$PWD/hadoop-logvolume",
-          "o": "bind"
+          "type": "nfs",
+          "device": ":/nfs-public/delete-me-after-09-AUG-00/hadoop-logvolume",
+          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
         }
       }
     },
