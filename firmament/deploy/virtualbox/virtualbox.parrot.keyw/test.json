@@ -56,7 +56,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/nfs-public/delete-me-after-09-AUG-00/dns-bind-conf-volume",
-          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=nfs.parrot-les.keyw,proto=tcp,async,soft,nolock"
         }
       },
       "dns-bind-data-volume": {
@@ -64,7 +64,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/nfs-public/delete-me-after-09-AUG-00/dns-bind-data-volume",
-          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=nfs.parrot-les.keyw,proto=tcp,async,soft,nolock"
         }
       },
       "pg-datavolume": {
@@ -72,7 +72,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/nfs-public/delete-me-after-09-AUG-00/postgres",
-          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=nfs.parrot-les.keyw,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume0": {
@@ -80,7 +80,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/nfs-public/delete-me-after-09-AUG-00/elasticsearch0",
-          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=nfs.parrot-les.keyw,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume1": {
@@ -88,7 +88,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/nfs-public/delete-me-after-09-AUG-00/elasticsearch1",
-          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=nfs.parrot-les.keyw,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume2": {
@@ -96,7 +96,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/nfs-public/delete-me-after-09-AUG-00/elasticsearch2",
-          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=nfs.parrot-les.keyw,proto=tcp,async,soft,nolock"
         }
       },
       "hadoop-datavolume": {
@@ -104,7 +104,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/nfs-public/delete-me-after-09-AUG-00/hadoop-datavolume",
-          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=nfs.parrot-les.keyw,proto=tcp,async,soft,nolock"
         }
       },
       "hadoop-logvolume": {
@@ -112,7 +112,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/nfs-public/delete-me-after-09-AUG-00/hadoop-logvolume",
-          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=nfs.parrot-les.keyw,proto=tcp,async,soft,nolock"
         }
       }
     },
