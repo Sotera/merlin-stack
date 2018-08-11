@@ -1,6 +1,25 @@
+
 {
+  "workerHostCount": 0,
+  "dockerMachineWorkerOptions": {
+    "engineLabel": "role=worker"
+  },
+  "dockerMachineMasterOptions": {
+    "engineLabel": "role=master"
+  },
+  "dockerMachineDriverOptions": {
+    "driver": "virtualbox",
+    "virtualboxCpuCount": 2,
+    "virtualboxMemory": 16384,
+    "virtualboxBoot2dockerUrl": "https://s3.amazonaws.com/merlin-jreeme/boot2docker.iso",
+    "engineInsecureRegistry": "docker-registry.parrot.keyw:5000"
+  },
   "stackName":"merlin",
   "clusterPrefix": "merlin-local",
+  "hostMachineDnsServer": "192.168.104.100",
+  "defaultDockerRegistry": "docker-registry.parrot.keyw:5000",
+  "defaultDockerImageTag": "0.07.14",
+  "traefikZoneName": "vbox.keyw",
   "dockerComposeYaml": {
     "version": "3.3",
     "networks": {
@@ -8,25 +27,25 @@
     },
     "configs": {
       "traefik-config": {
-        "file": "../config/traefik.toml"
+        "file": "../../config/traefik.toml"
       },
       "nginx-es-config": {
-        "file": "../config/nginx-elasticsearch.conf"
+        "file": "../../config/nginx-elasticsearch.conf"
       },
       "nginx-es-head-config": {
-        "file": "../config/nginx-elasticsearch-head.conf"
+        "file": "../../config/nginx-elasticsearch-head.conf"
       },
       "nginx-pgadmin4-config": {
-        "file": "../config/nginx-pgadmin4.conf"
+        "file": "../../config/nginx-pgadmin4.conf"
       },
       "nginx-amino3-config": {
-        "file": "../config/nginx-amino3.conf"
+        "file": "../../config/nginx-amino3.conf"
       },
       "nginx-namenode-config": {
-        "file": "../config/nginx-namenode.conf"
+        "file": "../../config/nginx-namenode.conf"
       },
       "nginx-hdfs-config": {
-        "file": "../config/nginx-hdfs.conf"
+        "file": "../../config/nginx-hdfs.conf"
       }
     },
     "volumes": {
@@ -34,8 +53,8 @@
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/var/nfs/merlin/db/postgresql",
-          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+          "device": ":/nfs-public/delete-me-after-09-AUG/postgres",
+          "o": "rw,addr=nfs.parrot-les.keyw,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume1": {
@@ -81,7 +100,6 @@
     },
     "services": {
       "pgadmin4": {
-        "image": "52.0.211.45:5000/pgadmin4:0.07.14",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -96,10 +114,7 @@
             ]
           },
           "labels": [
-            "traefik.enable=true",
-            "traefik.port=5050",
-            "traefik.backend=pgadmin4",
-            "traefik.frontend.rule=Host: pgadmin4.vbox.keyw"
+            "traefik.port=5050"
           ]
         },
         "volumes": [
@@ -117,7 +132,6 @@
         ]
       },
       "amino3": {
-        "image": "52.0.211.45:5000/amino3:0.07.14",
         "environment": [
           "AMINO3_REPLACE_BAD_DATA_SOURCE_WITH_MEMORY_DATA_SOURCE=false"
         ],
@@ -132,11 +146,8 @@
             ]
           },
           "labels": [
-            "traefik.enable=true",
             "traefik.port=3000",
-            "traefik.backend=amino3",
-            "traefik.backend.loadbalancer.stickiness=true",
-            "traefik.frontend.rule=Host: amino3.vbox.keyw"
+            "traefik.backend.loadbalancer.stickiness=true"
           ]
         },
         "networks": [
@@ -144,7 +155,6 @@
         ]
       },
       "postgres": {
-        "image": "52.0.211.45:5000/postgres:0.07.14",
         "environment": [
           "POSTGRES_PASSWORD=password"
         ],
@@ -177,7 +187,6 @@
         ]
       },
       "traefik": {
-        "image": "52.0.211.45:5000/traefik:0.07.14",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -217,7 +226,6 @@
         }
       },
       "elasticsearch-head": {
-        "image": "52.0.211.45:5000/elasticsearch-head:0.07.14",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -232,10 +240,7 @@
             ]
           },
           "labels": [
-            "traefik.enable=true",
-            "traefik.port=9100",
-            "traefik.backend=elasticsearch-head",
-            "traefik.frontend.rule=Host: elasticsearch-head.vbox.keyw"
+            "traefik.port=9100"
           ]
         },
         "networks": [
@@ -243,7 +248,6 @@
         ]
       },
       "elasticsearch": {
-        "image": "52.0.211.45:5000/elasticsearch:0.07.14",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -258,10 +262,7 @@
             ]
           },
           "labels": [
-            "traefik.enable=true",
-            "traefik.port=9200",
-            "traefik.backend=elasticsearch",
-            "traefik.frontend.rule=Host: elasticsearch.vbox.keyw"
+            "traefik.port=9200"
           ]
         },
         "volumes": [
@@ -279,7 +280,7 @@
         ]
       },
       "elasticsearch1": {
-        "image": "52.0.211.45:5000/elasticsearch:0.07.14",
+        "image": "elasticsearch",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -308,8 +309,38 @@
           "net"
         ]
       },
+      "elasticsearch2": {
+        "image": "elasticsearch",
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          }
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "elasticsearch-datavolume3",
+            "target": "/usr/share/elasticsearch/data",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
       "namenode": {
-        "image": "52.0.211.45:5000/merlin-hadoop-base-alpine:0.07.14",
+        "image": "merlin-hadoop-base-alpine",
         "environment": [
           "HADOOP_MACHINE_ROLE=namenode"
         ],
@@ -354,7 +385,7 @@
         ]
       },
       "datanode": {
-        "image": "52.0.211.45:5000/merlin-hadoop-base-alpine:0.07.14",
+        "image": "merlin-hadoop-base-alpine",
         "environment": [
           "HADOOP_MACHINE_ROLE=datanode"
         ],
@@ -395,7 +426,7 @@
         ]
       },
       "sparkworker": {
-        "image": "52.0.211.45:5000/merlin-hadoop-base-alpine:0.07.14",
+        "image": "merlin-hadoop-base-alpine",
         "environment": [
           "HADOOP_MACHINE_ROLE=sparkworker"
         ],
@@ -436,7 +467,7 @@
         ]
       },
       "stagingserver": {
-        "image": "52.0.211.45:5000/merlin-hadoop-base-alpine:0.07.14",
+        "image": "merlin-hadoop-base-alpine",
         "environment": [
           "HADOOP_MACHINE_ROLE=stagingserver"
         ],
@@ -477,7 +508,6 @@
         ]
       },
       "nginx": {
-        "image": "52.0.211.45:5000/nginx:0.07.14",
         "configs": [
           {
             "source": "nginx-amino3-config",
@@ -528,19 +558,5 @@
         ]
       }
     }
-  },
-  "workerHostCount": 0,
-  "dockerMachineWorkerOptions": {
-    "engineLabel": "role=worker"
-  },
-  "dockerMachineMasterOptions": {
-    "engineLabel": "role=master"
-  },
-  "dockerMachineDriverOptions": {
-    "driver": "virtualbox",
-    "virtualboxCpuCount": 2,
-    "virtualboxMemory": 32768,
-    "virtualboxBoot2dockerUrl": "https://s3.amazonaws.com/merlin-jreeme/boot2docker.iso",
-    "engineInsecureRegistry": "52.0.211.45:5000"
   }
 }

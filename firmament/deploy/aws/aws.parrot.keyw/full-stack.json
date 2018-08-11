@@ -1,28 +1,81 @@
 {
   "stackName": "merlin",
-  "clusterPrefix": "merlin-aws",
-  "hostMachineDnsServer": "192.168.104.100",
-  "workerHostCount": 2,
-  "dockerMachineWorkerOptions": {
-    "engineLabel": "role=worker"
-  },
-  "dockerMachineMasterOptions": {
-    "engineLabel": "role=master"
-  },
+  "clusterPrefix": "aws-test",
+  "defaultDockerRegistry": "172.31.16.194:5000",
+  "defaultDockerImageTag": "0.07.14",
+  "traefikZoneName": "merlin-aws.keyw",
   "dockerMachineDriverOptions": {
     "driver": "amazonec2",
-    "engineInsecureRegistry": "172.31.16.194:5000",
-    "amazonec2-instance-type": "m4.4xlarge",
-    "amazonec2-security-group":"docker-machine",
-    "amazonec2-ami":"ami-b9978cc6",
-    "amazonec2-vpc-id":"vpc-44a0d421",
-    "amazonec2-subnet-id":"subnet-eebf2999",
-    "amazonec2-region":"us-east-1",
-    "amazonec2-zone":"b",
-    "amazonec2-use-private-address":true
+    "engineInsecureRegistry": "172.31.16.194:5000"
+  },
+  "dockerMachines": {
+    "common": {
+      "amazonec2-security-group":"docker-machine",
+      "amazonec2-ami":"ami-0aab792550095b20f",
+      "amazonec2-vpc-id":"vpc-44a0d421",
+      "amazonec2-subnet-id":"subnet-eebf2999",
+      "amazonec2-region":"us-east-1",
+      "amazonec2-zone":"b",
+      "amazonec2-use-private-address":true
+    },
+    "manager": {
+      "nodeCount": 1,
+      "nodeName": "managerNode",
+      "amazonec2-instance-type": "m4.4xlarge",
+      "engineLabels": {
+        "role": "manager"
+      }
+    },
+    "workers": [
+      {
+        "nodeCount": 3,
+        "nodeName": "elasticsearchNode",
+        "amazonec2-instance-type": "t2.xlarge",
+        "engineLabels": {
+          "role": "worker",
+          "affinity": "elasticsearchNode"
+        }
+      },
+      {
+        "nodeCount": 1,
+        "nodeName": "postgresNode",
+        "amazonec2-instance-type": "t2.medium",
+        "engineLabels": {
+          "role": "worker",
+          "affinity": "postgresNode"
+        }
+      },
+      {
+        "nodeCount": 4,
+        "nodeName": "sparkNode",
+        "amazonec2-instance-type": "m4.4xlarge",
+        "engineLabels": {
+          "role": "worker",
+          "affinity": "sparkNode"
+        }
+      },
+      {
+        "nodeCount": 1,
+        "nodeName": "hdfsNode",
+        "amazonec2-instance-type": "t2.medium",
+        "engineLabels": {
+          "role": "worker",
+          "affinity": "hdfsNode"
+        }
+      },
+      {
+        "nodeCount": 1,
+        "nodeName": "stagingServerNode",
+        "amazonec2-instance-type": "t2.medium",
+        "engineLabels": {
+          "role": "worker",
+          "affinity": "stagingServerNode"
+        }
+      }
+    ]
   },
   "dockerComposeYaml": {
-    "version": "3.4",
+    "version": "3.6",
     "networks": {
       "net": null
     },
@@ -54,54 +107,54 @@
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/var/nfs/merlin",
-          "o": "rw,addr=172.31.47.43,proto=tcp,async,soft,nolock"
+          "device": ":/merlin",
+          "o": "rw,addr=fs-337c8678.efs.us-east-1.amazonaws.com,proto=tcp,async,soft,nolock"
         }
       },
       "hadoop-logvolume": {
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/var/nfs/merlin_logs",
-          "o": "rw,addr=172.31.47.43,proto=tcp,async,soft,nolock"
+          "device": ":/merlin_logs",
+          "o": "rw,addr=fs-337c8678.efs.us-east-1.amazonaws.com,proto=tcp,async,soft,nolock"
         }
       },
       "pg-datavolume": {
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/var/nfs/postgresql",
-          "o": "rw,addr=172.31.47.43,proto=tcp,async,soft,nolock"
+          "device": ":/postgresql",
+          "o": "rw,addr=fs-337c8678.efs.us-east-1.amazonaws.com,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume0": {
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/var/nfs/elasticsearch0",
-          "o": "rw,addr=172.31.47.43,proto=tcp,async,soft,nolock"
+          "device": ":/elasticsearch0",
+          "o": "rw,addr=fs-337c8678.efs.us-east-1.amazonaws.com,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume1": {
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/var/nfs/elasticsearch1",
-          "o": "rw,addr=172.31.47.43,proto=tcp,async,soft,nolock"
+          "device": ":/elasticsearch1",
+          "o": "rw,addr=addr=fs-337c8678.efs.us-east-1.amazonaws.com,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume2": {
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/var/nfs/elasticsearch2",
-          "o": "rw,addr=172.31.47.43,proto=tcp,async,soft,nolock"
+          "device": ":/elasticsearch2",
+          "o": "rw,addr=addr=fs-337c8678.efs.us-east-1.amazonaws.com,proto=tcp,async,soft,nolock"
         }
       }
     },
     "services": {
       "namenode": {
-        "image": "172.31.16.194:5000/merlin-hadoop-base-alpine:0.07.14",
+        "image": "merlin-hadoop-base-alpine",
         "environment": [
           "HADOOP_MACHINE_ROLE=namenode"
         ],
@@ -146,7 +199,7 @@
         ]
       },
       "datanode": {
-        "image": "172.31.16.194:5000/merlin-hadoop-base-alpine:0.07.14",
+        "image": "merlin-hadoop-base-alpine",
         "environment": [
           "HADOOP_MACHINE_ROLE=datanode"
         ],
@@ -157,7 +210,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == worker"
+              "engine.labels.affinity==hdfsNode"
             ]
           },
           "labels": [
@@ -187,18 +240,18 @@
         ]
       },
       "sparkworker": {
-        "image": "172.31.16.194:5000/merlin-hadoop-base-alpine:0.07.14",
+        "image": "merlin-hadoop-base-alpine",
         "environment": [
           "HADOOP_MACHINE_ROLE=sparkworker"
         ],
         "deploy": {
-          "replicas": 1,
+          "replicas": 4,
           "restart_policy": {
             "condition": "on-failure"
           },
           "placement": {
             "constraints": [
-              "node.role == worker"
+              "engine.labels.affinity==sparkNode"
             ]
           },
           "labels": [
@@ -228,7 +281,7 @@
         ]
       },
       "stagingserver": {
-        "image": "172.31.16.194:5000/merlin-hadoop-base-alpine:0.07.14",
+        "image": "merlin-hadoop-base-alpine",
         "environment": [
           "HADOOP_MACHINE_ROLE=stagingserver"
         ],
@@ -239,7 +292,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.affinity==stagingServerNode"
             ]
           },
           "labels": [
@@ -269,7 +322,6 @@
         ]
       },
       "pgadmin4": {
-        "image": "172.31.16.194:5000/pgadmin4:0.07.14",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -284,10 +336,7 @@
             ]
           },
           "labels": [
-            "traefik.enable=true",
-            "traefik.port=5050",
-            "traefik.backend=pgadmin4",
-            "traefik.frontend.rule=Host: pgadmin4.parrot-aws.keyw"
+            "traefik.port=5050"
           ]
         },
         "volumes": [
@@ -343,7 +392,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.affinity==postgresNode"
             ]
           },
           "labels": [
@@ -368,7 +417,6 @@
         ]
       },
       "traefik": {
-        "image": "172.31.16.194:5000/traefik:0.07.14",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -408,7 +456,6 @@
         }
       },
       "elasticsearch-head": {
-        "image": "172.31.16.194:5000/elasticsearch-head:0.07.14",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -423,10 +470,7 @@
             ]
           },
           "labels": [
-            "traefik.enable=true",
-            "traefik.port=9100",
-            "traefik.backend=elasticsearch-head",
-            "traefik.frontend.rule=Host: elasticsearch-head.parrot-aws.keyw"
+            "traefik.port=9100"
           ]
         },
         "networks": [
@@ -434,7 +478,7 @@
         ]
       },
       "elasticsearch": {
-        "image": "172.31.16.194:5000/elasticsearch:0.07.14",
+        "image": "elasticsearch",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -445,14 +489,11 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.affinity==elasticsearchNode"
             ]
           },
           "labels": [
-            "traefik.enable=true",
-            "traefik.port=9200",
-            "traefik.backend=elasticsearch",
-            "traefik.frontend.rule=Host: elasticsearch.parrot-aws.keyw"
+            "traefik.port=9200"
           ]
         },
         "volumes": [
@@ -470,7 +511,7 @@
         ]
       },
       "elasticsearch1": {
-        "image": "172.31.16.194:5000/elasticsearch:0.07.14",
+        "image": "elasticsearch",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -481,7 +522,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == worker"
+              "engine.labels.affinity==elasticsearchNode"
             ]
           }
         },
@@ -500,7 +541,7 @@
         ]
       },
       "elasticsearch2": {
-        "image": "172.31.16.194:5000/elasticsearch:0.07.14",
+        "image": "elasticsearch",
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -511,7 +552,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == worker"
+              "engine.labels.affinity==elasticsearchNode"
             ]
           }
         },
@@ -530,7 +571,6 @@
         ]
       },
       "nginx": {
-        "image": "172.31.16.194:5000/nginx:0.07.14",
         "configs": [
           {
             "source": "nginx-amino3-config",
