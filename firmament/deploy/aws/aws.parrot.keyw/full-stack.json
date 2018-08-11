@@ -47,7 +47,7 @@
         }
       },
       {
-        "nodeCount": 4,
+        "nodeCount": 3,
         "nodeName": "sparkNode",
         "amazonec2-instance-type": "m4.4xlarge",
         "engineLabels": {
@@ -117,7 +117,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/merlin_logs",
-          "o": "rw,addr=fs-337c8678.efs.us-east-1.amazonaws.com,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=fs-337c8678.efs.us-east-1.amazonaws.com,proto=tcp,async,soft,nolock,timeo=600,retrans=2"
         }
       },
       "pg-datavolume": {
@@ -125,7 +125,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/postgresql",
-          "o": "rw,addr=fs-337c8678.efs.us-east-1.amazonaws.com,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=fs-337c8678.efs.us-east-1.amazonaws.com,proto=tcp,async,soft,nolock,timeo=600,retrans=2"
         }
       },
       "elasticsearch-datavolume0": {
@@ -133,7 +133,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/elasticsearch0",
-          "o": "rw,addr=fs-337c8678.efs.us-east-1.amazonaws.com,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=fs-337c8678.efs.us-east-1.amazonaws.com,proto=tcp,async,soft,nolock,timeo=600,retrans=2"
         }
       },
       "elasticsearch-datavolume1": {
@@ -141,7 +141,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/elasticsearch1",
-          "o": "rw,addr=fs-337c8678.efs.us-east-1.amazonaws.com,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=fs-337c8678.efs.us-east-1.amazonaws.com,proto=tcp,async,soft,nolock,timeo=600,retrans=2"
         }
       },
       "elasticsearch-datavolume2": {
@@ -149,7 +149,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/elasticsearch2",
-          "o": "rw,addr=fs-337c8678.efs.us-east-1.amazonaws.com,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=fs-337c8678.efs.us-east-1.amazonaws.com,proto=tcp,async,soft,nolock,timeo=600,retrans=2"
         }
       }
     },
