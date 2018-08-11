@@ -11,7 +11,7 @@
   "dockerMachines": {
     "common": {
       "amazonec2-security-group":"docker-machine",
-      "amazonec2-ami":"ami-0aab792550095b20f",
+      "amazonec2-ami":"ami-0d71e22ca1785409d",
       "amazonec2-vpc-id":"vpc-44a0d421",
       "amazonec2-subnet-id":"subnet-eebf2999",
       "amazonec2-region":"us-east-1",
@@ -339,16 +339,6 @@
             "traefik.port=5050"
           ]
         },
-        "volumes": [
-          {
-            "type": "volume",
-            "source": "pg-datavolume",
-            "target": "/var/lib/postgresql/data",
-            "volume": {
-              "nocopy": false
-            }
-          }
-        ],
         "networks": [
           "net"
         ]
