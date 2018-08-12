@@ -11,7 +11,7 @@
   "dockerMachines": {
     "common": {
       "amazonec2-security-group":"docker-machine",
-      "amazonec2-ami":"ami-0d71e22ca1785409d",
+      "amazonec2-ami":"ami-08a2a4c960bacdb8f",
       "amazonec2-root-size":"64",
       "amazonec2-vpc-id":"vpc-44a0d421",
       "amazonec2-subnet-id":"subnet-eebf2999",
@@ -40,7 +40,7 @@
       {
         "nodeCount": 1,
         "nodeName": "postgresNode",
-        "amazonec2-instance-type": "t2.medium",
+        "amazonec2-instance-type": "m4.xlarge",
         "engineLabels": {
           "role": "worker",
           "affinity": "postgresNode"
@@ -58,7 +58,7 @@
       {
         "nodeCount": 1,
         "nodeName": "hdfsNode",
-        "amazonec2-instance-type": "t2.medium",
+        "amazonec2-instance-type": "m4.large",
         "engineLabels": {
           "role": "worker",
           "affinity": "hdfsNode"
@@ -67,7 +67,7 @@
       {
         "nodeCount": 1,
         "nodeName": "stagingServerNode",
-        "amazonec2-instance-type": "t2.medium",
+        "amazonec2-instance-type": "m4.xlarge",
         "engineLabels": {
           "role": "worker",
           "affinity": "stagingServerNode"
