@@ -31,7 +31,7 @@
       {
         "nodeCount": 3,
         "nodeName": "elasticsearchNode",
-        "amazonec2-instance-type": "t2.xlarge",
+        "amazonec2-instance-type": "m4.2xlarge",
         "engineLabels": {
           "role": "worker",
           "affinity": "elasticsearchNode"
