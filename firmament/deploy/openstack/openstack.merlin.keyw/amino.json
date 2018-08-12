@@ -8,12 +8,12 @@
   "dockerMachineDriverOptions": {
     "driver": "openstack",
     "engineInsecureRegistry": "10.1.70.193:5000",
-    "openstackUsername": "",
-    "openstackPassword": "",
     "openstackAuthUrl": "http://10.1.70.100:5000/v2.0"
   },
   "dockerMachines": {
     "common": {
+      "openstackUsername": "",
+      "openstackPassword": "",
       "openstackImageId": "47159a88-91d8-486a-8f4f-6aa10b9b02d8",
       "openstackSecGroups": "All",
       "openstackSshUser": "ubuntu",
