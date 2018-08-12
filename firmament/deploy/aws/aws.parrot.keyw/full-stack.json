@@ -101,6 +101,9 @@
       },
       "traefik-config": {
         "file": "../../config/traefik.toml"
+      },
+      "es-jvm-config": {
+        "file": "../../config/jvm.options"
       }
     },
     "volumes": {
@@ -497,6 +500,12 @@
             }
           }
         ],
+        "configs": [
+          {
+            "source": "es-jvm-config",
+            "target": "/usr/share/elasticsearch/config/jvm.options"
+          }
+        ],
         "networks": [
           "net"
         ]
@@ -527,6 +536,12 @@
             }
           }
         ],
+        "configs": [
+          {
+            "source": "es-jvm-config",
+            "target": "/usr/share/elasticsearch/config/jvm.options"
+          }
+        ],
         "networks": [
           "net"
         ]
@@ -555,6 +570,12 @@
             "volume": {
               "nocopy": false
             }
+          }
+        ],
+        "configs": [
+          {
+            "source": "es-jvm-config",
+            "target": "/usr/share/elasticsearch/config/jvm.options"
           }
         ],
         "networks": [
