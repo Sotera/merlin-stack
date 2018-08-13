@@ -8,10 +8,13 @@ WORKDIR /usr/local
 COPY ./config/requirements.txt requirements.txt
 RUN apt-get install -y libigraph0-dev python-pip libpst-dev readpst python-igraph
 
-
-
 RUN pip install -r requirements.txt
 RUN curl -o /usr/local/hadoop/share/hadoop/yarn/lib/elasticsearch-spark-20_2.11-6.3.2.jar https://repo.maven.apache.org/maven2/org/elasticsearch/elasticsearch-spark-20_2.11/6.3.2/elasticsearch-spark-20_2.11-6.3.2.jar
 RUN echo "alias etl='cd /mnt/merlin/merlin-etl'" >> /root/.bashrc
 RUN echo "export PATH=/mnt/merlin/merlin-etl/share/bin:$PATH" >> /root/.bashrc
+
+COPY config/update_classpath.sh /tmp/update_classpath.sh
+RUN chmod 755 /tmp/update_classpath.sh
+RUN /tmp/update_classpath.sh
+
 WORKDIR /mnt/merlin/merlin-etl

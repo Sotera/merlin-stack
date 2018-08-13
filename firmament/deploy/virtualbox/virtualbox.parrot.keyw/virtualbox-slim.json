@@ -1,25 +1,29 @@
 
 {
-  "workerHostCount": 0,
-  "dockerMachineWorkerOptions": {
-    "engineLabel": "role=worker"
-  },
-  "dockerMachineMasterOptions": {
-    "engineLabel": "role=master"
-  },
-  "dockerMachineDriverOptions": {
-    "driver": "virtualbox",
-    "virtualboxCpuCount": 2,
-    "virtualboxMemory": 16384,
-    "virtualboxBoot2dockerUrl": "https://s3.amazonaws.com/merlin-jreeme/boot2docker.iso",
-    "engineInsecureRegistry": "docker-registry.parrot.keyw:5000"
-  },
   "stackName":"merlin",
   "clusterPrefix": "merlin-local",
-  "hostMachineDnsServer": "192.168.104.100",
-  "defaultDockerRegistry": "docker-registry.parrot.keyw:5000",
+  "defaultDockerRegistry": "52.0.211.45:5000",
   "defaultDockerImageTag": "0.07.14",
   "traefikZoneName": "vbox.keyw",
+  "dockerMachineDriverOptions": {
+    "engineInsecureRegistry": "52.0.211.45:5000",
+    "driver": "virtualbox"
+  },
+  "dockerMachines": {
+    "common": {
+      "virtualboxBoot2dockerUrl": "https://s3.amazonaws.com/merlin-jreeme/boot2docker.iso"
+    },
+    "manager": {
+      "nodeCount": 3,
+      "nodeName": "local-master",
+      "virtualboxCpuCount": 2,
+      "virtualboxMemory": 16384,
+      "engineLabels": {
+        "role": "manager"
+      }
+    },
+    "workers": []
+  },
   "dockerComposeYaml": {
     "version": "3.3",
     "networks": {
@@ -53,8 +57,8 @@
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/nfs-public/delete-me-after-09-AUG/postgres",
-          "o": "rw,addr=nfs.parrot-les.keyw,proto=tcp,async,soft,nolock"
+          "device": ":/var/nfs/merlin/db/postgresql",
+          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume1": {
@@ -117,16 +121,6 @@
             "traefik.port=5050"
           ]
         },
-        "volumes": [
-          {
-            "type": "volume",
-            "source": "pg-datavolume",
-            "target": "/var/lib/postgresql/data",
-            "volume": {
-              "nocopy": false
-            }
-          }
-        ],
         "networks": [
           "net"
         ]
@@ -178,7 +172,7 @@
             "source": "pg-datavolume",
             "target": "/var/lib/postgresql/data",
             "volume": {
-              "nocopy": false
+              "nocopy": true
             }
           }
         ],
@@ -271,7 +265,7 @@
             "source": "elasticsearch-datavolume1",
             "target": "/usr/share/elasticsearch/data",
             "volume": {
-              "nocopy": false
+              "nocopy": true
             }
           }
         ],
@@ -301,7 +295,7 @@
             "source": "elasticsearch-datavolume2",
             "target": "/usr/share/elasticsearch/data",
             "volume": {
-              "nocopy": false
+              "nocopy": true
             }
           }
         ],
@@ -331,7 +325,7 @@
             "source": "elasticsearch-datavolume3",
             "target": "/usr/share/elasticsearch/data",
             "volume": {
-              "nocopy": false
+              "nocopy": true
             }
           }
         ],
