@@ -58,6 +58,14 @@
           "device": ":/merlin-lts/demopostgres",
           "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
         }
+      },
+      "amino-uploads": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/merlin-lts/uploads",
+          "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
+        }
       }
     },
     "services": {
@@ -102,6 +110,13 @@
             "traefik.backend.loadbalancer.stickiness=true"
           ]
         },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "amino-uploads",
+            "target": "/mnt/data"
+          }
+        ],
         "networks": [
           "net"
         ]

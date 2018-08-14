@@ -100,6 +100,14 @@
           "device": ":/var/nfs/merlin_logs",
           "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
         }
+      },
+      "amino-uploads": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/var/nfs/merlin/uploads",
+          "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
+        }
       }
     },
     "services": {
@@ -144,6 +152,13 @@
             "traefik.backend.loadbalancer.stickiness=true"
           ]
         },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "amino-uploads",
+            "target": "/mnt/data"
+          }
+        ],
         "networks": [
           "net"
         ]
