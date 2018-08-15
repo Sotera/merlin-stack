@@ -1,0 +1,235 @@
+{
+  "stackName": "merlin",
+  "clusterPrefix": "aws-test",
+  "defaultDockerRegistry": "172.31.16.194:5000",
+  "defaultDockerImageTag": "0.07.14",
+  "traefikZoneName": "merlin-aws.keyw",
+  "dockerMachineDriverOptions": {
+    "driver": "amazonec2",
+    "engineInsecureRegistry": "172.31.16.194:5000"
+  },
+  "dockerMachines": {
+    "common": {
+      "amazonec2-security-group":"docker-machine",
+      "amazonec2-ami":"ami-08a2a4c960bacdb8f",
+      "amazonec2-root-size":"64",
+      "amazonec2-vpc-id":"vpc-44a0d421",
+      "amazonec2-subnet-id":"subnet-eebf2999",
+      "amazonec2-region":"us-east-1",
+      "amazonec2-zone":"b",
+      "amazonec2-use-private-address":true
+    },
+    "manager": {
+      "nodeCount": 1,
+      "nodeName": "managerNode",
+      "amazonec2-instance-type": "m4.4xlarge",
+      "engineLabels": {
+        "role": "manager"
+      }
+    },
+    "workers": []
+  },
+  "dockerComposeYaml": {
+    "version": "3.6",
+    "networks": {
+      "net": null
+    },
+    "configs": {
+      "nginx-pgadmin4-config": {
+        "file": "../../config/nginx-pgadmin4.conf"
+      },
+      "nginx-amino3-config": {
+        "file": "../../config/nginx-amino3.conf"
+      },
+      "traefik-config": {
+        "file": "../../config/traefik.toml"
+      }
+    },
+    "volumes": {
+      "pg-datavolume": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": "fs-337c8678.efs.us-east-1.amazonaws.com:/postgresql",
+          "o": "rw,addr=fs-337c8678.efs.us-east-1.amazonaws.com,nfsvers=4.1,proto=tcp,async,soft,nolock,timeo=600,retrans=2"
+        }
+      },
+      "amino-uploads": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": "fs-337c8678.efs.us-east-1.amazonaws.com:/uploads",
+          "o": "rw,addr=fs-337c8678.efs.us-east-1.amazonaws.com,nfsvers=4.1,proto=tcp,async,soft,nolock,timeo=600,retrans=2"
+        }
+      }
+    },
+    "services": {
+      "pgadmin4": {
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          },
+          "labels": [
+            "traefik.port=5050"
+          ]
+        },
+        "networks": [
+          "net"
+        ]
+      },
+      "amino3": {
+        "image": "172.31.16.194:5000/amino3:0.07.14",
+        "environment": [
+          "AMINO3_REPLACE_BAD_DATA_SOURCE_WITH_MEMORY_DATA_SOURCE=false"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=true",
+            "traefik.port=3000",
+            "traefik.backend=amino3",
+            "traefik.backend.loadbalancer.stickiness=true",
+            "traefik.frontend.rule=Host: amino3.parrot-aws.keyw"
+          ]
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "amino-uploads",
+            "target": "/mnt/data"
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "postgres": {
+        "image": "172.31.16.194:5000/postgres:0.07.14",
+        "environment": [
+          "POSTGRES_PASSWORD=password"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.affinity==postgresNode"
+            ]
+          },
+          "labels": [
+            "traefik.enable=true",
+            "traefik.port=5432",
+            "traefik.backend=postgres",
+            "traefik.frontend.rule=Host: postgres.parrot-aws.keyw"
+          ]
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "pg-datavolume",
+            "target": "/var/lib/postgresql/data",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "traefik": {
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "volumes": [
+          {
+            "type": "bind",
+            "source": "/var/run/docker.sock",
+            "target": "/var/run/docker.sock"
+          }
+        ],
+        "configs": [
+          {
+            "source": "traefik-config",
+            "target": "/etc/traefik/traefik.toml"
+          }
+        ],
+        "ports": [
+          "80:80",
+          "8080:8080"
+        ],
+        "networks": [
+          "net"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=false"
+          ]
+        }
+      },
+      "nginx": {
+        "configs": [
+          {
+            "source": "nginx-amino3-config",
+            "target": "/etc/nginx/conf.d/nginx-amino3.conf"
+          },
+          {
+            "source": "nginx-pgadmin4-config",
+            "target": "/etc/nginx/conf.d/nginx-pgadmin4.conf"
+          }
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          }
+        },
+        "ports": [
+          "9200:9200",
+          "9100:9100",
+          "3000:3000",
+          "8088:8088",
+          "50070:50070",
+          "5050:5050"
+        ],
+        "networks": [
+          "net"
+        ]
+      }
+    }
+  }
+}
+

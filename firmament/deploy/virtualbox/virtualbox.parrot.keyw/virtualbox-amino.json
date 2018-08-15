@@ -1,0 +1,249 @@
+
+{
+  "stackName":"merlin",
+  "clusterPrefix": "merlin-local",
+  "defaultDockerRegistry": "52.0.211.45:5000",
+  "defaultDockerImageTag": "0.07.14",
+  "traefikZoneName": "vbox.keyw",
+  "dockerMachineDriverOptions": {
+    "engineInsecureRegistry": "52.0.211.45:5000",
+    "driver": "virtualbox"
+  },
+  "dockerMachines": {
+    "common": {
+      "virtualboxBoot2dockerUrl": "https://s3.amazonaws.com/merlin-jreeme/boot2docker.iso"
+    },
+    "manager": {
+      "nodeCount": 1,
+      "nodeName": "local-master",
+      "virtualboxCpuCount": 2,
+      "virtualboxMemory": 16384,
+      "engineLabels": {
+        "role": "manager"
+      }
+    },
+    "workers": []
+  },
+  "dockerComposeYaml": {
+    "version": "3.4",
+    "networks": {
+      "net": null
+    },
+    "configs": {
+      "traefik-config": {
+        "file": "../../config/traefik.toml"
+      },
+      "nginx-es-config": {
+        "file": "../../config/nginx-elasticsearch.conf"
+      },
+      "nginx-es-head-config": {
+        "file": "../../config/nginx-elasticsearch-head.conf"
+      },
+      "nginx-pgadmin4-config": {
+        "file": "../../config/nginx-pgadmin4.conf"
+      },
+      "nginx-amino3-config": {
+        "file": "../../config/nginx-amino3.conf"
+      },
+      "nginx-namenode-config": {
+        "file": "../../config/nginx-namenode.conf"
+      },
+      "nginx-hdfs-config": {
+        "file": "../../config/nginx-hdfs.conf"
+      }
+    },
+    "volumes": {
+      "pg-datavolume": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/var/nfs/merlin/db/postgresql",
+          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+        }
+      },
+      "amino-uploads": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/var/nfs/merlin/uploads",
+          "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
+        }
+      }
+    },
+    "services": {
+      "pgadmin4": {
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          },
+          "labels": [
+            "traefik.port=5050"
+          ]
+        },
+        "networks": [
+          "net"
+        ]
+      },
+      "amino3": {
+        "environment": [
+          "AMINO3_REPLACE_BAD_DATA_SOURCE_WITH_MEMORY_DATA_SOURCE=false"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          },
+          "labels": [
+            "traefik.port=3000",
+            "traefik.backend.loadbalancer.stickiness=true"
+          ]
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "amino-uploads",
+            "target": "/mnt/data"
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "postgres": {
+        "environment": [
+          "POSTGRES_PASSWORD=password"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          }
+        },
+        "ports": [
+          "5432:5432"
+        ],
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "pg-datavolume",
+            "target": "/var/lib/postgresql/data",
+            "volume": {
+              "nocopy": true
+            }
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "traefik": {
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "volumes": [
+          {
+            "type": "bind",
+            "source": "/var/run/docker.sock",
+            "target": "/var/run/docker.sock"
+          }
+        ],
+        "configs": [
+          {
+            "source": "traefik-config",
+            "target": "/etc/traefik/traefik.toml"
+          }
+        ],
+        "ports": [
+          "80:80",
+          "8080:8080"
+        ],
+        "networks": [
+          "net"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=false"
+          ]
+        }
+      },
+      "nginx": {
+        "configs": [
+          {
+            "source": "nginx-amino3-config",
+            "target": "/etc/nginx/conf.d/nginx-amino3.conf"
+          },
+          {
+            "source": "nginx-es-head-config",
+            "target": "/etc/nginx/conf.d/nginx-elasticsearch-head.conf"
+          },
+          {
+            "source": "nginx-es-config",
+            "target": "/etc/nginx/conf.d/nginx-elasticsearch.conf"
+          },
+          {
+            "source": "nginx-hdfs-config",
+            "target": "/etc/nginx/conf.d/nginx-hdfs.conf"
+          },
+          {
+            "source": "nginx-namenode-config",
+            "target": "/etc/nginx/conf.d/nginx-namenode.conf"
+          },
+          {
+            "source": "nginx-pgadmin4-config",
+            "target": "/etc/nginx/conf.d/nginx-pgadmin4.conf"
+          }
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "node.role == manager"
+            ]
+          }
+        },
+        "ports": [
+          "9200:9200",
+          "9100:9100",
+          "3000:3000",
+          "8088:8088",
+          "50070:50070",
+          "5050:5050"
+        ],
+        "networks": [
+          "net"
+        ]
+      }
+    }
+  }
+}
