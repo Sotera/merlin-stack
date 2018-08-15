@@ -132,7 +132,7 @@
           },
           "placement": {
             "constraints": [
-              "engine.labels.affinity==postgresNode"
+              "node.role == manager"
             ]
           },
           "labels": [
