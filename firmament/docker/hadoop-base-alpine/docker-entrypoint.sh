@@ -57,7 +57,7 @@ case ${HADOOP_MACHINE_ROLE} in
     echo $IPS
 
     PYSPARK_DRIVER_PYTHON="jupyter" \
-    PYSPARK_DRIVER_PYTHON_OPTS="notebook --no-browser --port=9999 --ip='*' --allow-root --notebook-dir='/mnt/merlin/notebooks' --NotebookApp.token=''" \
+    PYSPARK_DRIVER_PYTHON_OPTS="notebook --no-browser --port=9999 --ip='*' --NotebookApp.allow_origin=* --allow-root --notebook-dir='/mnt/merlin/notebooks' --NotebookApp.token=''" \
     pyspark \
     --conf spark.driver.maxResultSize=10g \
     --conf spark.kryoserializer.buffer.max=2000m \
@@ -65,7 +65,7 @@ case ${HADOOP_MACHINE_ROLE} in
     --driver-memory 10g \
     --executor-memory 10g \
     --conf spark.dynamicAllocation.enabled=true \
-    --conf spark.shuffle.enabled=trueS
+    --conf spark.shuffle.enabled=true
     ;;
   *)
     echo "Unknown Hadoop Machine Role Encountered"

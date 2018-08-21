@@ -306,6 +306,7 @@
             "traefik.enable=true",
             "traefik.port=9999",
             "traefik.backend=stagingserver",
+            "traefik.backend.loadbalancer.stickiness=true",
             "traefik.frontend.rule=Host: jupyter.parrot-aws.keyw"
           ]
         },
