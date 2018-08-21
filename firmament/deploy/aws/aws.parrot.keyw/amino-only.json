@@ -249,7 +249,7 @@
           },
           "placement": {
             "constraints": [
-              "engine.labels.affinity==stagingServerNode"
+              "node.role == manager"
             ]
           },
           "labels": [
