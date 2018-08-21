@@ -50,6 +50,8 @@ case ${HADOOP_MACHINE_ROLE} in
     ${HADOOP_HOME}/sbin/yarn-daemon.sh start nodemanager
     ;;
   stagingserver)
+    while ! hdfs dfs -test -e hdfs://namenode:9000/tmp; do sleep 2; done
+
     IPS="$(hostname --all-ip-addresses || hostname -I)"
     echo "Jupyter will be running on one of the following IPs":
     echo $IPS
