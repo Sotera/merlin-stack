@@ -252,7 +252,7 @@
           "HADOOP_MACHINE_ROLE=sparkworker"
         ],
         "deploy": {
-          "replicas": 4,
+          "replicas": 3,
           "restart_policy": {
             "condition": "on-failure"
           },
