@@ -56,7 +56,7 @@ case ${HADOOP_MACHINE_ROLE} in
 
     PYSPARK_DRIVER_PYTHON="jupyter" \
     PYSPARK_DRIVER_PYTHON_OPTS="notebook --no-browser --port=9999 --ip='*' --allow-root --notebook-dir='/mnt/merlin/notebooks' --NotebookApp.token=''" \
-    screen -dmS spark dse pyspark \
+    pyspark \
     --conf spark.driver.maxResultSize=10g \
     --conf spark.kryoserializer.buffer.max=2000m \
     --name merlin_notebook \

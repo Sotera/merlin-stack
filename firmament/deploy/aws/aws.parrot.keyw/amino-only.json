@@ -49,6 +49,22 @@
       }
     },
     "volumes": {
+      "hadoop-datavolume": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": "fs-337c8678.efs.us-east-1.amazonaws.com:/merlin",
+          "o": "rw,addr=fs-337c8678.efs.us-east-1.amazonaws.com,nfsvers=4.1,proto=tcp,async,soft,nolock"
+        }
+      },
+      "hadoop-logvolume": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": "fs-337c8678.efs.us-east-1.amazonaws.com:/merlin_logs",
+          "o": "rw,addr=fs-337c8678.efs.us-east-1.amazonaws.com,nfsvers=4.1,proto=tcp,async,soft,nolock,timeo=600,retrans=2"
+        }
+      },
       "pg-datavolume": {
         "driver": "local",
         "driver_opts": {
