@@ -93,6 +93,9 @@
       "nginx-amino3-config": {
         "file": "../../config/nginx-amino3.conf"
       },
+      "nginx-staging-config": {
+        "file": "../../config/nginx-staging.conf"
+      },
       "nginx-namenode-config": {
         "file": "../../config/nginx-namenode.conf"
       },
@@ -300,7 +303,10 @@
             ]
           },
           "labels": [
-            "traefik.enable=false"
+            "traefik.enable=true",
+            "traefik.port=9999",
+            "traefik.backend=stagingserver",
+            "traefik.frontend.rule=Host: jupyter.parrot-aws.keyw"
           ]
         },
         "volumes": [
@@ -585,6 +591,10 @@
       "nginx": {
         "configs": [
           {
+            "source": "nginx-staging-config",
+            "target": "/etc/nginx/conf.d/nginx-staging.conf"
+          },
+          {
             "source": "nginx-amino3-config",
             "target": "/etc/nginx/conf.d/nginx-amino3.conf"
           },
@@ -626,7 +636,8 @@
           "3000:3000",
           "8088:8088",
           "50070:50070",
-          "5050:5050"
+          "5050:5050",
+          "9999:9999"
         ],
         "networks": [
           "net"

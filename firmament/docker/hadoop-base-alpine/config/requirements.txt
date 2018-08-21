@@ -15,3 +15,7 @@ dill
 xmltodict
 pandas
 python-Levenshtein
+numpy
+pydoop
+pyspark
+jupyter

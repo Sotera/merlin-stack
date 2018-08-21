@@ -38,6 +38,9 @@
       "nginx-pgadmin4-config": {
         "file": "../../config/nginx-pgadmin4.conf"
       },
+      "nginx-staging-config": {
+        "file": "../../config/nginx-staging.conf"
+      },
       "nginx-amino3-config": {
         "file": "../../config/nginx-amino3.conf"
       },
@@ -202,6 +205,10 @@
             "target": "/etc/nginx/conf.d/nginx-amino3.conf"
           },
           {
+            "source": "nginx-staging-config",
+            "target": "/etc/nginx/conf.d/nginx-staging.conf"
+          },
+          {
             "source": "nginx-pgadmin4-config",
             "target": "/etc/nginx/conf.d/nginx-pgadmin4.conf"
           }
@@ -223,12 +230,58 @@
           "3000:3000",
           "8088:8088",
           "50070:50070",
-          "5050:5050"
+          "5050:5050",
+          "9999:9999"
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "stagingserver": {
+        "image": "merlin-hadoop-base-alpine",
+        "environment": [
+          "HADOOP_MACHINE_ROLE=stagingserver"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.affinity==stagingServerNode"
+            ]
+          },
+          "labels": [
+            "traefik.enable=true",
+            "traefik.port=9999",
+            "traefik.backend=stagingserver",
+            "traefik.frontend.rule=Host: jupyter.parrot-aws.keyw"
+          ]
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "hadoop-datavolume",
+            "target": "/mnt/merlin",
+            "volume": {
+              "nocopy": true
+            }
+          },
+          {
+            "type": "volume",
+            "source": "hadoop-logvolume",
+            "target": "/mnt/logs",
+            "volume": {
+              "nocopy": true
+            }
+          }
         ],
         "networks": [
           "net"
         ]
       }
+
     }
   }
 }
