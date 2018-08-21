@@ -18,5 +18,6 @@ RUN chmod 755 /tmp/update_classpath.sh
 RUN /tmp/update_classpath.sh
 
 COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod 755 /usr/local/bin/docker-entrypoint.sh
 
 WORKDIR /mnt/merlin/merlin-etl
