@@ -19,3 +19,4 @@ numpy
 pydoop
 pyspark
 jupyter
+spacy
