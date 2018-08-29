@@ -10,6 +10,7 @@ RUN apt-get update
 RUN apt-get install -y libigraph0-dev python-pip libpst-dev readpst python-igraph
 
 RUN pip install -r requirements.txt
+RUN python -m spacy download en
 RUN echo "alias etl='cd /mnt/merlin/merlin-etl'" >> /root/.bashrc
 RUN echo "export PATH=/mnt/merlin/merlin-etl/share/bin:$PATH" >> /root/.bashrc
 

@@ -53,6 +53,9 @@
       },
       "traefik-config": {
         "file": "../../config/traefik.toml"
+      },
+      "spark-defaults-config": {
+        "file": "../../config/spark-defaults.conf"
       }
     },
     "volumes": {
@@ -412,6 +415,12 @@
         "environment": [
           "HADOOP_MACHINE_ROLE=namenode"
         ],
+        "configs": [
+          {
+            "source": "spark-defaults-config",
+            "target": "/usr/local/spark/conf/spark-defaults.conf"
+          }
+        ],
         "deploy": {
           "replicas": 1,
           "restart_policy": {
@@ -457,6 +466,12 @@
         "environment": [
           "HADOOP_MACHINE_ROLE=datanode"
         ],
+        "configs": [
+          {
+            "source": "spark-defaults-config",
+            "target": "/usr/local/spark/conf/spark-defaults.conf"
+          }
+        ],
         "deploy": {
           "replicas": 1,
           "restart_policy": {
@@ -498,6 +513,12 @@
         "environment": [
           "HADOOP_MACHINE_ROLE=sparkworker"
         ],
+        "configs": [
+          {
+            "source": "spark-defaults-config",
+            "target": "/usr/local/spark/conf/spark-defaults.conf"
+          }
+        ],
         "deploy": {
           "replicas": 1,
           "restart_policy": {
@@ -538,6 +559,12 @@
         "image": "merlin-hadoop-base-alpine",
         "environment": [
           "HADOOP_MACHINE_ROLE=stagingserver"
+        ],
+        "configs": [
+          {
+            "source": "spark-defaults-config",
+            "target": "/usr/local/spark/conf/spark-defaults.conf"
+          }
         ],
         "deploy": {
           "replicas": 1,

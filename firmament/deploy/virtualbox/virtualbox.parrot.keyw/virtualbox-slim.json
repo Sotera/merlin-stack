@@ -50,6 +50,9 @@
       },
       "nginx-hdfs-config": {
         "file": "../../config/nginx-hdfs.conf"
+      },
+      "spark-defaults-config": {
+        "file": "../../config/spark-defaults.conf"
       }
     },
     "volumes": {
@@ -106,7 +109,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin/uploads",
-          "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
         }
       }
     },
@@ -353,6 +356,12 @@
         "environment": [
           "HADOOP_MACHINE_ROLE=namenode"
         ],
+        "configs": [
+          {
+            "source": "spark-defaults-config",
+            "target": "/usr/local/spark/conf/spark-defaults.conf"
+          }
+        ],
         "deploy": {
           "replicas": 1,
           "restart_policy": {
@@ -398,6 +407,12 @@
         "environment": [
           "HADOOP_MACHINE_ROLE=datanode"
         ],
+        "configs": [
+          {
+            "source": "spark-defaults-config",
+            "target": "/usr/local/spark/conf/spark-defaults.conf"
+          }
+        ],
         "deploy": {
           "replicas": 1,
           "restart_policy": {
@@ -439,6 +454,12 @@
         "environment": [
           "HADOOP_MACHINE_ROLE=sparkworker"
         ],
+        "configs": [
+          {
+            "source": "spark-defaults-config",
+            "target": "/usr/local/spark/conf/spark-defaults.conf"
+          }
+        ],
         "deploy": {
           "replicas": 1,
           "restart_policy": {
@@ -479,6 +500,12 @@
         "image": "merlin-hadoop-base-alpine",
         "environment": [
           "HADOOP_MACHINE_ROLE=stagingserver"
+        ],
+        "configs": [
+          {
+            "source": "spark-defaults-config",
+            "target": "/usr/local/spark/conf/spark-defaults.conf"
+          }
         ],
         "deploy": {
           "replicas": 1,
