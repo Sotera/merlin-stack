@@ -5,24 +5,84 @@
   "defaultDockerRegistry": "docker-registry.parrot.keyw:5000",
   "defaultDockerImageTag": "0.07.14",
   "traefikZoneName": "parrot.keyw",
-  "workerHostCount": 1,
-  "dockerMachineWorkerOptions": {
-    "engineLabel": "role=worker"
-  },
-  "dockerMachineMasterOptions": {
-    "engineLabel": "role=master"
-  },
   "dockerMachineDriverOptions": {
-    "engineInsecureRegistry": "docker-registry.parrot.keyw:5000",
-    "vmwarevsphereBoot2dockerUrl": "https://s3.amazonaws.com/merlin-jreeme/boot2docker.iso",
     "driver": "vmwarevsphere",
-    "vmwarevsphereUsername": "root",
-    "vmwarevspherePassword": "run2walk!",
-    "vmwarevsphereDatastore": "datastore1",
-    "vmwarevsphereCpuCount": 4,
-    "vmwarevsphereDiskSize": 40000,
-    "vmwarevsphereMemorySize": 24576,
-    "vmwarevsphereVcenter": "vmware.parrot.keyw"
+    "engineInsecureRegistry": "docker-registry.parrot.keyw:5000"
+  },
+  "dockerMachines": {
+    "common": {
+      "vmwarevsphereUsername": "root",
+      "vmwarevspherePassword": "run2walk!",
+      "vmwarevsphereDatastore": "datastore1",
+      "vmwarevsphereVcenter": "vmware.parrot.keyw"
+    },
+    "manager": {
+      "nodeCount": 1,
+      "nodeName": "managerNode",
+      "vmwarevsphereCpuCount": 4,
+      "vmwarevsphereDiskSize": 40000,
+      "vmwarevsphereMemorySize": 24576,
+      "engineLabels": {
+        "role": "manager"
+      }
+    },
+    "workers": [
+      {
+        "nodeCount": 3,
+        "nodeName": "elasticsearchNode",
+        "vmwarevsphereCpuCount": 4,
+        "vmwarevsphereDiskSize": 40000,
+        "vmwarevsphereMemorySize": 24576,
+        "engineLabels": {
+          "role": "worker",
+          "affinity": "elasticsearchNode"
+        }
+      },
+      {
+        "nodeCount": 1,
+        "nodeName": "postgresNode",
+        "vmwarevsphereCpuCount": 4,
+        "vmwarevsphereDiskSize": 40000,
+        "vmwarevsphereMemorySize": 24576,
+        "engineLabels": {
+          "role": "worker",
+          "affinity": "postgresNode"
+        }
+      },
+      {
+        "nodeCount": 1,
+        "nodeName": "sparkNode",
+        "vmwarevsphereCpuCount": 4,
+        "vmwarevsphereDiskSize": 40000,
+        "vmwarevsphereMemorySize": 24576,
+        "engineLabels": {
+          "role": "worker",
+          "affinity": "sparkNode"
+        }
+      },
+      {
+        "nodeCount": 1,
+        "nodeName": "hdfsNode",
+        "vmwarevsphereCpuCount": 4,
+        "vmwarevsphereDiskSize": 40000,
+        "vmwarevsphereMemorySize": 24576,
+        "engineLabels": {
+          "role": "worker",
+          "affinity": "hdfsNode"
+        }
+      },
+      {
+        "nodeCount": 1,
+        "nodeName": "stagingServerNode",
+        "vmwarevsphereCpuCount": 4,
+        "vmwarevsphereDiskSize": 40000,
+        "vmwarevsphereMemorySize": 24576,
+        "engineLabels": {
+          "role": "worker",
+          "affinity": "stagingServerNode"
+        }
+      }
+    ]
   },
   "dockerComposeYaml": {
     "version": "3.6",
@@ -30,10 +90,10 @@
       "net": null
     },
     "configs": {
-      "nginx-elasticsearch-config": {
+      "nginx-es-config": {
         "file": "../../config/nginx-elasticsearch.conf"
       },
-      "nginx-elasticsearch-head-config": {
+      "nginx-es-head-config": {
         "file": "../../config/nginx-elasticsearch-head.conf"
       },
       "nginx-pgadmin4-config": {
@@ -42,36 +102,47 @@
       "nginx-amino3-config": {
         "file": "../../config/nginx-amino3.conf"
       },
+      "nginx-staging-config": {
+        "file": "../../config/nginx-staging.conf"
+      },
       "nginx-namenode-config": {
         "file": "../../config/nginx-namenode.conf"
       },
       "nginx-hdfs-config": {
         "file": "../../config/nginx-hdfs.conf"
       },
-      "nginx-traefik-config": {
-        "file": "../../config/nginx-traefik.conf"
-      },
       "traefik-config": {
         "file": "../../config/traefik.toml"
       },
       "spark-defaults-config": {
         "file": "../../config/spark-defaults.conf"
+      },
+      "es-jvm-config": {
+        "file": "../../config/jvm.options"
       }
     },
     "volumes": {
-      "dns-bind-conf-volume": {
+      "hadoop-datavolume": {
+      "driver": "local",
+      "driver_opts": {
+        "type": "nfs",
+        "device": ":/nfs-public/parrot-amd-test/hadoop-datavolume",
+        "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
+      }
+    },
+      "hadoop-logvolume": {
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/nfs-public/parrot-amd-test/dns-bind-conf-volume",
+          "device": ":/nfs-public/parrot-amd-test/hadoop-logvolume",
           "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
         }
       },
-      "dns-bind-data-volume": {
+      "amino-uploads": {
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/nfs-public/parrot-amd-test/dns-bind-data-volume",
+          "device": ":/nfs-public/parrot-amd-test/uploads",
           "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
         }
       },
@@ -106,28 +177,20 @@
           "device": ":/nfs-public/parrot-amd-test/elasticsearch2",
           "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
         }
-      },
-      "hadoop-datavolume": {
-        "driver": "local",
-        "driver_opts": {
-          "type": "nfs",
-          "device": ":/nfs-public/parrot-amd-test/hadoop-datavolume",
-          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
-        }
-      },
-      "hadoop-logvolume": {
-        "driver": "local",
-        "driver_opts": {
-          "type": "nfs",
-          "device": ":/nfs-public/parrot-amd-test/hadoop-logvolume",
-          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
-        }
       }
+
     },
     "services": {
-      "dns-bind": {
+      "namenode": {
+        "image": "merlin-hadoop-base-alpine",
         "environment": [
-          "HOPE=SpringsEternal"
+          "HADOOP_MACHINE_ROLE=namenode"
+        ],
+        "configs": [
+          {
+            "source": "spark-defaults-config",
+            "target": "/usr/local/spark/conf/spark-defaults.conf"
+          }
         ],
         "deploy": {
           "replicas": 1,
@@ -140,29 +203,170 @@
             ]
           },
           "labels": [
-            "traefik.enable=false"
+            "traefik.enable=true",
+            "traefik.namenode.port=8088",
+            "traefik.namenode.frontend.rule=Host:namenode.parrot-aws.keyw",
+            "traefik.hdfs.port=50070",
+            "traefik.hdfs.frontend.rule=Host:hdfs.parrot-aws.keyw"
           ]
         },
-        "ports": [
-          "10000:10000",
-          "53:53",
-          "53:53/udp"
-        ],
         "volumes": [
           {
             "type": "volume",
-            "source": "dns-bind-conf-volume",
-            "target": "/etc/bind",
+            "source": "hadoop-datavolume",
+            "target": "/mnt/merlin",
             "volume": {
-              "nocopy": false
+              "nocopy": true
             }
           },
           {
             "type": "volume",
-            "source": "dns-bind-data-volume",
-            "target": "/var/bind",
+            "source": "hadoop-logvolume",
+            "target": "/mnt/logs",
             "volume": {
-              "nocopy": false
+              "nocopy": true
+            }
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "datanode": {
+        "image": "merlin-hadoop-base-alpine",
+        "environment": [
+          "HADOOP_MACHINE_ROLE=datanode"
+        ],
+        "configs": [
+          {
+            "source": "spark-defaults-config",
+            "target": "/usr/local/spark/conf/spark-defaults.conf"
+          }
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.affinity==hdfsNode"
+            ]
+          },
+          "labels": [
+            "traefik.enable=false"
+          ]
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "hadoop-datavolume",
+            "target": "/mnt/merlin",
+            "volume": {
+              "nocopy": true
+            }
+          },
+          {
+            "type": "volume",
+            "source": "hadoop-logvolume",
+            "target": "/mnt/logs",
+            "volume": {
+              "nocopy": true
+            }
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "sparkworker": {
+        "image": "merlin-hadoop-base-alpine",
+        "environment": [
+          "HADOOP_MACHINE_ROLE=sparkworker"
+        ],
+        "configs": [
+          {
+            "source": "spark-defaults-config",
+            "target": "/usr/local/spark/conf/spark-defaults.conf"
+          }
+        ],
+        "deploy": {
+          "replicas": 3,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.affinity==sparkNode"
+            ]
+          },
+          "labels": [
+            "traefik.enable=false"
+          ]
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "hadoop-datavolume",
+            "target": "/mnt/merlin",
+            "volume": {
+              "nocopy": true
+            }
+          },
+          {
+            "type": "volume",
+            "source": "hadoop-logvolume",
+            "target": "/mnt/logs",
+            "volume": {
+              "nocopy": true
+            }
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "stagingserver": {
+        "image": "merlin-hadoop-base-alpine",
+        "environment": [
+          "HADOOP_MACHINE_ROLE=stagingserver"
+        ],
+        "configs": [
+          {
+            "source": "spark-defaults-config",
+            "target": "/usr/local/spark/conf/spark-defaults.conf"
+          }
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.affinity==stagingServerNode"
+            ]
+          },
+          "labels": [
+            "traefik.port=9999",
+            "traefik.backend.loadbalancer.stickiness=true"
+          ]
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "hadoop-datavolume",
+            "target": "/mnt/merlin",
+            "volume": {
+              "nocopy": true
+            }
+          },
+          {
+            "type": "volume",
+            "source": "hadoop-logvolume",
+            "target": "/mnt/logs",
+            "volume": {
+              "nocopy": true
             }
           }
         ],
@@ -188,21 +392,12 @@
             "traefik.port=5050"
           ]
         },
-        "volumes": [
-          {
-            "type": "volume",
-            "source": "pg-datavolume",
-            "target": "/var/lib/postgresql/data",
-            "volume": {
-              "nocopy": false
-            }
-          }
-        ],
         "networks": [
           "net"
         ]
       },
       "amino3": {
+        "image": "172.31.16.194:5000/amino3:0.07.14",
         "environment": [
           "AMINO3_REPLACE_BAD_DATA_SOURCE_WITH_MEMORY_DATA_SOURCE=false"
         ],
@@ -213,7 +408,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == worker"
+              "node.role == manager"
             ]
           },
           "labels": [
@@ -236,11 +431,11 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.affinity==postgresNode"
             ]
           },
-          "labels": [
-            "traefik.port=5432"
+          "ports": [
+            "5432:5432"
           ]
         },
         "volumes": [
@@ -275,6 +470,7 @@
           }
         ],
         "ports": [
+          "80:80",
           "8080:8080"
         ],
         "networks": [
@@ -329,7 +525,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.affinity==elasticsearchNode"
             ]
           },
           "labels": [
@@ -344,6 +540,12 @@
             "volume": {
               "nocopy": false
             }
+          }
+        ],
+        "configs": [
+          {
+            "source": "es-jvm-config",
+            "target": "/usr/share/elasticsearch/config/jvm.options"
           }
         ],
         "networks": [
@@ -362,7 +564,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == worker"
+              "engine.labels.affinity==elasticsearchNode"
             ]
           }
         },
@@ -374,6 +576,12 @@
             "volume": {
               "nocopy": false
             }
+          }
+        ],
+        "configs": [
+          {
+            "source": "es-jvm-config",
+            "target": "/usr/share/elasticsearch/config/jvm.options"
           }
         ],
         "networks": [
@@ -392,7 +600,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == worker"
+              "engine.labels.affinity==elasticsearchNode"
             ]
           }
         },
@@ -406,196 +614,10 @@
             }
           }
         ],
-        "networks": [
-          "net"
-        ]
-      },
-      "namenode": {
-        "image": "merlin-hadoop-base-alpine",
-        "environment": [
-          "HADOOP_MACHINE_ROLE=namenode"
-        ],
         "configs": [
           {
-            "source": "spark-defaults-config",
-            "target": "/usr/local/spark/conf/spark-defaults.conf"
-          }
-        ],
-        "deploy": {
-          "replicas": 1,
-          "restart_policy": {
-            "condition": "on-failure"
-          },
-          "placement": {
-            "constraints": [
-              "node.role == manager"
-            ]
-          },
-          "labels": [
-            "traefik.enabled=true",
-            "traefik.namenode.port=8088",
-            "traefik.namenode.frontend.rule=Host:namenode.parrot-les.keyw",
-            "traefik.hdfs.port=50070",
-            "traefik.hdfs.frontend.rule=Host:hdfs.parrot-les.keyw"
-          ]
-        },
-        "volumes": [
-          {
-            "type": "volume",
-            "source": "hadoop-datavolume",
-            "target": "/mnt/merlin",
-            "volume": {
-              "nocopy": true
-            }
-          },
-          {
-            "type": "volume",
-            "source": "hadoop-logvolume",
-            "target": "/mnt/logs",
-            "volume": {
-              "nocopy": true
-            }
-          }
-        ],
-        "networks": [
-          "net"
-        ]
-      },
-      "datanode": {
-        "image": "merlin-hadoop-base-alpine",
-        "environment": [
-          "HADOOP_MACHINE_ROLE=datanode"
-        ],
-        "configs": [
-          {
-            "source": "spark-defaults-config",
-            "target": "/usr/local/spark/conf/spark-defaults.conf"
-          }
-        ],
-        "deploy": {
-          "replicas": 1,
-          "restart_policy": {
-            "condition": "on-failure"
-          },
-          "placement": {
-            "constraints": [
-              "node.role == worker"
-            ]
-          },
-          "labels": [
-            "traefik.enable=false"
-          ]
-        },
-        "volumes": [
-          {
-            "type": "volume",
-            "source": "hadoop-datavolume",
-            "target": "/mnt/merlin",
-            "volume": {
-              "nocopy": true
-            }
-          },
-          {
-            "type": "volume",
-            "source": "hadoop-logvolume",
-            "target": "/mnt/logs",
-            "volume": {
-              "nocopy": true
-            }
-          }
-        ],
-        "networks": [
-          "net"
-        ]
-      },
-      "sparkworker": {
-        "image": "merlin-hadoop-base-alpine",
-        "environment": [
-          "HADOOP_MACHINE_ROLE=sparkworker"
-        ],
-        "configs": [
-          {
-            "source": "spark-defaults-config",
-            "target": "/usr/local/spark/conf/spark-defaults.conf"
-          }
-        ],
-        "deploy": {
-          "replicas": 1,
-          "restart_policy": {
-            "condition": "on-failure"
-          },
-          "placement": {
-            "constraints": [
-              "node.role == worker"
-            ]
-          },
-          "labels": [
-            "traefik.enable=false"
-          ]
-        },
-        "volumes": [
-          {
-            "type": "volume",
-            "source": "hadoop-datavolume",
-            "target": "/mnt/merlin",
-            "volume": {
-              "nocopy": true
-            }
-          },
-          {
-            "type": "volume",
-            "source": "hadoop-logvolume",
-            "target": "/mnt/logs",
-            "volume": {
-              "nocopy": true
-            }
-          }
-        ],
-        "networks": [
-          "net"
-        ]
-      },
-      "stagingserver": {
-        "image": "merlin-hadoop-base-alpine",
-        "environment": [
-          "HADOOP_MACHINE_ROLE=stagingserver"
-        ],
-        "configs": [
-          {
-            "source": "spark-defaults-config",
-            "target": "/usr/local/spark/conf/spark-defaults.conf"
-          }
-        ],
-        "deploy": {
-          "replicas": 1,
-          "restart_policy": {
-            "condition": "on-failure"
-          },
-          "placement": {
-            "constraints": [
-              "node.role == worker"
-            ]
-          },
-          "labels": [
-            "traefik.enable=false"
-          ]
-        },
-        "volumes": [
-          {
-            "type": "volume",
-            "source": "hadoop-datavolume",
-            "target": "/mnt/merlin",
-            "volume": {
-              "nocopy": true
-            }
-          },
-          {
-            "type": "volume",
-            "source": "hadoop-logvolume",
-            "target": "/mnt/logs",
-            "volume": {
-              "nocopy": true
-            }
+            "source": "es-jvm-config",
+            "target": "/usr/share/elasticsearch/config/jvm.options"
           }
         ],
         "networks": [
@@ -605,32 +627,32 @@
       "nginx": {
         "configs": [
           {
-            "source": "nginx-elasticsearch-config",
-            "target": "/etc/nginx/conf.d/nginx-elasticsearch.conf"
-          },
-          {
-            "source": "nginx-elasticsearch-head-config",
-            "target": "/etc/nginx/conf.d/nginx-elasticsearch-head.conf"
-          },
-          {
-            "source": "nginx-pgadmin4-config",
-            "target": "/etc/nginx/conf.d/nginx-pgadmin4.conf"
+            "source": "nginx-staging-config",
+            "target": "/etc/nginx/conf.d/nginx-staging.conf"
           },
           {
             "source": "nginx-amino3-config",
             "target": "/etc/nginx/conf.d/nginx-amino3.conf"
           },
           {
-            "source": "nginx-namenode-config",
-            "target": "/etc/nginx/conf.d/nginx-namenode.conf"
+            "source": "nginx-es-head-config",
+            "target": "/etc/nginx/conf.d/nginx-elasticsearch-head.conf"
+          },
+          {
+            "source": "nginx-es-config",
+            "target": "/etc/nginx/conf.d/nginx-elasticsearch.conf"
           },
           {
             "source": "nginx-hdfs-config",
             "target": "/etc/nginx/conf.d/nginx-hdfs.conf"
           },
           {
-            "source": "nginx-traefik-config",
-            "target": "/etc/nginx/conf.d/nginx-traefik.conf"
+            "source": "nginx-namenode-config",
+            "target": "/etc/nginx/conf.d/nginx-namenode.conf"
+          },
+          {
+            "source": "nginx-pgadmin4-config",
+            "target": "/etc/nginx/conf.d/nginx-pgadmin4.conf"
           }
         ],
         "deploy": {
@@ -645,13 +667,13 @@
           }
         },
         "ports": [
-          "80:80",
           "9200:9200",
           "9100:9100",
           "3000:3000",
           "8088:8088",
           "50070:50070",
-          "5050:5050"
+          "5050:5050",
+          "9999:9999"
         ],
         "networks": [
           "net"
