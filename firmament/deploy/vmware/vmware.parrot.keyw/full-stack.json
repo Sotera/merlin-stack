@@ -21,18 +21,18 @@
       "nodeName": "managerNode",
       "vmwarevsphereCpuCount": 4,
       "vmwarevsphereDiskSize": 40000,
-      "vmwarevsphereMemorySize": 24576,
+      "vmwarevsphereMemorySize": 16384,
       "engineLabels": {
         "role": "manager"
       }
     },
     "workers": [
       {
-        "nodeCount": 3,
+        "nodeCount": 1,
         "nodeName": "elasticsearchNode",
         "vmwarevsphereCpuCount": 4,
         "vmwarevsphereDiskSize": 40000,
-        "vmwarevsphereMemorySize": 24576,
+        "vmwarevsphereMemorySize": 16384,
         "engineLabels": {
           "role": "worker",
           "affinity": "elasticsearchNode"
@@ -43,18 +43,18 @@
         "nodeName": "postgresNode",
         "vmwarevsphereCpuCount": 4,
         "vmwarevsphereDiskSize": 40000,
-        "vmwarevsphereMemorySize": 24576,
+        "vmwarevsphereMemorySize": 6144,
         "engineLabels": {
           "role": "worker",
           "affinity": "postgresNode"
         }
       },
       {
-        "nodeCount": 1,
+        "nodeCount": 3,
         "nodeName": "sparkNode",
         "vmwarevsphereCpuCount": 4,
         "vmwarevsphereDiskSize": 40000,
-        "vmwarevsphereMemorySize": 24576,
+        "vmwarevsphereMemorySize": 20480,
         "engineLabels": {
           "role": "worker",
           "affinity": "sparkNode"
@@ -65,7 +65,7 @@
         "nodeName": "hdfsNode",
         "vmwarevsphereCpuCount": 4,
         "vmwarevsphereDiskSize": 40000,
-        "vmwarevsphereMemorySize": 24576,
+        "vmwarevsphereMemorySize": 8192,
         "engineLabels": {
           "role": "worker",
           "affinity": "hdfsNode"
@@ -76,7 +76,7 @@
         "nodeName": "stagingServerNode",
         "vmwarevsphereCpuCount": 4,
         "vmwarevsphereDiskSize": 40000,
-        "vmwarevsphereMemorySize": 24576,
+        "vmwarevsphereMemorySize": 20480,
         "engineLabels": {
           "role": "worker",
           "affinity": "stagingServerNode"
@@ -118,7 +118,7 @@
         "file": "../../config/spark-defaults.conf"
       },
       "es-jvm-config": {
-        "file": "../../config/jvm.options"
+        "file": "../../config/jvm-vmware.options"
       }
     },
     "volumes": {
