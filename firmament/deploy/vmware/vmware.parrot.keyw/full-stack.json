@@ -7,7 +7,8 @@
   "traefikZoneName": "parrot.keyw",
   "dockerMachineDriverOptions": {
     "driver": "vmwarevsphere",
-    "engineInsecureRegistry": "docker-registry.parrot.keyw:5000"
+    "engineInsecureRegistry": "docker-registry.parrot.keyw:5000",
+    "vmwarevsphereBoot2dockerUrl": "https://s3.amazonaws.com/merlin-jreeme/boot2docker.iso"
   },
   "dockerMachines": {
     "common": {
@@ -50,11 +51,11 @@
         }
       },
       {
-        "nodeCount": 3,
+        "nodeCount": 1,
         "nodeName": "sparkNode",
         "vmwarevsphereCpuCount": 4,
         "vmwarevsphereDiskSize": 40000,
-        "vmwarevsphereMemorySize": 20480,
+        "vmwarevsphereMemorySize": 61440,
         "engineLabels": {
           "role": "worker",
           "affinity": "sparkNode"
@@ -291,7 +292,7 @@
           }
         ],
         "deploy": {
-          "replicas": 3,
+          "replicas": 1,
           "restart_policy": {
             "condition": "on-failure"
           },
@@ -397,7 +398,6 @@
         ]
       },
       "amino3": {
-        "image": "172.31.16.194:5000/amino3:0.07.14",
         "environment": [
           "AMINO3_REPLACE_BAD_DATA_SOURCE_WITH_MEMORY_DATA_SOURCE=false"
         ],
@@ -433,11 +433,11 @@
             "constraints": [
               "engine.labels.affinity==postgresNode"
             ]
-          },
-          "ports": [
-            "5432:5432"
-          ]
+          }
         },
+        "ports": [
+           "5432:5432"
+         ],
         "volumes": [
           {
             "type": "volume",
@@ -552,78 +552,6 @@
           "net"
         ]
       },
-      "elasticsearch1": {
-        "image": "elasticsearch",
-        "environment": [
-          "HOPE=SpringsEternal"
-        ],
-        "deploy": {
-          "replicas": 1,
-          "restart_policy": {
-            "condition": "on-failure"
-          },
-          "placement": {
-            "constraints": [
-              "engine.labels.affinity==elasticsearchNode"
-            ]
-          }
-        },
-        "volumes": [
-          {
-            "type": "volume",
-            "source": "elasticsearch-datavolume1",
-            "target": "/usr/share/elasticsearch/data",
-            "volume": {
-              "nocopy": false
-            }
-          }
-        ],
-        "configs": [
-          {
-            "source": "es-jvm-config",
-            "target": "/usr/share/elasticsearch/config/jvm.options"
-          }
-        ],
-        "networks": [
-          "net"
-        ]
-      },
-      "elasticsearch2": {
-        "image": "elasticsearch",
-        "environment": [
-          "HOPE=SpringsEternal"
-        ],
-        "deploy": {
-          "replicas": 1,
-          "restart_policy": {
-            "condition": "on-failure"
-          },
-          "placement": {
-            "constraints": [
-              "engine.labels.affinity==elasticsearchNode"
-            ]
-          }
-        },
-        "volumes": [
-          {
-            "type": "volume",
-            "source": "elasticsearch-datavolume2",
-            "target": "/usr/share/elasticsearch/data",
-            "volume": {
-              "nocopy": false
-            }
-          }
-        ],
-        "configs": [
-          {
-            "source": "es-jvm-config",
-            "target": "/usr/share/elasticsearch/config/jvm.options"
-          }
-        ],
-        "networks": [
-          "net"
-        ]
-      },
       "nginx": {
         "configs": [
           {
@@ -682,4 +610,3 @@
     }
   }
 }
-
