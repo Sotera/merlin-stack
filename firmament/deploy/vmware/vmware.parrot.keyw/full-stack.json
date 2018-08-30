@@ -53,7 +53,7 @@
       {
         "nodeCount": 1,
         "nodeName": "sparkNode",
-        "vmwarevsphereCpuCount": 4,
+        "vmwarevsphereCpuCount": 6,
         "vmwarevsphereDiskSize": 40000,
         "vmwarevsphereMemorySize": 61440,
         "engineLabels": {
