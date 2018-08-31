@@ -29,11 +29,11 @@
     },
     "workers": [
       {
-        "nodeCount": 2,
+        "nodeCount": 3,
         "nodeName": "elasticsearchNode",
         "vmwarevsphereCpuCount": 4,
         "vmwarevsphereDiskSize": 40000,
-        "vmwarevsphereMemorySize": 32768,
+        "vmwarevsphereMemorySize": 49152,
         "engineLabels": {
           "role": "worker",
           "affinity": "elasticsearchNode"
@@ -44,7 +44,7 @@
         "nodeName": "postgresNode",
         "vmwarevsphereCpuCount": 4,
         "vmwarevsphereDiskSize": 40000,
-        "vmwarevsphereMemorySize": 6144,
+        "vmwarevsphereMemorySize": 4096,
         "engineLabels": {
           "role": "worker",
           "affinity": "postgresNode"
@@ -55,7 +55,7 @@
         "nodeName": "sparkNode",
         "vmwarevsphereCpuCount": 6,
         "vmwarevsphereDiskSize": 40000,
-        "vmwarevsphereMemorySize": 53248,
+        "vmwarevsphereMemorySize": 38912,
         "engineLabels": {
           "role": "worker",
           "affinity": "sparkNode"
@@ -575,6 +575,45 @@
           {
             "type": "volume",
             "source": "elasticsearch-datavolume1",
+            "target": "/usr/share/elasticsearch/data",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
+        "configs": [
+          {
+            "source": "es-jvm-config",
+            "target": "/usr/share/elasticsearch/config/jvm-vmware.options"
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "elasticsearch2": {
+        "image": "elasticsearch",
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.affinity==elasticsearchNode"
+            ]
+          },
+          "labels": [
+            "traefik.port=9200"
+          ]
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "elasticsearch-datavolume2",
             "target": "/usr/share/elasticsearch/data",
             "volume": {
               "nocopy": false

@@ -1,4 +1,4 @@
-﻿﻿#!/usr/bin/env bash
+﻿#!/usr/bin/env bash
 
 
 DEPLOY_DIR="vmware/vmware.parrot.keyw"
