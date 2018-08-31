@@ -120,6 +120,9 @@
       },
       "es-jvm-config": {
         "file": "../../config/jvm-vmware.options"
+      },
+      "es-yml": {
+        "file": "../../config/elasticsearch.yml"
       }
     },
     "volumes": {
@@ -546,6 +549,10 @@
           {
             "source": "es-jvm-config",
             "target": "/usr/share/elasticsearch/config/jvm.options"
+          },
+          {
+            "source": "es-yml",
+            "target": "/usr/share/elasticsearch/config/elasticsearch.yml"
           }
         ],
         "networks": [
@@ -582,6 +589,10 @@
           {
             "source": "es-jvm-config",
             "target": "/usr/share/elasticsearch/config/jvm.options"
+          },
+          {
+            "source": "es-yml",
+            "target": "/usr/share/elasticsearch/config/elasticsearch.yml"
           }
         ],
         "networks": [
@@ -618,6 +629,10 @@
           {
             "source": "es-jvm-config",
             "target": "/usr/share/elasticsearch/config/jvm.options"
+          },
+          {
+            "source": "es-yml",
+            "target": "/usr/share/elasticsearch/config/elasticsearch.yml"
           }
         ],
         "networks": [
