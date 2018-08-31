@@ -29,11 +29,11 @@
     },
     "workers": [
       {
-        "nodeCount": 1,
+        "nodeCount": 2,
         "nodeName": "elasticsearchNode",
         "vmwarevsphereCpuCount": 4,
         "vmwarevsphereDiskSize": 40000,
-        "vmwarevsphereMemorySize": 16384,
+        "vmwarevsphereMemorySize": 32768,
         "engineLabels": {
           "role": "worker",
           "affinity": "elasticsearchNode"
@@ -55,7 +55,7 @@
         "nodeName": "sparkNode",
         "vmwarevsphereCpuCount": 6,
         "vmwarevsphereDiskSize": 40000,
-        "vmwarevsphereMemorySize": 61440,
+        "vmwarevsphereMemorySize": 53248,
         "engineLabels": {
           "role": "worker",
           "affinity": "sparkNode"
@@ -77,7 +77,7 @@
         "nodeName": "stagingServerNode",
         "vmwarevsphereCpuCount": 4,
         "vmwarevsphereDiskSize": 40000,
-        "vmwarevsphereMemorySize": 20480,
+        "vmwarevsphereMemorySize": 12288,
         "engineLabels": {
           "role": "worker",
           "affinity": "stagingServerNode"
@@ -513,7 +513,7 @@
           "net"
         ]
       },
-      "elasticsearch": {
+      "elasticsearch0": {
         "image": "elasticsearch",
         "environment": [
           "HOPE=SpringsEternal"
@@ -545,7 +545,46 @@
         "configs": [
           {
             "source": "es-jvm-config",
-            "target": "/usr/share/elasticsearch/config/jvm.options"
+            "target": "/usr/share/elasticsearch/config/jvm-vmware.options"
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "elasticsearch1": {
+        "image": "elasticsearch",
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.affinity==elasticsearchNode"
+            ]
+          },
+          "labels": [
+            "traefik.port=9200"
+          ]
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "elasticsearch-datavolume1",
+            "target": "/usr/share/elasticsearch/data",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
+        "configs": [
+          {
+            "source": "es-jvm-config",
+            "target": "/usr/share/elasticsearch/config/jvm-vmware.options"
           }
         ],
         "networks": [
