@@ -545,7 +545,7 @@
         "configs": [
           {
             "source": "es-jvm-config",
-            "target": "/usr/share/elasticsearch/config/jvm-vmware.options"
+            "target": "/usr/share/elasticsearch/config/jvm.options"
           }
         ],
         "networks": [
@@ -584,7 +584,7 @@
         "configs": [
           {
             "source": "es-jvm-config",
-            "target": "/usr/share/elasticsearch/config/jvm-vmware.options"
+            "target": "/usr/share/elasticsearch/config/jvm.options"
           }
         ],
         "networks": [
@@ -623,7 +623,7 @@
         "configs": [
           {
             "source": "es-jvm-config",
-            "target": "/usr/share/elasticsearch/config/jvm-vmware.options"
+            "target": "/usr/share/elasticsearch/config/jvm.options"
           }
         ],
         "networks": [
