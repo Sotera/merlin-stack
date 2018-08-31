@@ -33,7 +33,7 @@
         "nodeName": "elasticsearchNode",
         "vmwarevsphereCpuCount": 4,
         "vmwarevsphereDiskSize": 40000,
-        "vmwarevsphereMemorySize": 49152,
+        "vmwarevsphereMemorySize": 16384,
         "engineLabels": {
           "role": "worker",
           "affinity": "elasticsearchNode"
@@ -566,10 +566,7 @@
             "constraints": [
               "engine.labels.affinity==elasticsearchNode"
             ]
-          },
-          "labels": [
-            "traefik.port=9200"
-          ]
+          }
         },
         "volumes": [
           {
@@ -605,10 +602,7 @@
             "constraints": [
               "engine.labels.affinity==elasticsearchNode"
             ]
-          },
-          "labels": [
-            "traefik.port=9200"
-          ]
+          }
         },
         "volumes": [
           {
