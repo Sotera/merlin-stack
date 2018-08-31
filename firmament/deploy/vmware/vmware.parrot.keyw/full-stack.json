@@ -513,7 +513,7 @@
           "net"
         ]
       },
-      "elasticsearch0": {
+      "elasticsearch": {
         "image": "elasticsearch",
         "environment": [
           "HOPE=SpringsEternal"
