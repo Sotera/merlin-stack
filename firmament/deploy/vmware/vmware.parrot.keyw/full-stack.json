@@ -200,7 +200,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
@@ -386,7 +386,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
@@ -408,7 +408,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
@@ -483,7 +483,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
@@ -502,7 +502,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
@@ -662,7 +662,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           }
         },
