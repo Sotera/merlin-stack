@@ -14,7 +14,7 @@
       "virtualboxBoot2dockerUrl": "https://s3.amazonaws.com/merlin-jreeme/boot2docker.iso"
     },
     "manager": {
-      "nodeCount": 3,
+      "nodeCount": 1,
       "nodeName": "local-master",
       "virtualboxCpuCount": 2,
       "virtualboxMemory": 16384,
@@ -53,6 +53,9 @@
       },
       "spark-defaults-config": {
         "file": "../../config/spark-defaults.conf"
+      },
+      "es-yml": {
+        "file": "../../config/elasticsearch.yml"
       }
     },
     "volumes": {
@@ -61,7 +64,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin/db/postgresql",
-          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume1": {
@@ -69,7 +72,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin/db/es1",
-          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume2": {
@@ -77,7 +80,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin/db/es2",
-          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume3": {
@@ -85,7 +88,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin/db/es3",
-          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
         }
       },
       "hadoop-datavolume": {
@@ -93,7 +96,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin",
-          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
         }
       },
       "hadoop-logvolume": {
@@ -101,7 +104,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin_logs",
-          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
         }
       },
       "amino-uploads": {
@@ -109,7 +112,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin/uploads",
-          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
         }
       }
     },
@@ -287,6 +290,12 @@
             }
           }
         ],
+        "configs": [
+          {
+            "source": "es-yml",
+            "target": "/usr/share/elasticsearch/config/elasticsearch.yml"
+          }
+        ],
         "networks": [
           "net"
         ]
@@ -317,6 +326,12 @@
             }
           }
         ],
+        "configs": [
+          {
+            "source": "es-yml",
+            "target": "/usr/share/elasticsearch/config/elasticsearch.yml"
+          }
+        ],
         "networks": [
           "net"
         ]
@@ -345,6 +360,12 @@
             "volume": {
               "nocopy": true
             }
+          }
+        ],
+        "configs": [
+          {
+            "source": "es-yml",
+            "target": "/usr/share/elasticsearch/config/elasticsearch.yml"
           }
         ],
         "networks": [

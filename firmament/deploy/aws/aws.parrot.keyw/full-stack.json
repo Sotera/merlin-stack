@@ -181,7 +181,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
@@ -367,7 +367,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
@@ -390,7 +390,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
@@ -465,7 +465,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
@@ -484,7 +484,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
@@ -528,6 +528,10 @@
           {
             "source": "es-jvm-config",
             "target": "/usr/share/elasticsearch/config/jvm.options"
+          },
+          {
+            "source": "es-yml",
+            "target": "/usr/share/elasticsearch/config/elasticsearch.yml"
           }
         ],
         "networks": [
@@ -564,6 +568,10 @@
           {
             "source": "es-jvm-config",
             "target": "/usr/share/elasticsearch/config/jvm.options"
+          },
+          {
+            "source": "es-yml",
+            "target": "/usr/share/elasticsearch/config/elasticsearch.yml"
           }
         ],
         "networks": [
@@ -600,6 +608,10 @@
           {
             "source": "es-jvm-config",
             "target": "/usr/share/elasticsearch/config/jvm.options"
+          },
+          {
+            "source": "es-yml",
+            "target": "/usr/share/elasticsearch/config/elasticsearch.yml"
           }
         ],
         "networks": [
@@ -644,7 +656,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           }
         },
