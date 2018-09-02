@@ -110,6 +110,9 @@
       },
       "es-jvm-config": {
         "file": "../../config/jvm.options"
+      },
+      "es-yml": {
+        "file": "../../config/elasticsearch.yml"
       }
     },
     "volumes": {
