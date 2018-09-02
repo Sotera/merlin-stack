@@ -105,6 +105,9 @@
       "traefik-config": {
         "file": "../../config/traefik.toml"
       },
+      "spark-defaults-config": {
+        "file": "../../config/spark-defaults.conf"
+      },
       "es-jvm-config": {
         "file": "../../config/jvm.options"
       }
@@ -165,6 +168,12 @@
         "environment": [
           "HADOOP_MACHINE_ROLE=namenode"
         ],
+        "configs": [
+          {
+            "source": "spark-defaults-config",
+            "target": "/usr/local/spark/conf/spark-defaults.conf"
+          }
+        ],
         "deploy": {
           "replicas": 1,
           "restart_policy": {
@@ -172,7 +181,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
@@ -209,6 +218,12 @@
         "image": "merlin-hadoop-base-alpine",
         "environment": [
           "HADOOP_MACHINE_ROLE=datanode"
+        ],
+        "configs": [
+          {
+            "source": "spark-defaults-config",
+            "target": "/usr/local/spark/conf/spark-defaults.conf"
+          }
         ],
         "deploy": {
           "replicas": 1,
@@ -251,6 +266,12 @@
         "environment": [
           "HADOOP_MACHINE_ROLE=sparkworker"
         ],
+        "configs": [
+          {
+            "source": "spark-defaults-config",
+            "target": "/usr/local/spark/conf/spark-defaults.conf"
+          }
+        ],
         "deploy": {
           "replicas": 3,
           "restart_policy": {
@@ -292,6 +313,12 @@
         "environment": [
           "HADOOP_MACHINE_ROLE=stagingserver"
         ],
+        "configs": [
+          {
+            "source": "spark-defaults-config",
+            "target": "/usr/local/spark/conf/spark-defaults.conf"
+          }
+        ],
         "deploy": {
           "replicas": 1,
           "restart_policy": {
@@ -303,11 +330,8 @@
             ]
           },
           "labels": [
-            "traefik.enable=true",
             "traefik.port=9999",
-            "traefik.backend=stagingserver",
-            "traefik.backend.loadbalancer.stickiness=true",
-            "traefik.frontend.rule=Host: jupyter.parrot-aws.keyw"
+            "traefik.backend.loadbalancer.stickiness=true"
           ]
         },
         "volumes": [
@@ -343,7 +367,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
@@ -366,15 +390,12 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
-            "traefik.enable=true",
             "traefik.port=3000",
-            "traefik.backend=amino3",
-            "traefik.backend.loadbalancer.stickiness=true",
-            "traefik.frontend.rule=Host: amino3.parrot-aws.keyw"
+            "traefik.backend.loadbalancer.stickiness=true"
           ]
         },
         "networks": [
@@ -382,7 +403,6 @@
         ]
       },
       "postgres": {
-        "image": "172.31.16.194:5000/postgres:0.07.14",
         "environment": [
           "POSTGRES_PASSWORD=password"
         ],
@@ -396,11 +416,8 @@
               "engine.labels.affinity==postgresNode"
             ]
           },
-          "labels": [
-            "traefik.enable=true",
-            "traefik.port=5432",
-            "traefik.backend=postgres",
-            "traefik.frontend.rule=Host: postgres.parrot-aws.keyw"
+          "ports": [
+            "5432:5432"
           ]
         },
         "volumes": [
@@ -448,7 +465,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
@@ -467,7 +484,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
@@ -511,6 +528,10 @@
           {
             "source": "es-jvm-config",
             "target": "/usr/share/elasticsearch/config/jvm.options"
+          },
+          {
+            "source": "es-yml",
+            "target": "/usr/share/elasticsearch/config/elasticsearch.yml"
           }
         ],
         "networks": [
@@ -547,6 +568,10 @@
           {
             "source": "es-jvm-config",
             "target": "/usr/share/elasticsearch/config/jvm.options"
+          },
+          {
+            "source": "es-yml",
+            "target": "/usr/share/elasticsearch/config/elasticsearch.yml"
           }
         ],
         "networks": [
@@ -583,6 +608,10 @@
           {
             "source": "es-jvm-config",
             "target": "/usr/share/elasticsearch/config/jvm.options"
+          },
+          {
+            "source": "es-yml",
+            "target": "/usr/share/elasticsearch/config/elasticsearch.yml"
           }
         ],
         "networks": [
@@ -627,7 +656,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           }
         },
