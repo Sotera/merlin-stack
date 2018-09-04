@@ -1,4 +1,4 @@
-FROM 52.0.211.45:5000/hadoop-base-alpine:0.07.14
+FROM 52.0.211.45:5000/hadoop-base-alpine:0.07.15
 MAINTAINER John Reeme <john.reeme@keywcorp.com>
 COPY Dockerfile /root/merlin-hadoop-base-alpine-Dockerfile
 
