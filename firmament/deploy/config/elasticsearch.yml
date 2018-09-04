@@ -1,5 +1,8 @@
 network.host: 0.0.0.0
 node.name: ${HOSTNAME}
+node.master: true
+node.data: true
+node.ingest: true
 http.cors.enabled: true
 http.cors.allow-headers: "Authorization, Content-Type"
 http.cors.allow-origin: "*"
