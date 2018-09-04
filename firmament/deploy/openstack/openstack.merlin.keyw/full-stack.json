@@ -1,28 +1,29 @@
 {
-  "stackName": "full-stack-merlin",
-  "clusterPrefix": "parrot-amd",
-  "hostMachineDnsServer": "192.168.104.100",
-  "defaultDockerRegistry": "docker-registry.parrot.keyw:5000",
+  "stackName": "full-stack",
+  "clusterPrefix": "merlin-prod",
+  "defaultDockerRegistry": "10.1.70.193:5000",
   "defaultDockerImageTag": "0.07.15",
-  "traefikZoneName": "parrot.keyw",
+  "traefikZoneName": "merlin.keyw",
+
   "dockerMachineDriverOptions": {
-    "driver": "vmwarevsphere",
-    "engineInsecureRegistry": "docker-registry.parrot.keyw:5000",
-    "vmwarevsphereBoot2dockerUrl": "https://s3.amazonaws.com/merlin-jreeme/boot2docker.iso"
+    "driver": "openstack",
+    "engineInsecureRegistry": "10.1.70.193:5000",
+    "openstackAuthUrl": "http://10.1.70.100:5000/v2.0"
   },
   "dockerMachines": {
     "common": {
-      "vmwarevsphereUsername": "root",
-      "vmwarevspherePassword": "run2walk!",
-      "vmwarevsphereDatastore": "datastore1",
-      "vmwarevsphereVcenter": "vmware.parrot.keyw"
+      "openstackUsername": "",
+      "openstackPassword": "",
+      "openstackImageId": "47159a88-91d8-486a-8f4f-6aa10b9b02d8",
+      "openstackSecGroups": "All",
+      "openstackSshUser": "ubuntu",
+      "openstackFloatingipPool": "external-penet",
+      "openstackTenantName": "Newman"
     },
     "manager": {
       "nodeCount": 1,
       "nodeName": "managerNode",
-      "vmwarevsphereCpuCount": 4,
-      "vmwarevsphereDiskSize": 40000,
-      "vmwarevsphereMemorySize": 16384,
+      "openstackFlavorId": "9f1dc0a7-8ecd-4c1a-a439-1873710184a5",
       "engineLabels": {
         "role": "manager"
       }
@@ -31,9 +32,7 @@
       {
         "nodeCount": 3,
         "nodeName": "elasticsearchNode",
-        "vmwarevsphereCpuCount": 4,
-        "vmwarevsphereDiskSize": 40000,
-        "vmwarevsphereMemorySize": 16384,
+        "openstackFlavorId": "9f1dc0a7-8ecd-4c1a-a439-1873710184a5",
         "engineLabels": {
           "role": "worker",
           "affinity": "elasticsearchNode"
@@ -42,31 +41,25 @@
       {
         "nodeCount": 1,
         "nodeName": "postgresNode",
-        "vmwarevsphereCpuCount": 4,
-        "vmwarevsphereDiskSize": 40000,
-        "vmwarevsphereMemorySize": 4096,
+        "openstackFlavorId": "36b3a7f4-9caa-41a5-903a-caa61f73e36d",
         "engineLabels": {
           "role": "worker",
           "affinity": "postgresNode"
         }
       },
       {
-        "nodeCount": 1,
+        "nodeCount": 3,
         "nodeName": "sparkNode",
-        "vmwarevsphereCpuCount": 6,
-        "vmwarevsphereDiskSize": 40000,
-        "vmwarevsphereMemorySize": 38912,
+        "openstackFlavorId": "9f1dc0a7-8ecd-4c1a-a439-1873710184a5",
         "engineLabels": {
           "role": "worker",
           "affinity": "sparkNode"
         }
       },
       {
-        "nodeCount": 1,
+        "nodeCount": 2,
         "nodeName": "hdfsNode",
-        "vmwarevsphereCpuCount": 4,
-        "vmwarevsphereDiskSize": 40000,
-        "vmwarevsphereMemorySize": 8192,
+        "openstackFlavorId": "172e50a6-4cc0-441a-9983-adb9b0676b7f",
         "engineLabels": {
           "role": "worker",
           "affinity": "hdfsNode"
@@ -75,9 +68,7 @@
       {
         "nodeCount": 1,
         "nodeName": "stagingServerNode",
-        "vmwarevsphereCpuCount": 4,
-        "vmwarevsphereDiskSize": 40000,
-        "vmwarevsphereMemorySize": 12288,
+        "openstackFlavorId": "9f1dc0a7-8ecd-4c1a-a439-1873710184a5",
         "engineLabels": {
           "role": "worker",
           "affinity": "stagingServerNode"
@@ -127,26 +118,18 @@
     },
     "volumes": {
       "hadoop-datavolume": {
-      "driver": "local",
-      "driver_opts": {
-        "type": "nfs",
-        "device": ":/nfs-public/parrot-amd-test/hadoop-datavolume",
-        "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
-      }
-    },
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/merlin-lts",
+          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
+        }
+      },
       "hadoop-logvolume": {
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/nfs-public/parrot-amd-test/hadoop-logvolume",
-          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
-        }
-      },
-      "amino-uploads": {
-        "driver": "local",
-        "driver_opts": {
-          "type": "nfs",
-          "device": ":/nfs-public/parrot-amd-test/uploads",
+          "device": ":/merlin-lts-logs",
           "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
         }
       },
@@ -154,15 +137,23 @@
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/nfs-public/parrot-amd-test/postgres",
-          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
+          "device": ":/merlin-lts/demopostgres",
+          "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
+        }
+      },
+      "amino-uploads": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/merlin-lts/uploads",
+          "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume0": {
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/nfs-public/parrot-amd-test/elasticsearch0",
+          "device": ":/merlin-lts/db/es1",
           "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
         }
       },
@@ -170,7 +161,7 @@
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/nfs-public/parrot-amd-test/elasticsearch1",
+          "device": ":/merlin-lts/db/es2",
           "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
         }
       },
@@ -178,11 +169,10 @@
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/nfs-public/parrot-amd-test/elasticsearch2",
+          "device": ":/merlin-lts/db/es3",
           "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
         }
       }
-
     },
     "services": {
       "namenode": {
@@ -439,8 +429,8 @@
           }
         },
         "ports": [
-           "5432:5432"
-         ],
+          "5432:5432"
+        ],
         "volumes": [
           {
             "type": "volume",
@@ -697,3 +687,4 @@
     }
   }
 }
+
