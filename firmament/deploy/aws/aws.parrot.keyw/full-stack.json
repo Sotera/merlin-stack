@@ -2,7 +2,7 @@
   "stackName": "merlin",
   "clusterPrefix": "aws-test",
   "defaultDockerRegistry": "172.31.16.194:5000",
-  "defaultDockerImageTag": "0.07.14",
+  "defaultDockerImageTag": "0.07.15",
   "traefikZoneName": "merlin-aws.keyw",
   "dockerMachineDriverOptions": {
     "driver": "amazonec2",
