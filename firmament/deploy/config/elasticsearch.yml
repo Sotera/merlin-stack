@@ -4,6 +4,7 @@ http.cors.enabled: true
 http.cors.allow-headers: "Authorization, Content-Type"
 http.cors.allow-origin: "*"
 http.cors.allow-methods: OPTIONS, HEAD, GET, POST, PUT, DELETE
+discovery.zen.minimum_master_nodes: 3
 discovery.zen.ping.unicast.hosts: ["elasticsearch","elasticsearch1","elasticsearch2"]
 cluster.name: "elasticsearch-cluster"
 path.data: "/usr/share/elasticsearch/data"
