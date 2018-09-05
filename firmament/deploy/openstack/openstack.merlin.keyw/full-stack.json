@@ -12,8 +12,6 @@
   },
   "dockerMachines": {
     "common": {
-      "openstackUsername": "",
-      "openstackPassword": "",
       "openstackImageId": "47159a88-91d8-486a-8f4f-6aa10b9b02d8",
       "openstackSecGroups": "All",
       "openstackSshUser": "ubuntu",
@@ -110,7 +108,7 @@
         "file": "../../config/spark-defaults.conf"
       },
       "es-jvm-config": {
-        "file": "../../config/jvm-vmware.options"
+        "file": "../../config/jvm.options"
       },
       "es-yml": {
         "file": "../../config/elasticsearch.yml"
@@ -122,7 +120,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/merlin-lts",
-          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
         }
       },
       "hadoop-logvolume": {
@@ -130,7 +128,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/merlin-lts-logs",
-          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
         }
       },
       "pg-datavolume": {
@@ -154,7 +152,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/merlin-lts/db/es1",
-          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume1": {
@@ -162,7 +160,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/merlin-lts/db/es2",
-          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume2": {
@@ -170,7 +168,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/merlin-lts/db/es3",
-          "o": "rw,addr=nfs.parrot.keyw,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
         }
       }
     },
