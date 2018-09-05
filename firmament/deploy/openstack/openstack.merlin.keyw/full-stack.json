@@ -21,7 +21,7 @@
     "manager": {
       "nodeCount": 1,
       "nodeName": "managerNode",
-      "openstackFlavorId": "9f1dc0a7-8ecd-4c1a-a439-1873710184a5",
+      "openstackFlavorId": "d3ffcd13-b70d-4a43-8597-5f08c09ec42e",
       "engineLabels": {
         "role": "manager"
       }
@@ -30,7 +30,7 @@
       {
         "nodeCount": 3,
         "nodeName": "elasticsearchNode",
-        "openstackFlavorId": "9f1dc0a7-8ecd-4c1a-a439-1873710184a5",
+        "openstackFlavorId": "d3ffcd13-b70d-4a43-8597-5f08c09ec42e",
         "engineLabels": {
           "role": "worker",
           "affinity": "elasticsearchNode"
@@ -39,7 +39,7 @@
       {
         "nodeCount": 1,
         "nodeName": "postgresNode",
-        "openstackFlavorId": "36b3a7f4-9caa-41a5-903a-caa61f73e36d",
+        "openstackFlavorId": "b082d9aa-8b47-4772-8c55-90636197105f",
         "engineLabels": {
           "role": "worker",
           "affinity": "postgresNode"
@@ -48,7 +48,7 @@
       {
         "nodeCount": 3,
         "nodeName": "sparkNode",
-        "openstackFlavorId": "9f1dc0a7-8ecd-4c1a-a439-1873710184a5",
+        "openstackFlavorId": "d3ffcd13-b70d-4a43-8597-5f08c09ec42e",
         "engineLabels": {
           "role": "worker",
           "affinity": "sparkNode"
@@ -57,7 +57,7 @@
       {
         "nodeCount": 2,
         "nodeName": "hdfsNode",
-        "openstackFlavorId": "172e50a6-4cc0-441a-9983-adb9b0676b7f",
+        "openstackFlavorId": "368f99e8-5ec0-4b3d-aa07-36679e514199",
         "engineLabels": {
           "role": "worker",
           "affinity": "hdfsNode"
@@ -66,7 +66,7 @@
       {
         "nodeCount": 1,
         "nodeName": "stagingServerNode",
-        "openstackFlavorId": "9f1dc0a7-8ecd-4c1a-a439-1873710184a5",
+        "openstackFlavorId": "d3ffcd13-b70d-4a43-8597-5f08c09ec42e",
         "engineLabels": {
           "role": "worker",
           "affinity": "stagingServerNode"
