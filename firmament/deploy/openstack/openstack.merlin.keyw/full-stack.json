@@ -108,7 +108,7 @@
         "file": "../../config/spark-defaults.conf"
       },
       "es-jvm-config": {
-        "file": "../../config/jvm.options"
+        "file": "../../config/jvm-openstack.options"
       },
       "es-yml": {
         "file": "../../config/elasticsearch.yml"
