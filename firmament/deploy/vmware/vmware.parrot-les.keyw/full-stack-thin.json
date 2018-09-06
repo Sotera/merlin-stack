@@ -84,30 +84,6 @@
       }
     },
     "volumes": {
-      "pg-datavolume": {
-        "driver": "local",
-        "driver_opts": {
-          "type": "nfs"
-        }
-      },
-      "elasticsearch-datavolume0": {
-        "driver": "local",
-        "driver_opts": {
-          "type": "nfs"
-        }
-      },
-      "elasticsearch-datavolume1": {
-        "driver": "local",
-        "driver_opts": {
-          "type": "nfs"
-        }
-      },
-      "elasticsearch-datavolume2": {
-        "driver": "local",
-        "driver_opts": {
-          "type": "nfs"
-        }
-      },
       "hadoop-datavolume": {
         "driver": "local",
         "driver_opts": {
@@ -115,6 +91,36 @@
         }
       },
       "hadoop-logvolume": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs"
+        }
+      },
+      "/uploads": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs"
+        }
+      },
+      "postgres": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs"
+        }
+      },
+      "elasticsearch0": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs"
+        }
+      },
+      "elasticsearch1": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs"
+        }
+      },
+      "elasticsearch2": {
         "driver": "local",
         "driver_opts": {
           "type": "nfs"
@@ -143,7 +149,7 @@
         "volumes": [
           {
             "type": "volume",
-            "source": "pg-datavolume",
+            "source": "postgres",
             "target": "/var/lib/postgresql/data",
             "volume": {
               "nocopy": false
@@ -199,7 +205,7 @@
         "volumes": [
           {
             "type": "volume",
-            "source": "pg-datavolume",
+            "source": "postgres",
             "target": "/var/lib/postgresql/data",
             "volume": {
               "nocopy": false
@@ -293,7 +299,7 @@
         "volumes": [
           {
             "type": "volume",
-            "source": "elasticsearch-datavolume0",
+            "source": "elasticsearch0",
             "target": "/usr/share/elasticsearch/data",
             "volume": {
               "nocopy": false
@@ -324,7 +330,7 @@
         "volumes": [
           {
             "type": "volume",
-            "source": "elasticsearch-datavolume1",
+            "source": "elasticsearch1",
             "target": "/usr/share/elasticsearch/data",
             "volume": {
               "nocopy": false
@@ -355,7 +361,7 @@
         "volumes": [
           {
             "type": "volume",
-            "source": "elasticsearch-datavolume2",
+            "source": "elasticsearch2",
             "target": "/usr/share/elasticsearch/data",
             "volume": {
               "nocopy": false
