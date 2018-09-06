@@ -96,7 +96,7 @@
           "type": "nfs"
         }
       },
-      "/uploads": {
+      "uploads": {
         "driver": "local",
         "driver_opts": {
           "type": "nfs"
@@ -194,7 +194,7 @@
           },
           "placement": {
             "constraints": [
-              "engine.labels.role==manager",
+              "engine.labels.role==worker",
               "engine.labels.affinity==postgresNode"
             ]
           },
