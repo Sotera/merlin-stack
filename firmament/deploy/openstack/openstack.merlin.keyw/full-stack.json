@@ -136,7 +136,7 @@
         "driver": "local",
         "driver_opts": {
           "type": "nfs",
-          "device": ":/merlin-lts/demopostgres",
+          "device": ":/merlin-lts/db/postgresql",
           "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
         }
       },
@@ -237,7 +237,7 @@
           }
         ],
         "deploy": {
-          "replicas": 1,
+          "replicas": 2,
           "restart_policy": {
             "condition": "on-failure"
           },
@@ -284,7 +284,7 @@
           }
         ],
         "deploy": {
-          "replicas": 1,
+          "replicas": 3,
           "restart_policy": {
             "condition": "on-failure"
           },
