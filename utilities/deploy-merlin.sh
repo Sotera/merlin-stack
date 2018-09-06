@@ -5,9 +5,11 @@ DEPLOY_DIR="vmware/vmware.parrot.keyw"
 STACK_NAME="full-stack-merlin"
 
 
-MACHINES=$(docker-machine ls | grep $STACK_NAME | awk '{print $1}')
-if [ "$MACHINES" != "" ]; then
-    docker-machine rm $MACHINES --force
+if [ -z $1 ]; then
+    MACHINES=$(docker-machine ls | grep $STACK_NAME | awk '{print $1}')
+    if [ "$MACHINES" != "" ]; then
+        docker-machine rm $MACHINES --force
+    fi
 fi
 
 
