@@ -16,9 +16,9 @@
   },
   "dockerMachines": {
     "common": {
-      "vmwarevsphereCpuCount": 3,
+      "vmwarevsphereCpuCount": 6,
       "vmwarevsphereDiskSize": 20000,
-      "vmwarevsphereMemorySize": 8092
+      "vmwarevsphereMemorySize": 32768
     },
     "manager": {
       "nodeCount": 1,
@@ -26,9 +26,16 @@
     },
     "workers": [
       {
-        "nodeCount": 3,
-        "nodeName": "elasticsearchNode",
-        "vmwarevsphereMemorySize": 16384
+        "nodeCount": 1,
+        "nodeName": "elasticsearchNode0"
+      },
+      {
+        "nodeCount": 1,
+        "nodeName": "elasticsearchNode1"
+      },
+      {
+        "nodeCount": 1,
+        "nodeName": "elasticsearchNode2"
       },
       {
         "nodeCount": 1,
@@ -290,7 +297,7 @@
           "placement": {
             "constraints": [
               "engine.labels.role==worker",
-              "engine.labels.affinity==elasticsearchNode"
+              "engine.labels.affinity==elasticsearchNode0"
             ]
           },
           "labels": [
@@ -324,7 +331,7 @@
           "placement": {
             "constraints": [
               "engine.labels.role==worker",
-              "engine.labels.affinity==elasticsearchNode"
+              "engine.labels.affinity==elasticsearchNode1"
             ]
           }
         },
@@ -355,7 +362,7 @@
           "placement": {
             "constraints": [
               "engine.labels.role==worker",
-              "engine.labels.affinity==elasticsearchNode"
+              "engine.labels.affinity==elasticsearchNode2"
             ]
           }
         },
