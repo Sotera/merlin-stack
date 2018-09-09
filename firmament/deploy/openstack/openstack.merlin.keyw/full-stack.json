@@ -47,7 +47,7 @@
         }
       },
       {
-        "nodeCount": 3,
+        "nodeCount": 4,
         "nodeName": "sparkNode",
         "openstackFlavorId": "d3ffcd13-b70d-4a43-8597-5f08c09ec42e",
         "engineLabels": {
@@ -284,7 +284,7 @@
           }
         ],
         "deploy": {
-          "replicas": 3,
+          "replicas": 4,
           "restart_policy": {
             "condition": "on-failure"
           },
@@ -341,8 +341,9 @@
             ]
           },
           "labels": [
-            "traefik.port=9999",
-            "traefik.backend.loadbalancer.stickiness=true"
+            "traefik.jupyter.port=9999",
+            "traefik.jupyter.frontend.rule=Host:jupyter.parrot-aws.keyw",
+            "traefik.jupyter.backend.loadbalancer.stickiness=true"
           ]
         },
         "volumes": [

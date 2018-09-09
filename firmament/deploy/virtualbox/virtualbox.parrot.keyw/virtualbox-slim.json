@@ -3,7 +3,7 @@
   "stackName":"merlin",
   "clusterPrefix": "merlin-local",
   "defaultDockerRegistry": "52.0.211.45:5000",
-  "defaultDockerImageTag": "0.07.14",
+  "defaultDockerImageTag": "0.07.15",
   "traefikZoneName": "vbox.keyw",
   "dockerMachineDriverOptions": {
     "engineInsecureRegistry": "52.0.211.45:5000",
@@ -45,6 +45,9 @@
       "nginx-amino3-config": {
         "file": "../../config/nginx-amino3.conf"
       },
+      "nginx-staging-config": {
+        "file": "../../config/nginx-staging.conf"
+      },
       "nginx-namenode-config": {
         "file": "../../config/nginx-namenode.conf"
       },
@@ -64,7 +67,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin/db/postgresql",
-          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume1": {
@@ -72,7 +75,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin/db/es1",
-          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume2": {
@@ -80,7 +83,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin/db/es2",
-          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume3": {
@@ -88,7 +91,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin/db/es3",
-          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
         }
       },
       "hadoop-datavolume": {
@@ -96,7 +99,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin",
-          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
         }
       },
       "hadoop-logvolume": {
@@ -104,7 +107,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin_logs",
-          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
         }
       },
       "amino-uploads": {
@@ -112,7 +115,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin/uploads",
-          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
         }
       }
     },
@@ -128,7 +131,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
@@ -150,7 +153,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
@@ -180,7 +183,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           }
         },
@@ -232,7 +235,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
@@ -251,7 +254,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
@@ -273,7 +276,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
@@ -312,7 +315,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           }
         },
@@ -348,7 +351,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           }
         },
@@ -390,7 +393,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
@@ -441,7 +444,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
@@ -488,7 +491,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
@@ -535,11 +538,14 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
-            "traefik.enable=false"
+            "traefik.jupyter.port=9999",
+            "traefik.jupyter.frontend.rule=Host:jupyter.vbox.keyw",
+            "traefik.jupyter.backend.loadbalancer.stickiness=true"
+
           ]
         },
         "volumes": [
@@ -566,6 +572,10 @@
       },
       "nginx": {
         "configs": [
+          {
+            "source": "nginx-staging-config",
+            "target": "/etc/nginx/conf.d/nginx-staging.conf"
+          },
           {
             "source": "nginx-amino3-config",
             "target": "/etc/nginx/conf.d/nginx-amino3.conf"
@@ -598,7 +608,7 @@
           },
           "placement": {
             "constraints": [
-              "node.role == manager"
+              "engine.labels.role==manager"
             ]
           }
         },
@@ -608,7 +618,9 @@
           "3000:3000",
           "8088:8088",
           "50070:50070",
-          "5050:5050"
+          "5050:5050",
+          "4040:4040",
+          "9999:9999"
         ],
         "networks": [
           "net"
