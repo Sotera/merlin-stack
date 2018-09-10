@@ -1,0 +1,171 @@
+{
+  "stackName": "docker-registry",
+  "clusterPrefix": "docker-registry-cp",
+  "hostMachineDnsServer": "192.168.104.100",
+  "defaultDockerRegistry": "docker-registry.parrot-les.keyw:5000",
+  "defaultDockerImageTag": "0.07.15",
+  "traefikZoneName": "virtualbox-cutout.keyw",
+  "dockerMachineDriverOptions": {
+    "driver": "virtualbox",
+    "virtualboxBoot2dockerUrl": "https://s3.amazonaws.com/merlin-jreeme/boot2docker.iso",
+    "engineInsecureRegistry": "docker-registry.parrot-les.keyw:5000"
+  },
+  "dockerMachines": {
+    "common": {
+    },
+    "manager": {
+      "nodeCount": 1,
+      "nodeName": "managerNode"
+    },
+    "workers": [
+      {
+        "nodeCount": 1,
+        "nodeName": "stagingServerNode"
+      }
+    ]
+  },
+  "nfsConfig": {
+    "exportBaseDir": "/nfs-public/virtualbox-tmp",
+    "serverAddr": "nfs.parrot-les.keyw",
+    "options": "rw,proto=tcp,async,soft,nolock"
+  },
+  "dockerComposeYaml": {
+    "version": "3.6",
+    "networks": {
+      "net": null
+    },
+    "configs": {
+      "traefik-config": {
+        "file": "../../config/traefik.toml"
+      }
+    },
+    "volumes": {
+      "dns-bind-data-volume": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs"
+        }
+      },
+      "dns-bind-conf-volume": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs"
+        }
+      },
+      "docker-registry-volume": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs"
+        }
+      }
+    },
+    "services": {
+      "dns-bind": {
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=false"
+          ]
+        },
+        "ports": [
+          "10000:10000",
+          "53:53",
+          "53:53/udp"
+        ],
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "dns-bind-conf-volume",
+            "target": "/etc/bind",
+            "volume": {
+              "nocopy": false
+            }
+          },
+          {
+            "type": "volume",
+            "source": "dns-bind-data-volume",
+            "target": "/var/bind",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "docker-registry-frontend": {
+        "environment": [
+          "ENV_DOCKER_REGISTRY_HOST=docker-registry",
+          "ENV_DOCKER_REGISTRY_PORT=5000"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=true",
+            "traefik.port=80",
+            "traefik.backend=docker-registry-frontend",
+            "traefik.frontend.rule=Host: docker-registry-frontend.parrot-les.keyw"
+          ]
+        },
+        "networks": [
+          "net"
+        ]
+      },
+      "docker-registry": {
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=false"
+          ]
+        },
+        "ports": [
+          "5000:5000"
+        ],
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "docker-registry-volume",
+            "target": "/var/lib/registry",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      }
+    }
+  }
+}
