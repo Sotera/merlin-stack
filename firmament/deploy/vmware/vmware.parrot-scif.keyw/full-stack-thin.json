@@ -599,6 +599,22 @@
           "net"
         ]
       },
+      "esrally": {
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          }
+        },
+        "networks": [
+          "net"
+        ]
+      },
       "nginx": {
         "configs": [
           {
