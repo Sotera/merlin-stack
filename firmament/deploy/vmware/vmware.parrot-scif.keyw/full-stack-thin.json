@@ -2,12 +2,12 @@
   "stackName": "full-stack-merlin",
   "clusterPrefix": "full-stack-reeme",
   "hostMachineDnsServer": "192.168.104.100",
-  "defaultDockerRegistry": "docker-registry.parrot-scif.keyw:5000",
+  "defaultDockerRegistry": "docker-registry.parrot-les.keyw:5000",
   "defaultDockerImageTag": "0.07.15",
   "traefikZoneName": "parrot-scif.keyw",
   "dockerMachineDriverOptions": {
     "driver": "vmwarevsphere",
-    "engineInsecureRegistry": "docker-registry.parrot-scif.keyw:5000",
+    "engineInsecureRegistry": "docker-registry.parrot-les.keyw:5000",
     "vmwarevsphereBoot2dockerUrl": "https://s3.amazonaws.com/merlin-jreeme/boot2docker.iso",
     "vmwarevsphereUsername": "root",
     "vmwarevspherePassword": "run2walk!",
@@ -16,7 +16,7 @@
   },
   "dockerMachines": {
     "common": {
-      "vmwarevsphereCpuCount": 6,
+      "vmwarevsphereCpuCount": 10,
       "vmwarevsphereDiskSize": 20000,
       "vmwarevsphereMemorySize": 32768
     },
@@ -66,6 +66,15 @@
       "net": null
     },
     "configs": {
+      "elasticsearch-log4j2-config": {
+        "file": "../../config/log4j2.properties"
+      },
+      "elasticsearch-jvm-config": {
+        "file": "../../config/jvm.options"
+      },
+      "elasticsearch-yml-config": {
+        "file": "../../config/elasticsearch.yml"
+      },
       "nginx-elasticsearch-config": {
         "file": "../../config/nginx-elasticsearch.conf"
       },
@@ -286,8 +295,19 @@
       },
       "elasticsearch": {
         "image": "elasticsearch",
-        "environment": [
-          "HOPE=SpringsEternal"
+        "configs": [
+          {
+            "source": "elasticsearch-yml-config",
+            "target": "/usr/share/elasticsearch/config/elasticsearch.yml"
+          },
+          {
+            "source": "elasticsearch-jvm-config",
+            "target": "/usr/share/elasticsearch/config/jvm.options"
+          },
+          {
+            "source": "elasticsearch-log4j2-config",
+            "target": "/usr/share/elasticsearch/config/log4j2.properties"
+          }
         ],
         "deploy": {
           "replicas": 1,
@@ -320,6 +340,20 @@
       },
       "elasticsearch1": {
         "image": "elasticsearch",
+        "configs": [
+          {
+            "source": "elasticsearch-yml-config",
+            "target": "/usr/share/elasticsearch/config/elasticsearch.yml"
+          },
+          {
+            "source": "elasticsearch-jvm-config",
+            "target": "/usr/share/elasticsearch/config/jvm.options"
+          },
+          {
+            "source": "elasticsearch-log4j2-config",
+            "target": "/usr/share/elasticsearch/config/log4j2.properties"
+          }
+        ],
         "environment": [
           "HOPE=SpringsEternal"
         ],
@@ -351,6 +385,20 @@
       },
       "elasticsearch2": {
         "image": "elasticsearch",
+        "configs": [
+          {
+            "source": "elasticsearch-yml-config",
+            "target": "/usr/share/elasticsearch/config/elasticsearch.yml"
+          },
+          {
+            "source": "elasticsearch-jvm-config",
+            "target": "/usr/share/elasticsearch/config/jvm.options"
+          },
+          {
+            "source": "elasticsearch-log4j2-config",
+            "target": "/usr/share/elasticsearch/config/log4j2.properties"
+          }
+        ],
         "environment": [
           "HOPE=SpringsEternal"
         ],
