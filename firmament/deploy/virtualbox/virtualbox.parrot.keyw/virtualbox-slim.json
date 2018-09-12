@@ -51,6 +51,9 @@
       "nginx-namenode-config": {
         "file": "../../config/nginx-namenode.conf"
       },
+      "nginx-sparkui-config": {
+        "file": "../../config/nginx-sparkui.conf"
+      },
       "nginx-hdfs-config": {
         "file": "../../config/nginx-hdfs.conf"
       },
@@ -67,7 +70,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin/db/postgresql",
-          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume1": {
@@ -75,7 +78,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin/db/es1",
-          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume2": {
@@ -83,7 +86,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin/db/es2",
-          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume3": {
@@ -91,7 +94,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin/db/es3",
-          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
         }
       },
       "hadoop-datavolume": {
@@ -99,7 +102,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin",
-          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
         }
       },
       "hadoop-logvolume": {
@@ -107,7 +110,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin_logs",
-          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
         }
       },
       "amino-uploads": {
@@ -115,7 +118,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin/uploads",
-          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
         }
       }
     },
@@ -544,7 +547,10 @@
           "labels": [
             "traefik.jupyter.port=9999",
             "traefik.jupyter.frontend.rule=Host:jupyter.vbox.keyw",
-            "traefik.jupyter.backend.loadbalancer.stickiness=true"
+            "traefik.jupyter.backend.loadbalancer.stickiness=true",
+            "traefik.sparkui.port=4040",
+            "traefik.sparkui.frontend.rule=Host:sparkui.vbox.keyw",
+            "traefik.sparkui.backend.loadbalancer.stickiness=true"
 
           ]
         },
@@ -575,6 +581,10 @@
           {
             "source": "nginx-staging-config",
             "target": "/etc/nginx/conf.d/nginx-staging.conf"
+          },
+          {
+            "source": "nginx-sparkui-config",
+            "target": "/etc/nginx/conf.d/nginx-sparkui.conf"
           },
           {
             "source": "nginx-amino3-config",
