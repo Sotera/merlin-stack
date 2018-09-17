@@ -1,64 +1,74 @@
 {
-  "stackName": "full-stack-merlin",
-  "clusterPrefix": "full-stack-reeme",
-  "hostMachineDnsServer": "192.168.104.100",
-  "defaultDockerRegistry": "docker-registry.parrot-scif.keyw:5000",
-  "defaultDockerImageTag": "0.07.16",
-  "traefikZoneName": "parrot-scif.keyw",
+  "stackName": "merlin",
+  "clusterPrefix": "aws-test",
+  "defaultDockerRegistry": "172.31.16.194:5000",
+  "defaultDockerImageTag": "0.07.15",
+  "traefikZoneName": "merlin-aws.keyw",
   "dockerMachineDriverOptions": {
-    "driver": "vmwarevsphere",
-    "engineInsecureRegistry": "docker-registry.parrot-scif.keyw:5000",
-    "vmwarevsphereBoot2dockerUrl": "https://s3.amazonaws.com/merlin-jreeme/boot2docker.iso",
-    "vmwarevsphereUsername": "root",
-    "vmwarevspherePassword": "run2walk!",
-    "vmwarevsphereDatastore": "datastore1",
-    "vmwarevsphereVcenter": "vmware.parrot-scif.keyw"
+    "driver": "amazonec2",
+    "engineInsecureRegistry": "172.31.16.194:5000"
   },
   "dockerMachines": {
     "common": {
-      "vmwarevsphereCpuCount": 10,
-      "vmwarevsphereDiskSize": 20000,
-      "vmwarevsphereMemorySize": 32768
+      "amazonec2-security-group": "docker-machine",
+      "amazonec2-ami": "ami-0a1ecb407d0499f0d",
+      "amazonec2-root-size": "64",
+      "amazonec2-vpc-id": "vpc-44a0d421",
+      "amazonec2-subnet-id": "subnet-eebf2999",
+      "amazonec2-region": "us-east-1",
+      "amazonec2-zone": "b",
+      "amazonec2-use-private-address": true
     },
     "manager": {
       "nodeCount": 1,
-      "nodeName": "managerNode"
+      "nodeName": "managerNode",
+      "amazonec2-instance-type": "m4.4xlarge",
+      "engineLabels": {
+        "role": "manager"
+      }
     },
     "workers": [
       {
         "nodeCount": 1,
-        "nodeName": "elasticsearchNode0"
+        "nodeName": "elasticsearchNode0",
+        "amazonec2-instance-type": "m4.2xlarge"
       },
       {
         "nodeCount": 1,
-        "nodeName": "elasticsearchNode1"
+        "nodeName": "elasticsearchNode1",
+        "amazonec2-instance-type": "m4.2xlarge"
       },
       {
         "nodeCount": 1,
-        "nodeName": "elasticsearchNode2"
+        "nodeName": "elasticsearchNode2",
+        "amazonec2-instance-type": "m4.2xlarge"
       },
       {
         "nodeCount": 1,
-        "nodeName": "postgresNode"
+        "nodeName": "postgresNode",
+        "amazonec2-instance-type": "m4.xlarge"
       },
       {
         "nodeCount": 3,
-        "nodeName": "sparkNode"
+        "nodeName": "sparkNode",
+        "amazonec2-instance-type": "m4.4xlarge"
       },
       {
         "nodeCount": 1,
-        "nodeName": "hdfsNode"
+        "nodeName": "hdfsNode",
+        "amazonec2-instance-type": "m4.large"
       },
       {
         "nodeCount": 1,
-        "nodeName": "stagingServerNode"
+        "nodeName": "stagingServerNode",
+        "amazonec2-instance-type": "m4.xlarge"
       }
     ]
   },
   "nfsConfig": {
-    "exportBaseDir": "/nfs-public/parrot-scif",
-    "serverAddr": "nfs.parrot-scif.keyw",
-    "options": "rw,proto=tcp,async,soft,nolock"
+    "exportBaseDir": "/",
+    "serverAddr": "fs-337c8678.efs.us-east-1.amazonaws.com",
+    "options": "rw,nfsvers=4.1,proto=tcp,async,soft,nolock"
   },
   "dockerComposeYaml": {
     "version": "3.6",
@@ -432,11 +442,11 @@
             ]
           },
           "labels": [
-            "traefik.enabled=true",
+            "traefik.enable=true",
             "traefik.namenode.port=8088",
-            "traefik.namenode.frontend.rule=Host:namenode.parrot-scif.keyw",
+            "traefik.namenode.frontend.rule=Host:namenode.parrot-aws.keyw",
             "traefik.hdfs.port=50070",
-            "traefik.hdfs.frontend.rule=Host:hdfs.parrot-scif.keyw"
+            "traefik.hdfs.frontend.rule=Host:hdfs.parrot-aws.keyw"
           ]
         },
         "volumes": [
@@ -685,3 +695,4 @@
     }
   }
 }
+
