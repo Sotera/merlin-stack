@@ -6,7 +6,7 @@ http.cors.allow-methods: OPTIONS, HEAD, GET, POST, PUT, DELETE
 cluster.name: "elasticsearch-cluster"
 path.data: "/usr/share/elasticsearch/data"
 path.logs: "/usr/share/elasticsearch/logs"
-bootstrap.memory_lock: false
+bootstrap.memory_lock: true
 
 discovery.zen.minimum_master_nodes: 2
 discovery.zen.ping.unicast.hosts: ["elasticsearch","elasticsearch1","elasticsearch2"]
