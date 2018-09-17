@@ -11,7 +11,7 @@
   "dockerMachines": {
     "common": {
       "amazonec2-security-group":"docker-machine",
-      "amazonec2-ami":"ami-06356410efeed1d6a",
+      "amazonec2-ami":"ami-0a1ecb407d0499f0d",
       "amazonec2-root-size":"64",
       "amazonec2-vpc-id":"vpc-44a0d421",
       "amazonec2-subnet-id":"subnet-eebf2999",
