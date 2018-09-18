@@ -181,7 +181,8 @@
           },
           "placement": {
             "constraints": [
-              "engine.labels.role==worker"
+              "engine.labels.role==worker",
+              "engine.labels.affinity==stagingServerNode"
             ]
           },
           "labels": [
