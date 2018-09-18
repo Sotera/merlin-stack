@@ -47,6 +47,10 @@
       },
       {
         "nodeCount": 1,
+        "nodeName": "nameNode"
+      },
+      {
+        "nodeCount": 1,
         "nodeName": "hdfsNode"
       },
       {
@@ -429,7 +433,8 @@
           },
           "placement": {
             "constraints": [
-              "engine.labels.role==manager"
+              "engine.labels.role==worker",
+              "engine.labels.affinity==nameNode"
             ]
           },
           "labels": [
