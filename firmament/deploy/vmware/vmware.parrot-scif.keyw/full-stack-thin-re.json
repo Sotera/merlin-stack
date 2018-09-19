@@ -1,6 +1,6 @@
 {
-  "stackName": "rembleton-full-stack-merlin",
-  "clusterPrefix": "rembleton-full-stack",
+  "stackName": "rembleton-stack-merlin",
+  "clusterPrefix": "rembleton-stack",
   "hostMachineDnsServer": "192.168.104.100",
   "defaultDockerRegistry": "docker-registry.parrot-scif.keyw:5000",
   "defaultDockerImageTag": "0.07.16",
