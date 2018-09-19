@@ -11,7 +11,7 @@
     "vmwarevsphereBoot2dockerUrl": "https://s3.amazonaws.com/merlin-jreeme/boot2docker.iso",
     "vmwarevsphereUsername": "root",
     "vmwarevspherePassword": "run2walk!",
-    "vmwarevsphereDatastore": "datastore1",
+    "vmwarevsphereDatastore": "datastore2",
     "vmwarevsphereVcenter": "vmware.parrot-scif.keyw"
   },
   "dockerMachines": {
