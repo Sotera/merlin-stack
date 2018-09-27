@@ -3,7 +3,7 @@
   "stackName":"merlin",
   "clusterPrefix": "merlin-local",
   "defaultDockerRegistry": "52.0.211.45:5000",
-  "defaultDockerImageTag": "0.07.15",
+  "defaultDockerImageTag": "0.07.16",
   "traefikZoneName": "vbox.keyw",
   "dockerMachineDriverOptions": {
     "engineInsecureRegistry": "52.0.211.45:5000",
@@ -60,11 +60,14 @@
       "spark-defaults-config": {
         "file": "../../config/spark-defaults.conf"
       },
-      "es-yml": {
-        "file": "../../config/elasticsearch.yml"
+      "elasticsearch-log4j2-config": {
+        "file": "../../config/log4j2.properties"
       },
       "elasticsearch-jvm-config": {
         "file": "../../config/jvm-vbox.options"
+      },
+      "elasticsearch-yml-config": {
+        "file": "../../config/elasticsearch.yml"
       }
     },
     "volumes": {
@@ -301,12 +304,16 @@
         ],
         "configs": [
           {
-            "source": "es-yml",
+            "source": "elasticsearch-yml-config",
             "target": "/usr/share/elasticsearch/config/elasticsearch.yml"
           },
           {
             "source": "elasticsearch-jvm-config",
             "target": "/usr/share/elasticsearch/config/jvm.options"
+          },
+          {
+            "source": "elasticsearch-log4j2-config",
+            "target": "/usr/share/elasticsearch/config/log4j2.properties"
           }
         ],
         "networks": [
@@ -341,12 +348,16 @@
         ],
         "configs": [
           {
-            "source": "es-yml",
+            "source": "elasticsearch-yml-config",
             "target": "/usr/share/elasticsearch/config/elasticsearch.yml"
           },
           {
             "source": "elasticsearch-jvm-config",
             "target": "/usr/share/elasticsearch/config/jvm.options"
+          },
+          {
+            "source": "elasticsearch-log4j2-config",
+            "target": "/usr/share/elasticsearch/config/log4j2.properties"
           }
         ],
         "networks": [
@@ -381,12 +392,16 @@
         ],
         "configs": [
           {
-            "source": "es-yml",
+            "source": "elasticsearch-yml-config",
             "target": "/usr/share/elasticsearch/config/elasticsearch.yml"
           },
           {
             "source": "elasticsearch-jvm-config",
             "target": "/usr/share/elasticsearch/config/jvm.options"
+          },
+          {
+            "source": "elasticsearch-log4j2-config",
+            "target": "/usr/share/elasticsearch/config/log4j2.properties"
           }
         ],
         "networks": [

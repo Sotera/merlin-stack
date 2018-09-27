@@ -9,6 +9,8 @@ COPY ./config/requirements.txt requirements.txt
 RUN apt-get update
 RUN apt-get install -y libigraph0-dev python-pip libpst-dev readpst python-igraph
 
+RUN pip install --upgrade pip==18.0
+RUN hash -r pip
 RUN pip install -r requirements.txt
 RUN python -m spacy download en
 RUN echo "alias etl='cd /mnt/merlin/merlin-etl'" >> /root/.bashrc
