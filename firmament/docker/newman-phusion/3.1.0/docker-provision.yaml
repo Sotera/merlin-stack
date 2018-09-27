@@ -1,0 +1,22 @@
+version: '3.3'
+networks:
+  net: null
+services:
+  newman:
+    image: '52.0.211.45:5000/newman:0.07.17'
+    environment:
+      - HOPE=SpringsEternal
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints:
+          - 'node.role == worker'
+      labels:
+        - traefik.port=5000
+        - traefik.backend=newman
+    ports:
+      - '5000:5000'
+    networks:
+      - net
