@@ -3,7 +3,7 @@
   "clusterPrefix": "full-stack-reeme",
   "hostMachineDnsServer": "192.168.104.100",
   "defaultDockerRegistry": "docker-registry.parrot-scif.keyw:5000",
-  "defaultDockerImageTag": "0.07.16",
+  "defaultDockerImageTag": "0.07.17",
   "traefikZoneName": "parrot-scif.keyw",
   "dockerMachineDriverOptions": {
     "driver": "vmwarevsphere",
