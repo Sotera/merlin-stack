@@ -1,4 +1,7 @@
 FROM 52.0.211.45:5000/phusion:0.07.17
+MAINTAINER Justin Lueders<justin.lueders@keywcorp.com>
+COPY Dockerfile /root/newman-phusion-Dockerfile
+
 RUN adduser --system --group newman
 RUN mkdir /srv/software
 WORKDIR /srv/software
