@@ -2,12 +2,12 @@
   "stackName": "rembleton-stack-merlin",
   "clusterPrefix": "rembleton-stack",
   "hostMachineDnsServer": "192.168.104.100",
-  "defaultDockerRegistry": "docker-registry.parrot-scif.keyw:5000",
+  "defaultDockerRegistry": "52.0.211.45:5000",
   "defaultDockerImageTag": "0.07.17",
   "traefikZoneName": "parrot-scif.keyw",
   "dockerMachineDriverOptions": {
     "driver": "vmwarevsphere",
-    "engineInsecureRegistry": "docker-registry.parrot-scif.keyw:5000",
+    "engineInsecureRegistry": "52.0.211.45:5000",
     "vmwarevsphereBoot2dockerUrl": "https://s3.amazonaws.com/merlin-jreeme/boot2docker.iso",
     "vmwarevsphereUsername": "root",
     "vmwarevspherePassword": "run2walk!",
@@ -68,6 +68,9 @@
     "configs": {
       "elasticsearch-log4j2-config": {
         "file": "../../config/log4j2.properties"
+      },
+      "nginx-newman-config": {
+        "file": "../../config/nginx-newman.conf"
       },
       "elasticsearch-jvm-config": {
         "file": "../../config/jvm.options"
@@ -151,6 +154,25 @@
       }
     },
     "services": {
+      "newman": {
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          },
+          "labels": [
+            "traefik.port=5000"
+          ]
+        },
+        "networks": [
+          "net"
+        ]
+      },
       "pgadmin4": {
         "deploy": {
           "replicas": 1,
@@ -624,6 +646,10 @@
       },
       "nginx": {
         "configs": [
+          {
+            "source": "nginx-newman-config",
+            "target": "/etc/nginx/conf.d/nginx-newman.conf"
+          },
           {
             "source": "nginx-elasticsearch-config",
             "target": "/etc/nginx/conf.d/nginx-elasticsearch.conf"
