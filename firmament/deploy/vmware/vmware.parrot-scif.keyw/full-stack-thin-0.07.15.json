@@ -41,9 +41,6 @@
       "elasticsearch-log4j2-config": {
         "file": "../../config/log4j2.properties"
       },
-      "nginx-newman-config": {
-        "file": "../../config/nginx-newman.conf"
-      },
       "elasticsearch-jvm-config": {
         "file": "../../config/jvm.options"
       },
