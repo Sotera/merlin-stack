@@ -253,7 +253,7 @@
         ]
       },
       "elasticsearch": {
-        "image": "elasticsearch",
+        "image": "52.0.211.45:5000/elasticsearch:0.07.17",
         "configs": [
           {
             "source": "elasticsearch-yml-config",
@@ -297,7 +297,7 @@
         ]
       },
       "elasticsearch1": {
-        "image": "elasticsearch",
+        "image": "52.0.211.45:5000/elasticsearch:0.07.17",
         "configs": [
           {
             "source": "elasticsearch-yml-config",
@@ -338,7 +338,7 @@
         ]
       },
       "elasticsearch2": {
-        "image": "elasticsearch",
+        "image": "52.0.211.45:5000/elasticsearch:0.07.17",
         "configs": [
           {
             "source": "elasticsearch-yml-config",
