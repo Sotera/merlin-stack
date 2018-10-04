@@ -574,10 +574,6 @@
       "nginx": {
         "configs": [
           {
-            "source": "nginx-newman-config",
-            "target": "/etc/nginx/conf.d/nginx-newman.conf"
-          },
-          {
             "source": "nginx-elasticsearch-config",
             "target": "/etc/nginx/conf.d/nginx-elasticsearch.conf"
           },
