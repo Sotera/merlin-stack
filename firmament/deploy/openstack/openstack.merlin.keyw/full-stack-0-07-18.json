@@ -25,18 +25,8 @@
     },
     "workers": [
       {
-        "nodeCount": 1,
-        "nodeName": "elasticsearchNode0",
-        "openstackFlavorId": "d3ffcd13-b70d-4a43-8597-5f08c09ec42e"
-      },
-      {
-        "nodeCount": 1,
-        "nodeName": "elasticsearchNode1",
-        "openstackFlavorId": "d3ffcd13-b70d-4a43-8597-5f08c09ec42e"
-      },
-      {
-        "nodeCount": 1,
-        "nodeName": "elasticsearchNode2",
+        "nodeCount": 3,
+        "nodeName": "elasticsearchNode",
         "openstackFlavorId": "d3ffcd13-b70d-4a43-8597-5f08c09ec42e"
       },
       {
@@ -338,7 +328,7 @@
           },
           "placement": {
             "constraints": [
-              "engine.labels.affinity==elasticsearchNode0"
+              "engine.labels.affinity==elasticsearchNode"
             ]
           },
           "labels": [
@@ -382,7 +372,7 @@
           },
           "placement": {
             "constraints": [
-              "engine.labels.affinity==elasticsearchNode1"
+              "engine.labels.affinity==elasticsearchNode"
             ]
           }
         },
@@ -423,7 +413,7 @@
           },
           "placement": {
             "constraints": [
-              "engine.labels.affinity==elasticsearchNode2"
+              "engine.labels.affinity==elasticsearchNode"
             ]
           }
         },
