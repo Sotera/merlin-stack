@@ -17,7 +17,7 @@
   "dockerMachines": {
     "common": {
       "vmwarevsphereCpuCount": 10,
-      "vmwarevsphereDiskSize": 20000,
+      "vmwarevsphereDiskSize": 60000,
       "vmwarevsphereMemorySize": 32768
     },
     "manager": {
