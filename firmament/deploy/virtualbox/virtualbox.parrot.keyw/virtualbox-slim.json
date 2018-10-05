@@ -185,6 +185,9 @@
         ]
       },
       "newman": {
+        "environment": [
+          "DEFAULT_USER=elasticsearch"
+        ],
         "deploy": {
           "replicas": 1,
           "restart_policy": {
