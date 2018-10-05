@@ -127,14 +127,6 @@
           "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
         }
       },
-      "uploads": {
-        "driver": "local",
-        "driver_opts": {
-          "type": "nfs",
-          "device": ":/merlin-lts/uploads",
-          "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
-        }
-      },
       "postgres": {
         "driver": "local",
         "driver_opts": {
@@ -254,7 +246,7 @@
         "volumes": [
           {
             "type": "volume",
-            "source": "pg-datavolume",
+            "source": "postgres",
             "target": "/var/lib/postgresql/data",
             "volume": {
               "nocopy": false
