@@ -2,7 +2,7 @@
   "stackName": "full-stack",
   "clusterPrefix": "merlin-prod",
   "defaultDockerRegistry": "10.1.70.193:5000",
-  "defaultDockerImageTag": "0.07.17",
+  "defaultDockerImageTag": "0.07.18",
   "traefikZoneName": "merlin.keyw",
   "dockerMachineDriverOptions": {
     "driver": "openstack",
