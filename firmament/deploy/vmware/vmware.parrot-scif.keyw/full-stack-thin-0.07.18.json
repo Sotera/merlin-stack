@@ -122,12 +122,6 @@
           "type": "nfs"
         }
       },
-      "uploads": {
-        "driver": "local",
-        "driver_opts": {
-          "type": "nfs"
-        }
-      },
       "postgres": {
         "driver": "local",
         "driver_opts": {
