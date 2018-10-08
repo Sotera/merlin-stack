@@ -3,7 +3,7 @@
   "stackName":"merlin",
   "clusterPrefix": "merlin-local",
   "defaultDockerRegistry": "52.0.211.45:5000",
-  "defaultDockerImageTag": "0.07.17",
+  "defaultDockerImageTag": "0.07.18",
   "traefikZoneName": "vbox.keyw",
   "dockerMachineDriverOptions": {
     "engineInsecureRegistry": "52.0.211.45:5000",
@@ -79,7 +79,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin/db/postgresql",
-          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume1": {
@@ -87,7 +87,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin/db/es1",
-          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume2": {
@@ -95,7 +95,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin/db/es2",
-          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
         }
       },
       "elasticsearch-datavolume3": {
@@ -103,7 +103,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin/db/es3",
-          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
         }
       },
       "hadoop-datavolume": {
@@ -111,7 +111,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin",
-          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
         }
       },
       "hadoop-logvolume": {
@@ -119,7 +119,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin_logs",
-          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
         }
       },
       "amino-uploads": {
@@ -127,7 +127,7 @@
         "driver_opts": {
           "type": "nfs",
           "device": ":/var/nfs/merlin/uploads",
-          "o": "rw,addr=192.168.104.32,proto=tcp,async,soft,nolock"
+          "o": "rw,addr=192.168.0.23,proto=tcp,async,soft,nolock"
         }
       }
     },
