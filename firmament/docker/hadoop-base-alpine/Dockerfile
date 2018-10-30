@@ -7,7 +7,7 @@ WORKDIR /usr/local
 # Install additional requirements to hadoop-base-alpine base image
 COPY ./config/requirements.txt requirements.txt
 RUN apt-get update
-RUN apt-get install -y libigraph0-dev python-pip libpst-dev readpst python-igraph
+RUN apt-get install -y libigraph0-dev python-pip libpst-dev readpst python-igraph python-opencv
 
 RUN pip install --upgrade pip==18.0
 RUN hash -r pip
