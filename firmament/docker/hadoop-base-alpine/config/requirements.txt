@@ -15,7 +15,7 @@ dill
 xmltodict
 pandas
 python-Levenshtein
-numpy
+numpy>=1.15
 pydoop
 pyspark
 jupyter
