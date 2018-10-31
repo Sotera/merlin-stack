@@ -20,5 +20,5 @@ pydoop
 pyspark
 jupyter
 spacy
-cv2
 keras
+tensorflow
