@@ -1,4 +1,4 @@
-FROM 52.0.211.45:5000/phusion:0.07.17
+FROM 52.0.211.45:5000/phusion:0.07.19
 MAINTAINER Justin Lueders<justin.lueders@keywcorp.com>
 COPY Dockerfile /root/newman-phusion-Dockerfile
 
