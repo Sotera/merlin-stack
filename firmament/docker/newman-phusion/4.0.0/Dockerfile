@@ -1,4 +1,4 @@
-FROM 52.0.211.45:5000/phusion:0.07.19
+FROM docker-registry.parrot-les.keyw:5000/phusion:0.08.01
 MAINTAINER Justin Lueders<justin.lueders@keywcorp.com>
 COPY Dockerfile /root/newman-phusion-Dockerfile
 
