@@ -13,7 +13,7 @@ RUN chown -R nifi:nifi /home/nifi/
 RUN mkdir /etc/service/nifi
 RUN mkdir /etc/service/nifi/log
 RUN mkdir /var/log/nifi
-RUN chown nifi.nifi /var/log/nifi/ /etc/service/nifi/log/f
+RUN chown nifi.nifi /var/log/nifi/ /etc/service/nifi/log/
 
 COPY runit /etc/service/nifi/
 COPY runit /etc/service/nifi/
