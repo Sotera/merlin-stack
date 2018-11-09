@@ -20,8 +20,6 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 # Install additional requirements to hadoop-base-alpine base image
 COPY ./config/requirements.txt /var/tmp/requirements.txt
 
-RUN pip install --upgrade pip==18.0
-RUN hash -r pip
 RUN pip install -r /var/tmp/requirements.txt
 RUN python -m spacy download en
 RUN echo "alias etl='cd /mnt/merlin/merlin-etl'" >> /root/.bashrc
