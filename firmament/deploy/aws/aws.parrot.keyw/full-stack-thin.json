@@ -2,7 +2,7 @@
   "stackName": "merlin",
   "clusterPrefix": "aws-test",
   "defaultDockerRegistry": "172.31.16.194:5000",
-  "defaultDockerImageTag": "0.07.15",
+  "defaultDockerImageTag": "0.07.18",
   "traefikZoneName": "merlin-aws.keyw",
   "dockerMachineDriverOptions": {
     "driver": "amazonec2",
@@ -78,6 +78,9 @@
     "configs": {
       "elasticsearch-log4j2-config": {
         "file": "../../config/log4j2.properties"
+      },
+      "nginx-newman-config": {
+        "file": "../../config/nginx-newman.conf"
       },
       "elasticsearch-jvm-config": {
         "file": "../../config/jvm.options"
@@ -161,6 +164,28 @@
       }
     },
     "services": {
+      "newman": {
+        "environment": [
+          "DEFAULT_USER=elasticsearch"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          },
+          "labels": [
+            "traefik.port=5000"
+          ]
+        },
+        "networks": [
+          "net"
+        ]
+      },
       "pgadmin4": {
         "deploy": {
           "replicas": 1,
@@ -191,7 +216,7 @@
           },
           "placement": {
             "constraints": [
-              "engine.labels.role==worker"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
@@ -635,6 +660,10 @@
       "nginx": {
         "configs": [
           {
+            "source": "nginx-newman-config",
+            "target": "/etc/nginx/conf.d/nginx-newman.conf"
+          },
+          {
             "source": "nginx-elasticsearch-config",
             "target": "/etc/nginx/conf.d/nginx-elasticsearch.conf"
           },
@@ -685,6 +714,7 @@
           "8088:8088",
           "50070:50070",
           "5050:5050",
+          "5000:5000",
           "9999:9999"
         ],
         "networks": [
