@@ -1,7 +1,7 @@
 FROM docker-registry.parrot-les.keyw:5000/hadoop-base:0.08.01
 MAINTAINER John Reeme <john.reeme@keywcorp.com>
 
-COPY Dockerfile /var/opt/docker/
+COPY Dockerfile /var/opt/docker/Docker.hadoop
 
 # Install aptitude packages
 ARG PACKAGES="\
@@ -24,12 +24,15 @@ RUN pip install -r /var/tmp/requirements.txt
 RUN python -m spacy download en
 RUN echo "alias etl='cd /mnt/merlin/merlin-etl'" >> /root/.bashrc
 RUN echo "export PATH=/mnt/merlin/merlin-etl/share/bin:$PATH" >> /root/.bashrc
+#RUN echo "/mnt/merlin/merlin-etl/share/bin:$PATH" > /etc/container_environment/PATH
 
 COPY config/update_classpath.sh /var/tmp/update_classpath.sh
 RUN chmod 755 /var/tmp/update_classpath.sh
 RUN /var/tmp/update_classpath.sh
 
+#Add runit folder for managing hadoop process
 COPY docker-entrypoint.sh /usr/local/bin/
+
 RUN chmod 755 /usr/local/bin/docker-entrypoint.sh
 
 WORKDIR /mnt/merlin/merlin-etl
