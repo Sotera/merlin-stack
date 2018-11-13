@@ -11,7 +11,7 @@
   "dockerMachines": {
     "common": {
       "amazonec2-security-group": "docker-machine",
-      "amazonec2-ami": "ami-0a1ecb407d0499f0d",
+      "amazonec2-ami": "ami-02be14bd51082f677",
       "amazonec2-root-size": "64",
       "amazonec2-vpc-id": "vpc-44a0d421",
       "amazonec2-subnet-id": "subnet-eebf2999",
@@ -29,46 +29,51 @@
     },
     "workers": [
       {
-        "nodeCount": 1,
-        "nodeName": "elasticsearchNode0",
-        "amazonec2-instance-type": "m4.2xlarge"
-      },
-      {
-        "nodeCount": 1,
-        "nodeName": "elasticsearchNode1",
-        "amazonec2-instance-type": "m4.2xlarge"
-      },
-      {
-        "nodeCount": 1,
-        "nodeName": "elasticsearchNode2",
-        "amazonec2-instance-type": "m4.2xlarge"
+        "nodeCount": 3,
+        "nodeName": "elasticsearchNode",
+        "amazonec2-instance-type": "m4.2xlarge",
+        "engineLabels": {
+          "role": "worker",
+          "affinity": "elasticsearchNode"
+        }
       },
       {
         "nodeCount": 1,
         "nodeName": "postgresNode",
-        "amazonec2-instance-type": "m4.xlarge"
+        "amazonec2-instance-type": "m4.xlarge",
+        "engineLabels": {
+          "role": "worker",
+          "affinity": "postgresNode"
+        }
       },
       {
         "nodeCount": 3,
         "nodeName": "sparkNode",
-        "amazonec2-instance-type": "m4.4xlarge"
+        "amazonec2-instance-type": "m4.4xlarge",
+        "engineLabels": {
+          "role": "worker",
+          "affinity": "sparkNode"
+        }
       },
       {
         "nodeCount": 1,
         "nodeName": "hdfsNode",
-        "amazonec2-instance-type": "m4.large"
+        "amazonec2-instance-type": "m4.large",
+        "engineLabels": {
+          "role": "worker",
+          "affinity": "hdfsNode"
+        }
       },
       {
         "nodeCount": 1,
         "nodeName": "stagingServerNode",
-        "amazonec2-instance-type": "m4.xlarge"
+        "amazonec2-instance-type": "m4.xlarge",
+        "engineLabels": {
+          "role": "worker",
+          "affinity": "stagingServerNode"
+        }
       }
     ]
-  },
-  "nfsConfig": {
-    "exportBaseDir": "/",
-    "serverAddr": "fs-337c8678.efs.us-east-1.amazonaws.com",
-    "options": "rw,nfsvers=4.1,proto=tcp,async,soft,nolock"
   },
   "dockerComposeYaml": {
     "version": "3.6",
@@ -123,43 +128,49 @@
       "hadoop-datavolume": {
         "driver": "local",
         "driver_opts": {
-          "type": "nfs"
+          "type": "nfs",
+          "device": "fs-337c8678.efs.us-east-1.amazonaws.com:/merlin",
+          "o": "rw,addr=fs-337c8678.efs.us-east-1.amazonaws.com,nfsvers=4.1,proto=tcp,async,soft,nolock"
         }
       },
       "hadoop-logvolume": {
         "driver": "local",
         "driver_opts": {
-          "type": "nfs"
+          "type": "nfs",
+          "device": "fs-337c8678.efs.us-east-1.amazonaws.com:/merlin_logs",
+          "o": "rw,addr=fs-337c8678.efs.us-east-1.amazonaws.com,nfsvers=4.1,proto=tcp,async,soft,nolock,timeo=600,retrans=2"
         }
       },
-      "uploads": {
+      "pg-datavolume": {
         "driver": "local",
         "driver_opts": {
-          "type": "nfs"
+          "type": "nfs",
+          "device": "fs-337c8678.efs.us-east-1.amazonaws.com:/postgresql",
+          "o": "rw,addr=fs-337c8678.efs.us-east-1.amazonaws.com,nfsvers=4.1,proto=tcp,async,soft,nolock,timeo=600,retrans=2"
         }
       },
-      "postgres": {
+      "elasticsearch-datavolume0": {
         "driver": "local",
         "driver_opts": {
-          "type": "nfs"
+          "type": "nfs",
+          "device": "fs-337c8678.efs.us-east-1.amazonaws.com:/elasticsearch0",
+          "o": "rw,addr=fs-337c8678.efs.us-east-1.amazonaws.com,nfsvers=4.1,proto=tcp,async,soft,nolock,timeo=600,retrans=2"
         }
       },
-      "elasticsearch0": {
+      "elasticsearch-datavolume1": {
         "driver": "local",
         "driver_opts": {
-          "type": "nfs"
+          "type": "nfs",
+          "device": "fs-337c8678.efs.us-east-1.amazonaws.com:/elasticsearch1",
+          "o": "rw,addr=fs-337c8678.efs.us-east-1.amazonaws.com,nfsvers=4.1,proto=tcp,async,soft,nolock,timeo=600,retrans=2"
         }
       },
-      "elasticsearch1": {
+      "elasticsearch-datavolume2": {
         "driver": "local",
         "driver_opts": {
-          "type": "nfs"
-        }
-      },
-      "elasticsearch2": {
-        "driver": "local",
-        "driver_opts": {
-          "type": "nfs"
+          "type": "nfs",
+          "device": "fs-337c8678.efs.us-east-1.amazonaws.com:/elasticsearch2",
+          "o": "rw,addr=fs-337c8678.efs.us-east-1.amazonaws.com,nfsvers=4.1,proto=tcp,async,soft,nolock,timeo=600,retrans=2"
         }
       }
     },
@@ -194,7 +205,7 @@
           },
           "placement": {
             "constraints": [
-              "engine.labels.role==worker"
+              "engine.labels.role==manager"
             ]
           },
           "labels": [
@@ -239,7 +250,6 @@
           },
           "placement": {
             "constraints": [
-              "engine.labels.role==worker",
               "engine.labels.affinity==postgresNode"
             ]
           },
@@ -250,7 +260,7 @@
         "volumes": [
           {
             "type": "volume",
-            "source": "postgres",
+            "source": "pg-datavolume",
             "target": "/var/lib/postgresql/data",
             "volume": {
               "nocopy": false
@@ -339,8 +349,7 @@
           },
           "placement": {
             "constraints": [
-              "engine.labels.role==worker",
-              "engine.labels.affinity==elasticsearchNode0"
+              "engine.labels.affinity==elasticsearchNode"
             ]
           },
           "labels": [
@@ -350,7 +359,7 @@
         "volumes": [
           {
             "type": "volume",
-            "source": "elasticsearch0",
+            "source": "elasticsearch-datavolume0",
             "target": "/usr/share/elasticsearch/data",
             "volume": {
               "nocopy": false
@@ -384,15 +393,14 @@
           },
           "placement": {
             "constraints": [
-              "engine.labels.role==worker",
-              "engine.labels.affinity==elasticsearchNode1"
+              "engine.labels.affinity==elasticsearchNode"
             ]
           }
         },
         "volumes": [
           {
             "type": "volume",
-            "source": "elasticsearch1",
+            "source": "elasticsearch-datavolume1",
             "target": "/usr/share/elasticsearch/data",
             "volume": {
               "nocopy": false
@@ -426,15 +434,14 @@
           },
           "placement": {
             "constraints": [
-              "engine.labels.role==worker",
-              "engine.labels.affinity==elasticsearchNode2"
+              "engine.labels.affinity==elasticsearchNode"
             ]
           }
         },
         "volumes": [
           {
             "type": "volume",
-            "source": "elasticsearch2",
+            "source": "elasticsearch-datavolume2",
             "target": "/usr/share/elasticsearch/data",
             "volume": {
               "nocopy": false
@@ -641,31 +648,11 @@
           "net"
         ]
       },
-      "esrally": {
-        "deploy": {
-          "replicas": 1,
-          "restart_policy": {
-            "condition": "on-failure"
-          },
-          "placement": {
-            "constraints": [
-              "engine.labels.role==manager"
-            ]
-          }
-        },
-        "networks": [
-          "net"
-        ]
-      },
       "nginx": {
         "configs": [
           {
             "source": "nginx-newman-config",
             "target": "/etc/nginx/conf.d/nginx-newman.conf"
-          },
-          {
-            "source": "nginx-elasticsearch-config",
-            "target": "/etc/nginx/conf.d/nginx-elasticsearch.conf"
           },
           {
             "source": "nginx-elasticsearch-head-config",
@@ -694,6 +681,10 @@
           {
             "source": "nginx-traefik-config",
             "target": "/etc/nginx/conf.d/nginx-traefik.conf"
+          },
+          {
+            "source": "nginx-elasticsearch-config",
+            "target": "/etc/nginx/conf.d/nginx-elasticsearch.conf"
           }
         ],
         "deploy": {
