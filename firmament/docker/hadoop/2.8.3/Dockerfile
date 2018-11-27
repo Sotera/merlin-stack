@@ -1,4 +1,4 @@
-FROM docker-registry.parrot-les.keyw:5000/hadoop-base:0.08.01
+FROM docker-registry.parrot-scif.keyw:5000/hadoop-base:0.08.02
 MAINTAINER John Reeme <john.reeme@keywcorp.com>
 
 COPY Dockerfile /var/opt/docker/Docker.hadoop
@@ -17,18 +17,20 @@ RUN apt-get update && apt-get install -y --no-install-recommends $PACKAGES
 # Clean up APT
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Install additional requirements to hadoop-base-alpine base image
-COPY ./config/requirements.txt /var/tmp/requirements.txt
+# Install additional python requirements
+RUN mkdir -p /var/opt/python
+COPY ./config/requirements.txt /var/opt/python/requirements.txt
 
-RUN pip install -r /var/tmp/requirements.txt
+RUN pip install -r /var/opt/python/requirements.txt
 RUN python -m spacy download en
 RUN echo "alias etl='cd /mnt/merlin/merlin-etl'" >> /root/.bashrc
 RUN echo "export PATH=/mnt/merlin/merlin-etl/share/bin:$PATH" >> /root/.bashrc
-#RUN echo "/mnt/merlin/merlin-etl/share/bin:$PATH" > /etc/container_environment/PATH
+RUN echo "/mnt/merlin/merlin-etl/share/bin:$PATH" > /etc/container_environment/PATH
 
-COPY config/update_classpath.sh /var/tmp/update_classpath.sh
-RUN chmod 755 /var/tmp/update_classpath.sh
-RUN /var/tmp/update_classpath.sh
+RUN mkdir -p /var/opt/java
+COPY config/update_classpath.sh /var/opt/java/update_classpath.sh
+RUN chmod 700 /var/opt/java/update_classpath.sh
+RUN /var/opt/java/update_classpath.sh
 
 #Add runit folder for managing hadoop process
 COPY docker-entrypoint.sh /usr/local/bin/
