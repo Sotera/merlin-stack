@@ -1,24 +1,20 @@
 {
-  "stackName": "ostest-stack-merlin",
-  "clusterPrefix": "ostest-stack",
+  "stackName": "full-stack-0-08-02",
+  "clusterPrefix": "full-stack-0-08-02-cp",
   "hostMachineDnsServer": "192.168.104.100",
-  "defaultDockerRegistry": "52.0.211.45:5000",
-  "defaultDockerImageTag": "0.07.18",
-  "traefikZoneName": "parrot-scif.keyw",
+  "defaultDockerRegistry": "docker-registry.parrot-scif.keyw:5000",
+  "defaultDockerImageTag": "0.08.02",
+  "traefikZoneName": "parrot.keyw",
   "dockerMachineDriverOptions": {
-    "driver": "vmwarevsphere",
-    "engineInsecureRegistry": "52.0.211.45:5000",
-    "vmwarevsphereBoot2dockerUrl": "https://s3.amazonaws.com/merlin-jreeme/boot2docker.iso",
-    "vmwarevsphereUsername": "root",
-    "vmwarevspherePassword": "run2walk!",
-    "vmwarevsphereDatastore": "datastore2",
-    "vmwarevsphereVcenter": "vmware.parrot-scif.keyw"
+    "driver": "virtualbox",
+    "engineInsecureRegistry": "docker-registry.parrot-scif.keyw:5000",
+    "vmwarevsphereBoot2dockerUrl": "https://s3.amazonaws.com/merlin-jreeme/boot2docker.iso"
   },
   "dockerMachines": {
     "common": {
-      "vmwarevsphereCpuCount": 10,
-      "vmwarevsphereDiskSize": 60000,
-      "vmwarevsphereMemorySize": 24576
+      "virtualboxCpuCount": 1,
+      "virtualboxMemory": 4096,
+      "virtualboxDiskSize": 20000
     },
     "manager": {
       "nodeCount": 1,
@@ -42,7 +38,7 @@
         "nodeName": "postgresNode"
       },
       {
-        "nodeCount": 3,
+        "nodeCount": 1,
         "nodeName": "sparkNode"
       },
       {
@@ -56,7 +52,9 @@
     ]
   },
   "nfsConfig": {
-    "exportBaseDir": "/nfs-public/parrot-scif-ostest",
+    "nfsUser": "jreeme",
+    "nfsPassword": "password",
+    "exportBaseDir": "/nfs-public/jreeme-vbox",
     "serverAddr": "nfs.parrot-scif.keyw",
     "options": "rw,proto=tcp,async,soft,nolock"
   },
@@ -117,6 +115,12 @@
         }
       },
       "hadoop-logvolume": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs"
+        }
+      },
+      "uploads": {
         "driver": "local",
         "driver_opts": {
           "type": "nfs"
@@ -394,7 +398,7 @@
         ]
       },
       "namenode": {
-        "image": "merlin-hadoop-base-alpine",
+        "image": "hadoop",
         "environment": [
           "HADOOP_MACHINE_ROLE=namenode"
         ],
@@ -445,7 +449,7 @@
         ]
       },
       "datanode": {
-        "image": "merlin-hadoop-base-alpine",
+        "image": "hadoop",
         "environment": [
           "HADOOP_MACHINE_ROLE=datanode"
         ],
@@ -493,7 +497,7 @@
         ]
       },
       "sparkworker": {
-        "image": "merlin-hadoop-base-alpine",
+        "image": "hadoop",
         "environment": [
           "HADOOP_MACHINE_ROLE=sparkworker"
         ],
@@ -504,7 +508,7 @@
           }
         ],
         "deploy": {
-          "replicas": 3,
+          "replicas": 1,
           "restart_policy": {
             "condition": "on-failure"
           },
@@ -541,7 +545,7 @@
         ]
       },
       "stagingserver": {
-        "image": "merlin-hadoop-base-alpine",
+        "image": "hadoop",
         "environment": [
           "HADOOP_MACHINE_ROLE=stagingserver"
         ],
