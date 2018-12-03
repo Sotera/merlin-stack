@@ -27,6 +27,10 @@ RUN echo "alias etl='cd /mnt/merlin/merlin-etl'" >> /root/.bashrc
 RUN echo "export PATH=/mnt/merlin/merlin-etl/share/bin:$PATH" >> /root/.bashrc
 RUN echo "/mnt/merlin/merlin-etl/share/bin:$PATH" > /etc/container_environment/PATH
 
+#Create /mnt/merlin & /mnt/logs mountpoints so ownership can be set to hadoop.hadoop
+RUN mkdir -p /mnt/merlin /mnt/logs
+RUN chown hadoop.hadoop /mnt/merlin /mnt/logs
+
 RUN mkdir -p /var/opt/java
 COPY config/update_classpath.sh /var/opt/java/update_classpath.sh
 RUN chmod 700 /var/opt/java/update_classpath.sh
