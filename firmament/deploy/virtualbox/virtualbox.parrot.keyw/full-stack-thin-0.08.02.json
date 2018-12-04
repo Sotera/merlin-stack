@@ -51,6 +51,9 @@
       "spark-defaults-config": {
         "file": "../../config/spark-defaults.conf"
       },
+      "nginx-config": {
+        "file": "../../config/nginx.conf"
+      },
       "nginx-elasticsearch-config": {
         "file": "../../config/nginx-elasticsearch.conf"
       },
@@ -610,6 +613,10 @@
       "nginx": {
         "configs": [
           {
+            "source": "nginx-config",
+            "target": "/etc/nginx/nginx.conf"
+          },
+          {
             "source": "nginx-newman-config",
             "target": "/etc/nginx/conf.d/nginx-newman.conf"
           },
@@ -659,6 +666,7 @@
           }
         },
         "ports": [
+          "2200:2200",
           "9200:9200",
           "9100:9100",
           "3000:3000",
