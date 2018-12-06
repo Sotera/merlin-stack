@@ -24,8 +24,8 @@ COPY ./config/requirements.txt /var/opt/python/requirements.txt
 RUN pip install -r /var/opt/python/requirements.txt
 RUN python -m spacy download en
 RUN echo "alias etl='cd /mnt/merlin/merlin-etl'" >> /home/hadoop/.bashrc
-RUN echo "export PATH=/mnt/merlin/merlin-etl/share/bin:$PATH" >> /home/hadoop/.bashrc
-RUN echo "/mnt/merlin/merlin-etl/share/bin:$PATH" > /etc/container_environment/PATH
+
+ENV PATH /mnt/merlin/merlin-etl/share/bin:${PATH}
 
 #Create /mnt/merlin & /mnt/logs mountpoints so ownership can be set to hadoop.hadoop
 RUN mkdir -p /mnt/merlin /mnt/logs
