@@ -1,55 +1,64 @@
 {
-  "stackName": "full-stack",
-  "clusterPrefix": "merlin-prod",
-  "defaultDockerRegistry": "10.1.70.193:5000",
-  "defaultDockerImageTag": "0.07.18",
-  "traefikZoneName": "merlin.keyw",
+  "stackName": "rembleton-stack-merlin",
+  "clusterPrefix": "rembleton-stack",
+  "hostMachineDnsServer": "192.168.104.100",
+  "defaultDockerRegistry": "52.0.211.45:5000",
+  "defaultDockerImageTag": "0.08.02",
+  "traefikZoneName": "parrot-scif.keyw",
   "dockerMachineDriverOptions": {
-    "driver": "openstack",
-    "engineInsecureRegistry": "10.1.70.193:5000",
-    "openstackAuthUrl": "http://10.1.70.100:5000/v2.0",
-    "openstackTenantName": "Newman",
-    "openstackImageId": "67777a81-a8bb-40ec-8f87-457ef9f89d1c",
-    "openstackSecGroups": "All",
-    "openstackSshUser": "ubuntu",
-    "openstackFloatingipPool": "external-penet",
-    "openstackActiveTimeout":2000
+    "driver": "vmwarevsphere",
+    "engineInsecureRegistry": "52.0.211.45:5000",
+    "vmwarevsphereBoot2dockerUrl": "https://s3.amazonaws.com/merlin-jreeme/boot2docker.iso",
+    "vmwarevsphereUsername": "root",
+    "vmwarevspherePassword": "run2walk!",
+    "vmwarevsphereDatastore": "datastore2",
+    "vmwarevsphereVcenter": "vmware.parrot-scif.keyw"
   },
   "dockerMachines": {
     "common": {
+      "vmwarevsphereCpuCount": 10,
+      "vmwarevsphereDiskSize": 60000,
+      "vmwarevsphereMemorySize": 24576
     },
     "manager": {
       "nodeCount": 1,
-      "nodeName": "managerNode",
-      "openstackFlavorId": "d3ffcd13-b70d-4a43-8597-5f08c09ec42e"
+      "nodeName": "managerNode"
     },
     "workers": [
       {
+        "nodeCount": 1,
+        "nodeName": "elasticsearchNode0"
+      },
+      {
+        "nodeCount": 1,
+        "nodeName": "elasticsearchNode1"
+      },
+      {
+        "nodeCount": 1,
+        "nodeName": "elasticsearchNode2"
+      },
+      {
+        "nodeCount": 1,
+        "nodeName": "postgresNode"
+      },
+      {
         "nodeCount": 3,
-        "nodeName": "elasticsearchNode",
-        "openstackFlavorId": "d3ffcd13-b70d-4a43-8597-5f08c09ec42e"
+        "nodeName": "sparkNode"
       },
       {
         "nodeCount": 1,
-        "nodeName": "postgresNode",
-        "openstackFlavorId": "b082d9aa-8b47-4772-8c55-90636197105f"
-      },
-      {
-        "nodeCount": 4,
-        "nodeName": "sparkNode",
-        "openstackFlavorId": "41caa497-96e4-4b0c-a5e6-77e0b82f35e6"
-      },
-      {
-        "nodeCount": 2,
-        "nodeName": "hdfsNode",
-        "openstackFlavorId": "368f99e8-5ec0-4b3d-aa07-36679e514199"
+        "nodeName": "hdfsNode"
       },
       {
         "nodeCount": 1,
-        "nodeName": "stagingServerNode",
-        "openstackFlavorId": "d3ffcd13-b70d-4a43-8597-5f08c09ec42e"
+        "nodeName": "stagingServerNode"
       }
     ]
+  },
+  "nfsConfig": {
+    "exportBaseDir": "/nfs-public/parrot-scif-re",
+    "serverAddr": "nfs.parrot-scif.keyw",
+    "options": "rw,proto=tcp,async,soft,nolock"
   },
   "dockerComposeYaml": {
     "version": "3.6",
@@ -64,7 +73,7 @@
         "file": "../../config/nginx-newman.conf"
       },
       "elasticsearch-jvm-config": {
-        "file": "../../config/jvm-openstack.options"
+        "file": "../../config/jvm.options"
       },
       "elasticsearch-yml-config": {
         "file": "../../config/elasticsearch.yml"
@@ -104,49 +113,43 @@
       "hadoop-datavolume": {
         "driver": "local",
         "driver_opts": {
-          "type": "nfs",
-          "device": ":/merlin-lts",
-          "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
+          "type": "nfs"
         }
       },
       "hadoop-logvolume": {
         "driver": "local",
         "driver_opts": {
-          "type": "nfs",
-          "device": ":/merlin-lts-logs",
-          "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
+          "type": "nfs"
+        }
+      },
+      "uploads": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs"
         }
       },
       "postgres": {
         "driver": "local",
         "driver_opts": {
-          "type": "nfs",
-          "device": ":/merlin-lts/db/postgresql",
-          "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
+          "type": "nfs"
         }
       },
       "elasticsearch0": {
         "driver": "local",
         "driver_opts": {
-          "type": "nfs",
-          "device": ":/merlin-lts/db/es1",
-          "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
+          "type": "nfs"
         }
       },
       "elasticsearch1": {
         "driver": "local",
         "driver_opts": {
-          "type": "nfs",
-          "device": ":/merlin-lts/db/es2",
-          "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
+          "type": "nfs"
         }
       },
       "elasticsearch2": {
         "driver": "local",
         "driver_opts": {
-          "type": "nfs",
-          "device": ":/merlin-lts/db/es3",
-          "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
+          "type": "nfs"
         }
       }
     },
@@ -181,7 +184,7 @@
           },
           "placement": {
             "constraints": [
-              "engine.labels.affinity==postgresNode"
+              "engine.labels.role==worker"
             ]
           },
           "labels": [
@@ -193,6 +196,7 @@
         ]
       },
       "amino3": {
+        "image": "amino3:0.07.19.re",
         "environment": [
           "AMINO3_REPLACE_BAD_DATA_SOURCE_WITH_MEMORY_DATA_SOURCE=false"
         ],
@@ -203,7 +207,7 @@
           },
           "placement": {
             "constraints": [
-              "engine.labels.role==manager"
+              "engine.labels.role==worker"
             ]
           },
           "labels": [
@@ -226,13 +230,14 @@
           },
           "placement": {
             "constraints": [
+              "engine.labels.role==worker",
               "engine.labels.affinity==postgresNode"
             ]
-          }
+          },
+          "labels": [
+            "traefik.port=5432"
+          ]
         },
-        "ports": [
-          "5432:5432"
-        ],
         "volumes": [
           {
             "type": "volume",
@@ -284,9 +289,6 @@
         }
       },
       "elasticsearch-head": {
-        "environment": [
-          "HOPE=SpringsEternal"
-        ],
         "deploy": {
           "replicas": 1,
           "restart_policy": {
@@ -294,7 +296,7 @@
           },
           "placement": {
             "constraints": [
-              "engine.labels.role==manager"
+              "engine.labels.role==worker"
             ]
           },
           "labels": [
@@ -328,7 +330,8 @@
           },
           "placement": {
             "constraints": [
-              "engine.labels.affinity==elasticsearchNode"
+              "engine.labels.role==worker",
+              "engine.labels.affinity==elasticsearchNode0"
             ]
           },
           "labels": [
@@ -372,7 +375,8 @@
           },
           "placement": {
             "constraints": [
-              "engine.labels.affinity==elasticsearchNode"
+              "engine.labels.role==worker",
+              "engine.labels.affinity==elasticsearchNode1"
             ]
           }
         },
@@ -413,7 +417,8 @@
           },
           "placement": {
             "constraints": [
-              "engine.labels.affinity==elasticsearchNode"
+              "engine.labels.role==worker",
+              "engine.labels.affinity==elasticsearchNode2"
             ]
           }
         },
@@ -453,11 +458,11 @@
             ]
           },
           "labels": [
-            "traefik.enable=true",
+            "traefik.enabled=true",
             "traefik.namenode.port=8088",
-            "traefik.namenode.frontend.rule=Host:namenode.merlin.keyw",
+            "traefik.namenode.frontend.rule=Host:namenode.parrot-scif.keyw",
             "traefik.hdfs.port=50070",
-            "traefik.hdfs.frontend.rule=Host:hdfs.merlin.keyw"
+            "traefik.hdfs.frontend.rule=Host:hdfs.parrot-scif.keyw"
           ]
         },
         "volumes": [
@@ -494,12 +499,13 @@
           }
         ],
         "deploy": {
-          "replicas": 2,
+          "replicas": 1,
           "restart_policy": {
             "condition": "on-failure"
           },
           "placement": {
             "constraints": [
+              "engine.labels.role==worker",
               "engine.labels.affinity==hdfsNode"
             ]
           },
@@ -541,12 +547,13 @@
           }
         ],
         "deploy": {
-          "replicas": 4,
+          "replicas": 3,
           "restart_policy": {
             "condition": "on-failure"
           },
           "placement": {
             "constraints": [
+              "engine.labels.role==worker",
               "engine.labels.affinity==sparkNode"
             ]
           },
@@ -594,13 +601,13 @@
           },
           "placement": {
             "constraints": [
+              "engine.labels.role==worker",
               "engine.labels.affinity==stagingServerNode"
             ]
           },
           "labels": [
-            "traefik.jupyter.port=9999",
-            "traefik.jupyter.frontend.rule=Host:jupyter.merlin.keyw",
-            "traefik.jupyter.backend.loadbalancer.stickiness=true"
+            "traefik.port=9999",
+            "traefik.backend.loadbalancer.stickiness=true"
           ]
         },
         "volumes": [
@@ -692,4 +699,3 @@
     }
   }
 }
-

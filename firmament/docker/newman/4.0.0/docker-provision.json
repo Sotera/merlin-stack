@@ -12,13 +12,13 @@
     "engineInsecureRegistry": "52.0.211.45:5000"
   },
   "dockerComposeYaml": {
-    "version": "3.3",
+    "version": "3.6",
     "networks": {
       "net": null
     },
     "services": {
-      "elasticsearch": {
-        "image": "52.0.211.45:5000/newman:0.07.17",
+      "newman": {
+        "image": "docker-registry.parrot-scif.keyw:5000/newman:0.08.02",
         "environment": [
           "HOPE=SpringsEternal"
         ],

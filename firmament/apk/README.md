@@ -1,1 +1,0 @@
-../../../parrot-stack/firmament/apk/README.md

@@ -87,9 +87,6 @@
       "nginx-elasticsearch-head-config": {
         "file": "../../config/nginx-elasticsearch-head.conf"
       },
-      "nginx-staging-config": {
-        "file": "../../config/nginx-staging.conf"
-      },
       "nginx-pgadmin4-config": {
         "file": "../../config/nginx-pgadmin4.conf"
       },
@@ -98,6 +95,9 @@
       },
       "nginx-namenode-config": {
         "file": "../../config/nginx-namenode.conf"
+      },
+      "nginx-staging-config": {
+        "file": "../../config/nginx-staging.conf"
       },
       "nginx-hdfs-config": {
         "file": "../../config/nginx-hdfs.conf"
@@ -148,28 +148,6 @@
       }
     },
     "services": {
-      "newman": {
-        "environment": [
-          "DEFAULT_USER=elasticsearch"
-        ],
-        "deploy": {
-          "replicas": 1,
-          "restart_policy": {
-            "condition": "on-failure"
-          },
-          "placement": {
-            "constraints": [
-              "engine.labels.role==manager"
-            ]
-          },
-          "labels": [
-            "traefik.port=5000"
-          ]
-        },
-        "networks": [
-          "net"
-        ]
-      },
       "pgadmin4": {
         "deploy": {
           "replicas": 1,
@@ -183,29 +161,6 @@
           },
           "labels": [
             "traefik.port=5050"
-          ]
-        },
-        "networks": [
-          "net"
-        ]
-      },
-      "amino3": {
-        "environment": [
-          "AMINO3_REPLACE_BAD_DATA_SOURCE_WITH_MEMORY_DATA_SOURCE=false"
-        ],
-        "deploy": {
-          "replicas": 1,
-          "restart_policy": {
-            "condition": "on-failure"
-          },
-          "placement": {
-            "constraints": [
-              "engine.labels.role==worker"
-            ]
-          },
-          "labels": [
-            "traefik.port=3000",
-            "traefik.backend.loadbalancer.stickiness=true"
           ]
         },
         "networks": [
@@ -245,26 +200,9 @@
           "net"
         ]
       },
-      "traefik": {
-        "volumes": [
-          {
-            "type": "bind",
-            "source": "/var/run/docker.sock",
-            "target": "/var/run/docker.sock"
-          }
-        ],
-        "configs": [
-          {
-            "source": "traefik-config",
-            "target": "/etc/traefik/traefik.toml"
-          }
-        ],
-        "ports": [
-          "80:80",
-          "8080:8080"
-        ],
-        "networks": [
-          "net"
+      "amino3": {
+        "environment": [
+          "AMINO3_REPLACE_BAD_DATA_SOURCE_WITH_MEMORY_DATA_SOURCE=false"
         ],
         "deploy": {
           "replicas": 1,
@@ -273,13 +211,17 @@
           },
           "placement": {
             "constraints": [
-              "engine.labels.role==manager"
+              "engine.labels.role==worker"
             ]
           },
           "labels": [
-            "traefik.enable=false"
+            "traefik.port=3000",
+            "traefik.backend.loadbalancer.stickiness=true"
           ]
-        }
+        },
+        "networks": [
+          "net"
+        ]
       },
       "elasticsearch-head": {
         "deploy": {
@@ -425,6 +367,28 @@
             }
           }
         ],
+        "networks": [
+          "net"
+        ]
+      },
+      "newman": {
+        "environment": [
+          "DEFAULT_USER=elasticsearch"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          },
+          "labels": [
+            "traefik.port=5000"
+          ]
+        },
         "networks": [
           "net"
         ]
@@ -625,7 +589,27 @@
           "net"
         ]
       },
-      "esrally": {
+      "traefik": {
+        "volumes": [
+          {
+            "type": "bind",
+            "source": "/var/run/docker.sock",
+            "target": "/var/run/docker.sock"
+          }
+        ],
+        "configs": [
+          {
+            "source": "traefik-config",
+            "target": "/etc/traefik/traefik.toml"
+          }
+        ],
+        "ports": [
+          "80:80",
+          "8080:8080"
+        ],
+        "networks": [
+          "net"
+        ],
         "deploy": {
           "replicas": 1,
           "restart_policy": {
@@ -635,11 +619,11 @@
             "constraints": [
               "engine.labels.role==manager"
             ]
-          }
-        },
-        "networks": [
-          "net"
-        ]
+          },
+          "labels": [
+            "traefik.enable=false"
+          ]
+        }
       },
       "nginx": {
         "configs": [
@@ -656,10 +640,6 @@
             "target": "/etc/nginx/conf.d/nginx-elasticsearch-head.conf"
           },
           {
-            "source": "nginx-staging-config",
-            "target": "/etc/nginx/conf.d/nginx-staging.conf"
-          },
-          {
             "source": "nginx-pgadmin4-config",
             "target": "/etc/nginx/conf.d/nginx-pgadmin4.conf"
           },
@@ -670,6 +650,10 @@
           {
             "source": "nginx-namenode-config",
             "target": "/etc/nginx/conf.d/nginx-namenode.conf"
+          },
+          {
+            "source": "nginx-staging-config",
+            "target": "/etc/nginx/conf.d/nginx-staging.conf"
           },
           {
             "source": "nginx-hdfs-config",
