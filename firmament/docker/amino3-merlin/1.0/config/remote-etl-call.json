@@ -1,0 +1,23 @@
+{
+  "description": "Remote ETL Call to staging server",
+  "options": {
+    "displayExecutionGraphDescription": true
+  },
+  "asynchronousCommands": [
+  ],
+  "serialSynchronizedCommands": [
+    {
+      "description": "run-etl <data_set_id> <executor_count>",
+      "suppressOutput": false,
+      "showDiagnostics": false,
+      "showPreAndPostSpawnMessages": false,
+      "outputColor": "",
+      "useSudo": false,
+      "remoteHost": "stagingserver",
+      "remoteUser": "hadoop",
+      "remoteSshKeyPath": "/home/hadoop/.ssh/parrot",
+      "command": "run-etl",
+      "args": []
+    }
+  ]
+}
