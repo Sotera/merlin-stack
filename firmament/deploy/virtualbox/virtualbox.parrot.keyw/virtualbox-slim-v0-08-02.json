@@ -25,8 +25,8 @@
     "workers": []
   },
   "nfsConfig": {
-    "nfsUser": "",
-    "nfsPassword": "",
+    "nfsUser": "jstnldrs",
+    "nfsPassword": "0ct@g0n@1",
     "serverAddr": "192.168.104.32",
     "exportBaseDir": "/var/nfs/merlin802",
     "options": "rw,proto=tcp,async,soft,nolock"
@@ -126,9 +126,7 @@
       "nifi-datavolume": {
         "driver": "local",
         "driver_opts": {
-          "type": "nfs",
-          "device": ":/nifi/data",
-          "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
+          "type": "nfs"
         }
       }
     },
@@ -620,7 +618,7 @@
           },
           "placement": {
             "constraints": [
-              "engine.labels.affinity==generalWorkerNode"
+              "engine.labels.role==manager"
             ]
           }
         },

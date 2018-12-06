@@ -101,6 +101,9 @@
       "nginx-traefik-config": {
         "file": "../../config/nginx-traefik.conf"
       },
+      "nginx-nifi-config": {
+        "file": "../../config/nginx-nifi.conf"
+      },
       "traefik-config": {
         "file": "../../config/traefik.toml"
       }
@@ -653,9 +656,6 @@
             ]
           }
         },
-        "ports": [
-          "2222:22"
-        ],
         "volumes": [
           {
             "type": "volume",
@@ -707,6 +707,10 @@
           {
             "source": "nginx-traefik-config",
             "target": "/etc/nginx/conf.d/nginx-traefik.conf"
+          },
+          {
+            "source": "nginx-nifi-config",
+            "target": "/etc/nginx/conf.d/nginx-nifi.conf"
           }
         ],
         "deploy": {
