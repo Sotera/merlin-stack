@@ -36,6 +36,9 @@
       "net": null
     },
     "configs": {
+      "amino3-remote-etl-call-config": {
+        "file": "../../config/remote-etl-call.json"
+      },
       "elasticsearch-log4j2-config": {
         "file": "../../config/log4j2.properties"
       },
@@ -180,7 +183,13 @@
           "net"
         ]
       },
-      "amino3": {
+      "amino3-merlin": {
+        "configs": [
+          {
+            "source": "amino3-remote-etl-call-config",
+            "target": "/src/server-dist/firmament-bash/remote-etl-call.json"
+          }
+        ],
         "environment": [
           "AMINO3_REPLACE_BAD_DATA_SOURCE_WITH_MEMORY_DATA_SOURCE=false"
         ],
