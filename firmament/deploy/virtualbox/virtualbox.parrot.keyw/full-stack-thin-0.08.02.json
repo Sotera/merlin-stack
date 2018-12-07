@@ -66,8 +66,8 @@
       "nginx-pgadmin4-config": {
         "file": "../../config/nginx-pgadmin4.conf"
       },
-      "nginx-amino3-config": {
-        "file": "../../config/nginx-amino3.conf"
+      "nginx-amino3-merlin-config": {
+        "file": "../../config/nginx-amino3-merlin.conf"
       },
       "nginx-namenode-config": {
         "file": "../../config/nginx-namenode.conf"
@@ -642,8 +642,8 @@
             "target": "/etc/nginx/conf.d/nginx-pgadmin4.conf"
           },
           {
-            "source": "nginx-amino3-config",
-            "target": "/etc/nginx/conf.d/nginx-amino3.conf"
+            "source": "nginx-amino3-merlin-config",
+            "target": "/etc/nginx/conf.d/nginx-amino3-merlin.conf"
           },
           {
             "source": "nginx-namenode-config",
