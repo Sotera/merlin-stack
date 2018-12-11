@@ -1,7 +1,7 @@
 ﻿#!/usr/bin/env bash
 
 
-STACK_NAME="full-stack-merlin"
+STACK_NAME="rembleton-stack-merlin"
 
 
 MACHINES=$(docker-machine ls | grep $STACK_NAME | awk '{print $1}')

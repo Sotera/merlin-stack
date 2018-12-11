@@ -1,8 +1,10 @@
 ﻿#!/usr/bin/env bash
 
 
-DEPLOY_DIR="vmware/vmware.parrot.keyw"
-STACK_NAME="full-stack-merlin"
+DEPLOY_DIR="vmware/vmware.parrot-scif.keyw"
+STACK_NAME="rembleton-stack-merlin"
+STACK_JSON="full-stack-thin-re.json"
+
 
 
 if [ -z $1 ]; then
@@ -14,7 +16,7 @@ fi
 
 
 cd ~/src/merlin-stack/firmament/deploy/$DEPLOY_DIR
-firmament p b -i full-stack.json
+firmament p b -i $STACK_JSON
 
 
 eval $(docker-machine env ${STACK_NAME}-managerNode)
