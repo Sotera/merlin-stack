@@ -195,7 +195,7 @@
           "net"
         ]
       },
-      "amino3": {
+      "amino3-merlin": {
         "environment": [
           "AMINO3_REPLACE_BAD_DATA_SOURCE_WITH_MEMORY_DATA_SOURCE=false"
         ],
@@ -214,6 +214,13 @@
             "traefik.backend.loadbalancer.stickiness=true"
           ]
         },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "uploads",
+            "target": "/mnt/data"
+          }
+        ],
         "networks": [
           "net"
         ]
@@ -480,6 +487,11 @@
             "volume": {
               "nocopy": true
             }
+          },
+          {
+            "type": "volume",
+            "source": "uploads",
+            "target": "/mnt/data"
           }
         ],
         "networks": [
@@ -528,6 +540,11 @@
             "volume": {
               "nocopy": true
             }
+          },
+          {
+            "type": "volume",
+            "source": "uploads",
+            "target": "/mnt/data"
           }
         ],
         "networks": [
@@ -576,6 +593,11 @@
             "volume": {
               "nocopy": true
             }
+          },
+          {
+            "type": "volume",
+            "source": "uploads",
+            "target": "/mnt/data"
           }
         ],
         "networks": [
@@ -625,6 +647,11 @@
             "volume": {
               "nocopy": true
             }
+          },
+          {
+            "type": "volume",
+            "source": "uploads",
+            "target": "/mnt/data"
           }
         ],
         "networks": [
