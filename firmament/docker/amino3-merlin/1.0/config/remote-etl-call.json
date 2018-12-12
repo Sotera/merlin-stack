@@ -17,7 +17,10 @@
       "remoteUser": "hadoop",
       "remoteSshKeyPath": "/home/hadoop/.ssh/parrot",
       "command": "run-etl",
-      "args": []
+      "args": [
+        "1",
+        "4"
+      ]
     }
   ]
 }
