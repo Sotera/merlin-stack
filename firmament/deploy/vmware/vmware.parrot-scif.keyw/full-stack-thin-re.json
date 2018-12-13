@@ -249,9 +249,6 @@
               "engine.labels.affinity==postgresNode"
             ]
           },
-          "ports": [
-            "5432:5432"
-          ],
           "labels": [
             "traefik.port=5432"
           ]
@@ -265,6 +262,9 @@
               "nocopy": false
             }
           }
+        ],
+        "ports": [
+          "5432:5432"
         ],
         "networks": [
           "net"
