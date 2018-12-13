@@ -247,6 +247,9 @@
             "constraints": [
               "engine.labels.role==worker",
               "engine.labels.affinity==postgresNode"
+            ],
+            "ports": [
+              "5432:5432"
             ]
           },
           "labels": [
