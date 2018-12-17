@@ -209,6 +209,13 @@
             "traefik.backend.loadbalancer.stickiness=true"
           ]
         },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "uploads",
+            "target": "/mnt/data"
+          }
+        ],
         "networks": [
           "net"
         ]
