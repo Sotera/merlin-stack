@@ -1,13 +1,13 @@
 {
   "stackName": "rembleton-stack-merlin",
   "clusterPrefix": "rembleton-stack",
-  "hostMachineDnsServer": "192.168.104.100",
-  "defaultDockerRegistry": "docker-registry.parrot-scif.keyw:5000",
+  "hostMachineDnsServer": "192.168.104.105",
+  "defaultDockerRegistry": "52.0.211.45:5000",
   "defaultDockerImageTag": "0.08.02",
   "traefikZoneName": "parrot-scif.keyw",
   "dockerMachineDriverOptions": {
     "driver": "vmwarevsphere",
-    "engineInsecureRegistry": "docker-registry.parrot-scif.keyw:5000",
+    "engineInsecureRegistry": "52.0.211.45:5000",
     "vmwarevsphereBoot2dockerUrl": "https://s3.amazonaws.com/merlin-jreeme/boot2docker.iso",
     "vmwarevsphereUsername": "root",
     "vmwarevspherePassword": "run2walk!",
