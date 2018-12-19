@@ -157,6 +157,14 @@
           "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
         }
       },
+      "uploads": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/merlin-lts/uploads",
+          "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
+        }
+      },
       "nifi-datavolume": {
         "driver": "local",
         "driver_opts": {
@@ -230,6 +238,13 @@
         },
         "networks": [
           "net"
+        ],
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "uploads",
+            "target": "/mnt/data"
+          }
         ]
       },
       "postgres": {
@@ -493,6 +508,11 @@
             "volume": {
               "nocopy": true
             }
+          },
+          {
+            "type": "volume",
+            "source": "uploads",
+            "target": "/mnt/data"
           }
         ],
         "networks": [
@@ -540,6 +560,11 @@
             "volume": {
               "nocopy": true
             }
+          },
+          {
+            "type": "volume",
+            "source": "uploads",
+            "target": "/mnt/data"
           }
         ],
         "networks": [
@@ -587,6 +612,11 @@
             "volume": {
               "nocopy": true
             }
+          },
+          {
+            "type": "volume",
+            "source": "uploads",
+            "target": "/mnt/data"
           }
         ],
         "networks": [
@@ -636,6 +666,11 @@
             "volume": {
               "nocopy": true
             }
+          },
+          {
+            "type": "volume",
+            "source": "uploads",
+            "target": "/mnt/data"
           }
         ],
         "networks": [

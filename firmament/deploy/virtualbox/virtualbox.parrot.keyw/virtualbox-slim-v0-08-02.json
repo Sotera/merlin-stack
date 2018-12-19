@@ -37,6 +37,9 @@
       "net": null
     },
     "configs": {
+      "amino3-remote-etl-call-config": {
+        "file": "../../config/remote-etl-call.json"
+      },
       "nginx-elasticsearch-config": {
         "file": "../../config/nginx-elasticsearch.conf"
       },
@@ -186,6 +189,12 @@
         ]
       },
       "amino3-merlin": {
+        "configs": [
+          {
+            "source": "amino3-remote-etl-call-config",
+            "target": "/src/server-dist/firmament-bash/remote-etl-call.json"
+          }
+        ],
         "environment": [
           "AMINO3_REPLACE_BAD_DATA_SOURCE_WITH_MEMORY_DATA_SOURCE=false"
         ],
