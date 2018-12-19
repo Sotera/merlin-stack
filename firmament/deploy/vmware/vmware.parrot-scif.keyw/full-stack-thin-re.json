@@ -3,7 +3,7 @@
   "clusterPrefix": "rembleton-stack",
   "hostMachineDnsServer": "192.168.104.105",
   "defaultDockerRegistry": "52.0.211.45:5000",
-  "defaultDockerImageTag": "0.08.02",
+  "defaultDockerImageTag": "0.08.03",
   "traefikZoneName": "parrot-scif.keyw",
   "dockerMachineDriverOptions": {
     "driver": "vmwarevsphere",
