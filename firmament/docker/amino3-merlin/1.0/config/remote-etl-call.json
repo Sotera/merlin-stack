@@ -7,7 +7,7 @@
   ],
   "serialSynchronizedCommands": [
     {
-      "description": "run-etl <data_set_id> <executor_count>",
+      "description": "run-etl <data_set_id>",
       "suppressOutput": false,
       "showDiagnostics": false,
       "showPreAndPostSpawnMessages": false,
@@ -18,8 +18,7 @@
       "remoteSshKeyPath": "/home/amino3/.ssh/parrot",
       "command": "run-etl",
       "args": [
-        "1",
-        "4"
+        "1"
       ]
     }
   ]
