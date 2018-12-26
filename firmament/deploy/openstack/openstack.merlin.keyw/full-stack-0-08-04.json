@@ -35,7 +35,7 @@
         "openstackFlavorId": "b082d9aa-8b47-4772-8c55-90636197105f"
       },
       {
-        "nodeCount": 3,
+        "nodeCount": 4,
         "nodeName": "sparkNode",
         "openstackFlavorId": "41caa497-96e4-4b0c-a5e6-77e0b82f35e6"
       },
@@ -522,6 +522,11 @@
             "type": "volume",
             "source": "uploads",
             "target": "/mnt/data"
+          },
+          {
+            "type": "volume",
+            "source": "nifi-datavolume",
+            "target": "/mnt/nifi/data/"
           }
         ],
         "networks": [
@@ -574,6 +579,11 @@
             "type": "volume",
             "source": "uploads",
             "target": "/mnt/data"
+          },
+          {
+            "type": "volume",
+            "source": "nifi-datavolume",
+            "target": "/mnt/nifi/data/"
           }
         ],
         "networks": [
@@ -626,6 +636,11 @@
             "type": "volume",
             "source": "uploads",
             "target": "/mnt/data"
+          },
+          {
+            "type": "volume",
+            "source": "nifi-datavolume",
+            "target": "/mnt/nifi/data/"
           }
         ],
         "networks": [
@@ -680,6 +695,11 @@
             "type": "volume",
             "source": "uploads",
             "target": "/mnt/data"
+          },
+          {
+            "type": "volume",
+            "source": "nifi-datavolume",
+            "target": "/mnt/nifi/data/"
           }
         ],
         "networks": [
@@ -704,10 +724,7 @@
           {
             "type": "volume",
             "source": "nifi-datavolume",
-            "target": "/home/nifi/data/",
-            "volume": {
-              "nocopy": false
-            }
+            "target": "/home/nifi/data/"
           }
         ],
         "networks": [
