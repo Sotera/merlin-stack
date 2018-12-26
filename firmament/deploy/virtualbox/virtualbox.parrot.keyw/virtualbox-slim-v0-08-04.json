@@ -469,6 +469,11 @@
             "type": "volume",
             "source": "uploads",
             "target": "/mnt/data"
+          },
+          {
+            "type": "volume",
+            "source": "nifi-datavolume",
+            "target": "/mnt/nifi/data/"
           }
         ],
         "networks": [
@@ -521,6 +526,11 @@
             "type": "volume",
             "source": "uploads",
             "target": "/mnt/data"
+          },
+          {
+            "type": "volume",
+            "source": "nifi-datavolume",
+            "target": "/mnt/nifi/data/"
           }
         ],
         "networks": [
@@ -573,6 +583,11 @@
             "type": "volume",
             "source": "uploads",
             "target": "/mnt/data"
+          },
+          {
+            "type": "volume",
+            "source": "nifi-datavolume",
+            "target": "/mnt/nifi/data/"
           }
         ],
         "networks": [
@@ -626,6 +641,16 @@
             "volume": {
               "nocopy": true
             }
+          },
+          {
+            "type": "volume",
+            "source": "uploads",
+            "target": "/mnt/data"
+          },
+          {
+            "type": "volume",
+            "source": "nifi-datavolume",
+            "target": "/mnt/nifi/data/"
           }
         ],
         "networks": [
