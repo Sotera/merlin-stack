@@ -602,7 +602,7 @@
           }
         ],
         "deploy": {
-          "replicas": 3,
+          "replicas": 4,
           "restart_policy": {
             "condition": "on-failure"
           },
@@ -716,7 +716,7 @@
           },
           "placement": {
             "constraints": [
-              "engine.labels.role==manager"
+              "engine.labels.affinity==generalWorkerNode"
             ]
           }
         },
@@ -793,7 +793,8 @@
           "50070:50070",
           "5050:5050",
           "5000:5000",
-          "9999:9999"
+          "9999:9999",
+          "2201:2201"
         ],
         "networks": [
           "net"

@@ -2,14 +2,14 @@
   "stackName": "full-stack",
   "clusterPrefix": "merlin-prod",
   "defaultDockerRegistry": "10.1.70.193:5000",
-  "defaultDockerImageTag": "0.08.03",
+  "defaultDockerImageTag": "0.08.04",
   "traefikZoneName": "merlin.keyw",
   "dockerMachineDriverOptions": {
     "driver": "openstack",
     "engineInsecureRegistry": "10.1.70.193:5000",
     "openstackAuthUrl": "http://10.1.70.100:5000/v2.0",
     "openstackTenantName": "Newman",
-    "openstackImageId": "67777a81-a8bb-40ec-8f87-457ef9f89d1c",
+    "openstackImageId": "47159a88-91d8-486a-8f4f-6aa10b9b02d8",
     "openstackSecGroups": "All",
     "openstackSshUser": "ubuntu",
     "openstackFloatingipPool": "external-penet",
@@ -35,7 +35,7 @@
         "openstackFlavorId": "b082d9aa-8b47-4772-8c55-90636197105f"
       },
       {
-        "nodeCount": 4,
+        "nodeCount": 3,
         "nodeName": "sparkNode",
         "openstackFlavorId": "41caa497-96e4-4b0c-a5e6-77e0b82f35e6"
       },
@@ -62,6 +62,9 @@
       "net": null
     },
     "configs": {
+      "amino3-remote-etl-call-config": {
+        "file": "../../config/remote-etl-call.json"
+      },
       "elasticsearch-log4j2-config": {
         "file": "../../config/log4j2.properties"
       },
@@ -90,7 +93,7 @@
         "file": "../../config/nginx-pgadmin4.conf"
       },
       "nginx-amino3-config": {
-        "file": "../../config/nginx-amino3.conf"
+        "file": "../../config/nginx-amino3-merlin.conf"
       },
       "nginx-namenode-config": {
         "file": "../../config/nginx-namenode.conf"
@@ -100,9 +103,6 @@
       },
       "nginx-traefik-config": {
         "file": "../../config/nginx-traefik.conf"
-      },
-      "nginx-nifi-config": {
-        "file": "../../config/nginx-nifi.conf"
       },
       "traefik-config": {
         "file": "../../config/traefik.toml"
@@ -217,7 +217,13 @@
           "net"
         ]
       },
-      "amino3": {
+      "amino3-merlin": {
+        "configs": [
+          {
+            "source": "amino3-remote-etl-call-config",
+            "target": "/src/server-dist/firmament-bash/remote-etl-call.json"
+          }
+        ],
         "environment": [
           "AMINO3_REPLACE_BAD_DATA_SOURCE_WITH_MEMORY_DATA_SOURCE=false"
         ],
@@ -464,7 +470,7 @@
         ]
       },
       "namenode": {
-        "image": "merlin-hadoop-base-alpine",
+        "image": "hadoop",
         "environment": [
           "HADOOP_MACHINE_ROLE=namenode"
         ],
@@ -520,7 +526,7 @@
         ]
       },
       "datanode": {
-        "image": "merlin-hadoop-base-alpine",
+        "image": "hadoop",
         "environment": [
           "HADOOP_MACHINE_ROLE=datanode"
         ],
@@ -572,7 +578,7 @@
         ]
       },
       "sparkworker": {
-        "image": "merlin-hadoop-base-alpine",
+        "image": "hadoop",
         "environment": [
           "HADOOP_MACHINE_ROLE=sparkworker"
         ],
@@ -583,7 +589,7 @@
           }
         ],
         "deploy": {
-          "replicas": 4,
+          "replicas": 3,
           "restart_policy": {
             "condition": "on-failure"
           },
@@ -624,7 +630,7 @@
         ]
       },
       "stagingserver": {
-        "image": "merlin-hadoop-base-alpine",
+        "image": "hadoop",
         "environment": [
           "HADOOP_MACHINE_ROLE=stagingserver"
         ],
@@ -677,34 +683,6 @@
           "net"
         ]
       },
-      "nifi": {
-        "environment": [
-        ],
-        "deploy": {
-          "replicas": 1,
-          "restart_policy": {
-            "condition": "on-failure"
-          },
-          "placement": {
-            "constraints": [
-              "engine.labels.affinity==generalWorkerNode"
-            ]
-          }
-        },
-        "volumes": [
-          {
-            "type": "volume",
-            "source": "nifi-datavolume",
-            "target": "/home/nifi/data/",
-            "volume": {
-              "nocopy": false
-            }
-          }
-        ],
-        "networks": [
-          "net"
-        ]
-      },
       "nginx": {
         "configs": [
           {
@@ -742,10 +720,6 @@
           {
             "source": "nginx-traefik-config",
             "target": "/etc/nginx/conf.d/nginx-traefik.conf"
-          },
-          {
-            "source": "nginx-nifi-config",
-            "target": "/etc/nginx/conf.d/nginx-nifi.conf"
           }
         ],
         "deploy": {
@@ -776,4 +750,3 @@
     }
   }
 }
-
