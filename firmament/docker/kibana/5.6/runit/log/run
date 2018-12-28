@@ -1,0 +1,2 @@
+#!/bin/sh
+exec chpst -u kibana svlogd -tt /var/log/kibana

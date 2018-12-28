@@ -27,7 +27,7 @@
   "nfsConfig": {
     "nfsUser": "",
     "nfsPassword": "",
-    "serverAddr": "192.168.0.30",
+    "serverAddr": "192.168.104.32",
     "exportBaseDir": "/var/nfs/merlin802",
     "options": "rw,proto=tcp,async,soft,nolock"
   },
@@ -39,6 +39,9 @@
     "configs": {
       "amino3-remote-etl-call-config": {
         "file": "../../config/remote-etl-call.json"
+      },
+      "nginx-kibana-config": {
+        "file": "../../config/nginx-kibana.conf"
       },
       "nginx-elasticsearch-config": {
         "file": "../../config/nginx-elasticsearch.conf"
@@ -685,6 +688,27 @@
           "net"
         ]
       },
+      "kibana": {
+        "environment": [
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          },
+          "labels": [
+            "traefik.port=5601"
+          ]
+        },
+        "networks": [
+          "net"
+        ]
+      },
       "nginx": {
         "configs": [
           {
@@ -720,6 +744,10 @@
             "target": "/etc/nginx/conf.d/nginx-pgadmin4.conf"
           },
           {
+            "source": "nginx-kibana-config",
+            "target": "/etc/nginx/conf.d/nginx-kibana.conf"
+          },
+          {
             "source": "nginx-config",
             "target": "/etc/nginx/nginx.conf"
           }
@@ -743,7 +771,8 @@
           "50070:50070",
           "5050:5050",
           "4040:4040",
-          "9999:9999"
+          "9999:9999",
+          "5601:5601"
         ],
         "networks": [
           "net"
