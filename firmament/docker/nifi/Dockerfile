@@ -1,4 +1,4 @@
-FROM 52.0.211.45:5000/phusion:0.07.19
+FROM 192.168.99.100:5000/phusion:0.08.05
 MAINTAINER Justin Lueders<justin.lueders@keywcorp.com>
 COPY Dockerfile /root/nifi-Dockerfile
 
