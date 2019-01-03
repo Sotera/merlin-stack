@@ -1,0 +1,37 @@
+{
+  "stackName": "merlin",
+  "clusterPrefix": "merlin",
+  "workerHostCount": 0,
+  "dockerMachineMasterOptions": {
+    "engineLabel": "role=master"
+  },
+  "dockerMachineDriverOptions": {
+    "driver": "virtualbox",
+    "virtualboxCpuCount": 2,
+    "virtualboxMemory": 8092,
+    "engineInsecureRegistry": "52.0.211.45:5000"
+  },
+  "dockerComposeYaml": {
+    "version": "3.6",
+    "networks": {
+      "net": null
+    },
+    "services": {
+      "nifi": {
+        "image": "docker-registry.parrot-scif.keyw:5000/kibana:0.08.04",
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          }
+        },
+        "networks": [
+          "net"
+        ]
+      }
+    }
+  }
+}

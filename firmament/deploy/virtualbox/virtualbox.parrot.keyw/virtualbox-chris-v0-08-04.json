@@ -2,11 +2,11 @@
 {
   "stackName":"merlin",
   "clusterPrefix": "merlin-local",
-  "defaultDockerRegistry": "docker-registry.parrot-scif.keyw:5000",
-  "defaultDockerImageTag": "0.08.02",
+  "defaultDockerRegistry": "52.0.211.45:5000",
+  "defaultDockerImageTag": "0.08.04",
   "traefikZoneName": "vbox.keyw",
   "dockerMachineDriverOptions": {
-    "engineInsecureRegistry": "docker-registry.parrot-scif.keyw:5000",
+    "engineInsecureRegistry": "52.0.211.45:5000",
     "driver": "virtualbox"
   },
   "dockerMachines": {
@@ -27,7 +27,7 @@
   "nfsConfig": {
     "nfsUser": "",
     "nfsPassword": "",
-    "serverAddr": "192.168.104.32",
+    "serverAddr": "<YOUR NFS ADDRESS HERE>",
     "exportBaseDir": "/var/nfs/merlin802",
     "options": "rw,proto=tcp,async,soft,nolock"
   },
@@ -37,6 +37,12 @@
       "net": null
     },
     "configs": {
+      "amino3-remote-etl-call-config": {
+        "file": "../../config/remote-etl-call.json"
+      },
+      "nginx-kibana-config": {
+        "file": "../../config/nginx-kibana.conf"
+      },
       "nginx-elasticsearch-config": {
         "file": "../../config/nginx-elasticsearch.conf"
       },
@@ -73,8 +79,8 @@
       "elasticsearch-yml-config": {
         "file": "../../config/elasticsearch.yml"
       },
-      "nginx-nifi-config": {
-        "file": "../../config/nginx-nifi.conf"
+      "nginx-config": {
+        "file": "../../config/nginx.conf"
       },
       "nginx-newman-config": {
         "file": "../../config/nginx-newman.conf"
@@ -186,6 +192,12 @@
         ]
       },
       "amino3-merlin": {
+        "configs": [
+          {
+            "source": "amino3-remote-etl-call-config",
+            "target": "/src/server-dist/firmament-bash/remote-etl-call.json"
+          }
+        ],
         "environment": [
           "AMINO3_REPLACE_BAD_DATA_SOURCE_WITH_MEMORY_DATA_SOURCE=false"
         ],
@@ -460,6 +472,11 @@
             "type": "volume",
             "source": "uploads",
             "target": "/mnt/data"
+          },
+          {
+            "type": "volume",
+            "source": "nifi-datavolume",
+            "target": "/mnt/nifi/data/"
           }
         ],
         "networks": [
@@ -512,6 +529,11 @@
             "type": "volume",
             "source": "uploads",
             "target": "/mnt/data"
+          },
+          {
+            "type": "volume",
+            "source": "nifi-datavolume",
+            "target": "/mnt/nifi/data/"
           }
         ],
         "networks": [
@@ -564,6 +586,11 @@
             "type": "volume",
             "source": "uploads",
             "target": "/mnt/data"
+          },
+          {
+            "type": "volume",
+            "source": "nifi-datavolume",
+            "target": "/mnt/nifi/data/"
           }
         ],
         "networks": [
@@ -617,6 +644,16 @@
             "volume": {
               "nocopy": true
             }
+          },
+          {
+            "type": "volume",
+            "source": "uploads",
+            "target": "/mnt/data"
+          },
+          {
+            "type": "volume",
+            "source": "nifi-datavolume",
+            "target": "/mnt/nifi/data/"
           }
         ],
         "networks": [
@@ -647,6 +684,27 @@
             }
           }
         ],
+        "networks": [
+          "net"
+        ]
+      },
+      "kibana": {
+        "environment": [
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          },
+          "labels": [
+            "traefik.port=5601"
+          ]
+        },
         "networks": [
           "net"
         ]
@@ -684,6 +742,14 @@
           {
             "source": "nginx-pgadmin4-config",
             "target": "/etc/nginx/conf.d/nginx-pgadmin4.conf"
+          },
+          {
+            "source": "nginx-kibana-config",
+            "target": "/etc/nginx/conf.d/nginx-kibana.conf"
+          },
+          {
+            "source": "nginx-config",
+            "target": "/etc/nginx/nginx.conf"
           }
         ],
         "deploy": {
@@ -705,7 +771,8 @@
           "50070:50070",
           "5050:5050",
           "4040:4040",
-          "9999:9999"
+          "9999:9999",
+          "5601:5601"
         ],
         "networks": [
           "net"

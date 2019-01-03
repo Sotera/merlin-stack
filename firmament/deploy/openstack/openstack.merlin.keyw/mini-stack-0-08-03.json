@@ -1,0 +1,81 @@
+{
+  "stackName": "mini-stack",
+  "clusterPrefix": "merlin-prod",
+  "defaultDockerRegistry": "10.1.70.193:5000",
+  "defaultDockerImageTag": "0.08.03",
+  "traefikZoneName": "merlin.keyw",
+  "dockerMachineDriverOptions": {
+    "driver": "openstack",
+    "engineInsecureRegistry": "10.1.70.193:5000",
+    "openstackAuthUrl": "http://10.1.70.100:5000/v2.0",
+    "openstackTenantName": "Newman",
+    "openstackImageId": "67777a81-a8bb-40ec-8f87-457ef9f89d1c",
+    "openstackSecGroups": "All",
+    "openstackSshUser": "ubuntu",
+    "openstackFloatingipPool": "external-penet",
+    "openstackActiveTimeout":2000
+  },
+  "dockerMachines": {
+    "common": {
+    },
+    "manager": {
+      "nodeCount": 1,
+      "nodeName": "managerNode",
+      "openstackFlavorId": "d3ffcd13-b70d-4a43-8597-5f08c09ec42e"
+    },
+    "workers": [
+
+    ]
+  },
+  "dockerComposeYaml": {
+    "version": "3.6",
+    "networks": {
+      "net": null
+    },
+    "configs": {
+
+    },
+    "volumes": {
+      "nifi-datavolume": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs",
+          "device": ":/nifi/data",
+          "o": "rw,addr=10.1.70.252,proto=tcp,async,soft,nolock"
+        }
+      }
+
+    },
+    "services": {
+      "nifi": {
+        "environment": [
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.affinity==managerNode"
+            ]
+          }
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "nifi-datavolume",
+            "target": "/home/nifi/data/",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      }
+    }
+  }
+}
+

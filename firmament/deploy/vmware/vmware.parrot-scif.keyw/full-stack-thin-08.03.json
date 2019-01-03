@@ -1,13 +1,13 @@
 {
-  "stackName": "test-stack-merlin",
-  "clusterPrefix": "test-stack",
-  "hostMachineDnsServer": "192.168.104.100",
-  "defaultDockerRegistry": "docker-registry.parrot-scif.keyw:5000",
-  "defaultDockerImageTag": "0.08.02",
+  "stackName": "ostest-stack-merlin",
+  "clusterPrefix": "ostest-stack",
+  "hostMachineDnsServer": "192.168.104.155",
+  "defaultDockerRegistry": "52.0.211.45:5000",
+  "defaultDockerImageTag": "0.08.03",
   "traefikZoneName": "parrot-scif.keyw",
   "dockerMachineDriverOptions": {
     "driver": "vmwarevsphere",
-    "engineInsecureRegistry": "docker-registry.parrot-scif.keyw:5000",
+    "engineInsecureRegistry": "52.0.211.45:5000",
     "vmwarevsphereBoot2dockerUrl": "https://s3.amazonaws.com/merlin-jreeme/boot2docker.iso",
     "vmwarevsphereUsername": "root",
     "vmwarevspherePassword": "run2walk!",
@@ -56,9 +56,7 @@
     ]
   },
   "nfsConfig": {
-    "nfsUser": "jreeme",
-    "nfsPassword": "password",
-    "exportBaseDir": "/nfs-public/test-stack-merlin",
+    "exportBaseDir": "/nfs-public/parrot-scif-ostest",
     "serverAddr": "nfs.parrot-scif.keyw",
     "options": "rw,proto=tcp,async,soft,nolock"
   },
@@ -68,6 +66,9 @@
       "net": null
     },
     "configs": {
+      "amino3-remote-etl-call-config": {
+        "file": "../../config/remote-etl-call.json"
+      },
       "elasticsearch-log4j2-config": {
         "file": "../../config/log4j2.properties"
       },
@@ -198,6 +199,12 @@
         ]
       },
       "amino3-merlin": {
+        "configs": [
+          {
+            "source": "amino3-remote-etl-call-config",
+            "target": "/src/server-dist/firmament-bash/remote-etl-call.json"
+          }
+        ],
         "environment": [
           "AMINO3_REPLACE_BAD_DATA_SOURCE_WITH_MEMORY_DATA_SOURCE=false"
         ],
@@ -255,6 +262,9 @@
               "nocopy": false
             }
           }
+        ],
+        "ports": [
+          "5432:5432"
         ],
         "networks": [
           "net"
