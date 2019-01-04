@@ -1,19 +1,46 @@
-FROM 52.0.211.45:5000/phusion:0.08.04
+FROM 192.168.99.100:5000/phusion:0.08.05
 MAINTAINER Justin Lueders<justin.lueders@keywcorp.com>
 
 COPY Dockerfile /var/opt/docker/Docker.kibana
 
-# add our user and group first to make sure their IDs get assigned consistently
-RUN groupadd -r kibana && useradd -r -m -g kibana kibana
+#Begin adduser (kibana)
+ARG _ROOT_HOME=/root
+ARG _KEY_FILE_NAME=parrot
+ARG _USER=kibana
+ARG _GROUP=$_USER
+ARG _HOME=/home/$_USER
+ARG _USER_ID=907
+ARG _GROUP_ID=907
+RUN addgroup --gid $_GROUP_ID $_GROUP
+RUN adduser --system --uid=$_USER_ID --gid=$_GROUP_ID --home $_HOME --shell /bin/bash $_USER
+RUN mkdir -p $_HOME/.ssh
+RUN chmod 700 $_HOME/.ssh
+RUN cat /root/.ssh/$_KEY_FILE_NAME.pub >> $_HOME/.ssh/authorized_keys
+RUN chown $_USER.$_GROUP $_HOME/.ssh/authorized_keys
+RUN chmod 644 $_HOME/.ssh/authorized_keys
 
-RUN apt-get update && apt-get install -y \
-		apt-transport-https \
-		ca-certificates \
-		wget \
+RUN \
+  cp $_ROOT_HOME/.vimrc $_HOME/.vimrc && \
+  cp $_ROOT_HOME/.profile $_HOME/.profile && \
+  cp $_ROOT_HOME/.bashrc $_HOME/.bashrc
+
+RUN chown -R $_USER.$_GROUP $_HOME
+#Add user to docker_env group so it can participate in phusion ENV vars
+RUN usermod -aG docker_env $_USER
+#End adduser (kibana)
+
 # generating PDFs requires libfontconfig and libfreetype6
-		libfontconfig \
-		libfreetype6 \
-	--no-install-recommends && rm -rf /var/lib/apt/lists/*
+ARG _APT_PACKAGES="\
+  apt-transport-https \
+  ca-certificates \
+  wget \
+  libfontconfig \
+  libfreetype6 \
+"
+
+RUN \
+  apt-get update && apt-get install -y --no-install-recommends $_APT_PACKAGES && \
+  apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN set -ex; \
 # https://artifacts.elastic.co/GPG-KEY-elasticsearch
@@ -44,14 +71,18 @@ RUN set -x \
 
 ENV PATH /usr/share/kibana/bin:$PATH
 
-#Add runit folder for managing newman process
-RUN mkdir /etc/service/kibana
-RUN mkdir /etc/service/kibana/log
-RUN mkdir /var/log/kibana
-RUN chown kibana.kibana /var/log/kibana/ /etc/service/kibana/log/
+#Configure runit for service
+ARG _SERVICE_NAME=$_USER
+RUN mkdir /etc/service/$_SERVICE_NAME
+RUN mkdir /etc/service/$_SERVICE_NAME/log
+RUN mkdir /var/log/$_SERVICE_NAME
+RUN chown -R $_USER.$_GROUP /var/log/$_SERVICE_NAME
 
-COPY runit /etc/service/kibana/
-COPY runit /etc/service/kibana/
-COPY runit /etc/service/kibana/log
+COPY runit/start.sh /etc/service/$_SERVICE_NAME/
+COPY runit/run /etc/service/$_SERVICE_NAME/
+COPY runit/log/run /etc/service/$_SERVICE_NAME/log
 
-RUN chmod 755 /etc/service/kibana/run /etc/service/kibana/log/run /etc/service/kibana/start.sh
+RUN chmod 755 /etc/service/$_SERVICE_NAME/run /etc/service/$_SERVICE_NAME/log/run /etc/service/$_SERVICE_NAME/start.sh
+
+WORKDIR /var/log/$_SERVICE_NAME
+
