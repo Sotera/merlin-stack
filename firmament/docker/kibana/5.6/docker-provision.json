@@ -18,7 +18,7 @@
     },
     "services": {
       "nifi": {
-        "image": "docker-registry.parrot-scif.keyw:5000/kibana:0.08.04",
+        "image": "10.1.70.193:5000/kibana:0.08.05",
         "environment": [
           "HOPE=SpringsEternal"
         ],

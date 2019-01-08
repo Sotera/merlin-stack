@@ -1,0 +1,85 @@
+{
+  "stackName": "webserver-test",
+  "clusterPrefix": "webserver-test-cp",
+  "defaultDockerRegistry": "10.1.70.193:5000",
+  "defaultDockerImageTag": "0.08.05",
+  "traefikZoneName": "merlin.keyw",
+  "dockerMachineDriverOptions": {
+    "driver": "openstack",
+    "engineInsecureRegistry": "10.1.70.193:5000",
+    "openstackAuthUrl": "http://10.1.70.100:5000/v2.0",
+    "openstackTenantName": "Newman",
+    "openstackImageId": "b10a9bac-ee87-4f8a-bbd0-80c754943174",
+    "openstackSecGroups": "All",
+    "openstackSshUser": "ubuntu",
+    "openstackFloatingipPool": "external-penet",
+    "openstackActiveTimeout": 2000
+  },
+  "dockerMachines": {
+    "common": {
+    },
+    "manager": {
+      "nodeCount": 1,
+      "nodeName": "managerNode",
+      "openstackFlavorId": "d3ffcd13-b70d-4a43-8597-5f08c09ec42e"
+    },
+    "workers": [
+      {
+        "nodeCount": 1,
+        "nodeName": "workerNode",
+        "openstackFlavorId": "b082d9aa-8b47-4772-8c55-90636197105f"
+      }
+    ]
+  },
+  "dockerComposeYaml": {
+    "version": "3.6",
+    "networks": {
+      "net": null
+    },
+    "configs": {
+    },
+    "volumes": {
+    },
+    "services": {
+      "web-server0": {
+        "image": "web-server",
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.affinity==managerNode"
+            ]
+          }
+        },
+        "ports": [
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "web-server1": {
+        "image": "web-server",
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.affinity==workerNode"
+            ]
+          }
+        },
+        "ports": [
+        ],
+        "networks": [
+          "net"
+        ]
+      }
+    }
+  }
+}
+
