@@ -18,7 +18,7 @@
     },
     "services": {
       "newman": {
-        "image": "10.1.70.193:5000/newman:0.08.05",
+        "image": "docker-registry.parrot-scif.keyw:5000/newman:0.08.05",
         "environment": [
           "HOPE=SpringsEternal"
         ],

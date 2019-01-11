@@ -1,4 +1,4 @@
-FROM 10.1.70.193:5000/phusion:0.08.05
+FROM docker-registry.parrot-scif.keyw:5000/phusion:0.08.05
 MAINTAINER Justin Lueders<justin.lueders@keywcorp.com>
 
 COPY Dockerfile /var/opt/docker/Docker.kibana
@@ -15,6 +15,7 @@ RUN addgroup --gid $_GROUP_ID $_GROUP
 RUN adduser --system --uid=$_USER_ID --gid=$_GROUP_ID --home $_HOME --shell /bin/bash $_USER
 RUN mkdir -p $_HOME/.ssh
 RUN chmod 700 $_HOME/.ssh
+RUN cp /root/.ssh/$_KEY_FILE_NAME.pub /root/.ssh/$_KEY_FILE_NAME $_HOME/.ssh/
 RUN cat /root/.ssh/$_KEY_FILE_NAME.pub >> $_HOME/.ssh/authorized_keys
 RUN chown $_USER.$_GROUP $_HOME/.ssh/authorized_keys
 RUN chmod 644 $_HOME/.ssh/authorized_keys
