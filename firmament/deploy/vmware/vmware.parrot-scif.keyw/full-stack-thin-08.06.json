@@ -1,7 +1,7 @@
 {
   "stackName": "ostest-stack-merlin",
   "clusterPrefix": "ostest-stack",
-  "hostMachineDnsServer": "192.168.104.155",
+  "hostMachineDnsServer": "192.168.104.55",
   "defaultDockerRegistry": "docker-registry.parrot-scif.keyw:5000",
   "defaultDockerImageTag": "0.08.06",
   "traefikZoneName": "parrot-scif.keyw",
