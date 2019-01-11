@@ -16,7 +16,7 @@
       "remoteHost": "stagingserver",
       "remoteUser": "hadoop",
       "remoteSshKeyPath": "/home/amino3/.ssh/parrot",
-      "command": "run-etl-detached",
+      "command": "run-etl",
       "args": [
         "1"
       ]
