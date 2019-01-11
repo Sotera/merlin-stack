@@ -14,6 +14,90 @@
 - f p b -i openstack-merlin.json
 - f p b -i openstack-etl.json
 
+# Stack Contents
+* ### Services
+  * Web Services
+    * Hadoop Web UI
+      * location : [any node ip]:8088
+      * Lists all spark jobs running or otherwise as well as ETL logs and spark cluster status
+    * HDFS Web UI
+      * location : [any node ip]:50070
+      * Lists Hadoop File System nodes and status.  Also allows for file browsing within HDFS
+    * PostgreSQL Admin page
+      * location : [any node ip]:5050
+      * Allows for administration of the PostgreSQL database
+    * Merlin ETL Dashboard
+      * location : [any node ip]:3000
+      * Management of Datasets, Users and Roles
+      * Dataset ETL Kickoff and status updates      
+    * Merlin Data API Explorer
+      * location : [any node ip]:3000/explorer
+      * Allows programatic access to all data in the system
+    * Elasticsearch Head
+      * location : [any node ip]:9100
+      * Web UI for management of the Elastic Cluster
+    * Kibana
+      * location : [any node ip]:5601
+      * Web UI for analysis of Elasticsearch Data
+    * Traefik Web Proxy
+      * location : [any node ip]:8080
+    * Newman Email Analytics
+      * location : [any node ip]:5000
+      * Email analytics user interface
+    * Jupyter
+      * location : [any node ip]:9999
+      * Python development environment when wanting to work with data directly using python
+      
+  * Data Storage
+    *PostgreSQL
+      * location : Inside the stack at postgres:5432, Direct connections are not available outside the stack
+    *Elasticsearch
+      * location : Inside the stack at elasticsearch:9200
+  
+  * Other
+    * SFTP server for file transfer
+            * location : [any node ip]:2201  
+  
+  # Stack Requirements
+    * The stack in it's current form requires a Hypervisor (Vsphere, Virtualbox, AWS EC2, Openstack)
+    * The stack also requires persistent network attached storage.  Specifically NFS mountable storage (QNAP, NFS Server, AWS Elastic Storage)
+    * Depending on the Hypervisor used you may need to use a specific os image (provided) for the base docker host
+    * Docker repository containing all Docker images the stack requires (provided)
+    
+  # Building the Docker Images
+    
+  # Installation:
+  ### Build Machine running on the target hypervisor
+    * It is recommended that you start up a linux build vm on the target hypervisor.  From the build machine you will
+    deploy the host machines and all services that form the Merlin Stack.
+    * Install Docker version <docker version here>
+    * Parrot Repo
+    * Merlin Repo
+    * Firmament install
+      * NodeJs install
+      * sudo npm install firmament
+      * firmament module i --name docker
+      * firmament module i --name docker-machine
+    * 
+  ### Firmament
+    * Firmament is an application we developed to read json files and deploy our services based on the settings within.
+    * 
+  ### Ensure NFS mounts are available and match the Firmament File
+    * <List Mounts>
+    * Directory structure
+    * location of all config files and job definitions
+  ### 
+    
+  # Position the Data
+  ### Creation of Datasets
+  ### Manual data positioning
+  ### Data Upload
+  
+  # ETL Execution
+  ### Manual ETL Execution
+  ### Automatic ETL Execution
+  
+  
 
 # Notes about using an NFS mount in the stack
 Docker swarm allows volumes used by services to be backed by an NFS server. Getting this to work is a little tweaky. Here are some pointers:
