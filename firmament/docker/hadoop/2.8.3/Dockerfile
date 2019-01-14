@@ -1,4 +1,4 @@
-FROM docker-registry.parrot-scif.keyw:5000/hadoop-base:0.08.05
+FROM docker-registry.parrot-scif.keyw:5000/hadoop-base:0.08.06
 MAINTAINER John Reeme <john.reeme@keywcorp.com>
 
 COPY Dockerfile /var/opt/docker/Docker.hadoop

@@ -1,4 +1,4 @@
-FROM docker-registry.parrot-scif.keyw:5000/phusion:0.08.05
+FROM docker-registry.parrot-scif.keyw:5000/phusion:0.08.06
 MAINTAINER Justin Lueders<justin.lueders@keywcorp.com>
 
 COPY Dockerfile /var/opt/docker/Docker.kibana

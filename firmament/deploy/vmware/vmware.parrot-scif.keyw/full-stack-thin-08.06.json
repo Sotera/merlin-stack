@@ -56,7 +56,9 @@
     ]
   },
   "nfsConfig": {
-    "exportBaseDir": "/nfs-public/parrot-scif-ostest",
+    "nfsUser":"jreeme",
+    "nfsPassword":"password",
+    "exportBaseDir": "/nfs-public/parrot-scif-jreeme",
     "serverAddr": "nfs.parrot-scif.keyw",
     "options": "rw,proto=tcp,async,soft,nolock"
   },
