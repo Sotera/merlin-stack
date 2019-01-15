@@ -2,11 +2,12 @@
 {
   "stackName":"merlin",
   "clusterPrefix": "merlin-local",
-  "defaultDockerRegistry": "52.0.211.45:5000",
+  "hostMachineDnsServer": "192.168.104.55",
+  "defaultDockerRegistry": "docker-registry.parrot-scif.keyw:5000",
   "defaultDockerImageTag": "0.08.06",
   "traefikZoneName": "vbox.keyw",
   "dockerMachineDriverOptions": {
-    "engineInsecureRegistry": "52.0.211.45:5000",
+    "engineInsecureRegistry": "docker-registry.parrot-scif.keyw:5000",
     "driver": "virtualbox"
   },
   "dockerMachines": {
@@ -27,7 +28,7 @@
   "nfsConfig": {
     "nfsUser": "",
     "nfsPassword": "",
-    "serverAddr": "192.168.0.26",
+    "serverAddr": "192.168.104.32",
     "exportBaseDir": "/var/nfs/merlin802",
     "options": "rw,proto=tcp,async,soft,nolock"
   },
