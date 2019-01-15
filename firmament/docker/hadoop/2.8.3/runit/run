@@ -1,0 +1,20 @@
+#!/bin/bash -e
+exec 2>&1
+
+DIRECTORIES_TO_CHOWN=( "/mnt/logs" "/mnt/data" "/mnt/merlin" "/mnt/merlin/merlin-etl" )
+for i in "${DIRECTORIES_TO_CHOWN[@]}"
+do
+	if [ ! `stat -c %u ${i}` = "907" ]
+	then
+		echo "Changing owner of ${i} to 907 & permissions to 755"
+		chmod 755 ${i}
+		chown 907 ${i}
+	fi
+	if [ ! `stat -c %g ${i}` = "907" ]
+	then
+		echo "Changing group of ${i} to 907"
+		chgrp 907 ${i}
+	fi
+done
+
+exec chpst -u hadoop /etc/service/hadoop/start.sh

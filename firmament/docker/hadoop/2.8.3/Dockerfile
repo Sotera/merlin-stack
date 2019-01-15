@@ -30,8 +30,8 @@ RUN echo "alias etl='cd /mnt/merlin/merlin-etl'" >> $_HOME/.bashrc
 ENV PATH /mnt/merlin/merlin-etl/share/bin:${PATH}
 
 #Create /mnt/merlin & /mnt/logs mountpoints so ownership can be set to hadoop.hadoop
-RUN mkdir -p /mnt/merlin /mnt/logs
-RUN chown -R $_USER.$_GROUP /mnt/merlin /mnt/logs
+RUN mkdir -p /mnt/logs /mnt/merlin /mnt/merlin/merlin-etl
+RUN chown -R $_USER.$_GROUP /mnt/logs /mnt/merlin /mnt/merlin/merlin-etl
 
 ARG _OPT_CLASSPATH=/var/opt/java
 ARG _UPDATE_CLASSPATH=$_OPT_CLASSPATH/update_classpath.sh
@@ -44,5 +44,10 @@ ARG _DOCKER_ENTRYPOINT=/usr/local/bin/docker-entrypoint.sh
 COPY docker-entrypoint.sh $_DOCKER_ENTRYPOINT
 
 RUN chmod 755 $_DOCKER_ENTRYPOINT
+
+#Configure runit for service
+ARG _SERVICE_NAME=$_USER
+COPY runit/run /etc/service/$_SERVICE_NAME/
+RUN chmod 755 /etc/service/$_SERVICE_NAME/run
 
 WORKDIR /mnt/merlin/merlin-etl
