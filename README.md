@@ -1,19 +1,5 @@
 # merlin-stack
 
-- cd merlin-stack/firmament/docker/merlin-hadoop-base/
-- ./_build.sh
-- output:
-- Successfully tagged <aws registry ip>:5000/merlin-hadoop-base:latest
-- Successfully tagged <openstack registry ip>:5000/merlin-hadoop-base:latest
-- docker push <aws registry ip>:5000/hadoop-base:latest
-- connect to vpn
-- docker push <openstack registry ip>:5000/merlin-hadoop-base:latest
-- repeat for hadoop-namenode be sure to prepend merlin-
-- edit the openstack-etl.json and fill in any usernames / passwords
-- DO NOT CHECK THEM IN
-- f p b -i openstack-merlin.json
-- f p b -i openstack-etl.json
-
 # Stack Pre-requisites
   * The stack in it's current form requires a Hypervisor (Vsphere, Virtualbox, AWS EC2, Openstack)
   * The stack also requires persistent network attached storage.  Specifically NFS mountable storage (QNAP, NFS Server,
@@ -129,9 +115,8 @@
           * data\
             _The data folder holds all files post ETL that are filtered for NiFi_
     * location of all config files and job definitions
-  ### 
-    
-  # Position the Data
+      
+  # Positioning Data
   
   ### Creation of Datasets
   * You may create datasets either by using the dataset creation user interface located on the stack management page or
