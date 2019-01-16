@@ -5,6 +5,8 @@
   * The stack also requires persistent network attached storage.  Specifically NFS mountable storage (QNAP, NFS Server,
    AWS Elastic Storage)
   * Depending on the Hypervisor used you may need to use a specific os image (provided) for the base docker host
+    * AWS and Openstack will need the provided Cloudbuild image
+    * Virtualbox and Vsphere will need the provided boot2docker image 
   * Docker repository containing all Docker images the stack requires (provided)
 
 # Stack Contents
@@ -80,9 +82,7 @@
       to make a packaged version of itself by running "firmament package tar".  This will create a tar.gz file containing
       the entirety of the firmament application with all dependencies.
     * 
-  ### Firmament
-    * Firmament is an application we developed to read json files and deploy our services based on the settings within.
-    * 
+  
   ### Ensure NFS mounts are available and match the Firmament File
     * "hadoop-datavolume": /merlin-lts\
       "hadoop-logvolume": /merlin-lts-logs\
@@ -115,12 +115,40 @@
           * data\
             _The data folder holds all files post ETL that are filtered for NiFi_
     * location of all config files and job definitions
-      
+  
+  ### Firmament Stack Deployment
+    * Deploying a stack requires that you be on a machine that is able to connect to the hypervisor, we suggest that it
+    be a build machine VM running on the hypervisor so other team members are able to manage the stack from that VM.
+    Once you have Firmament installed, a clone of the parrot-stack repo and a clone of the merlin-stack repo available
+    you may continue with stack deployment.    
+    * Firmament is an application we've developed to read json files and deploy our services based on the settings within.
+    * Firmament deployment files are located in the Merlin repo under /firmament/deploy
+      * Each hypervisor currently supported will have a directory under which we place all deployment files
+      * Supported hypervisors include AWS, Openstack, VMWare, and Virtualbox
+      * The json deployment files are labeled with the build version of the stack docker images
+      * Changes to the Firmament deploy files can be made depending on environment, hardware and desired stack size/
+      capability
+    * To deploy a stack based on a firmament configuration file, navigate to the config file of your choice under the 
+    /firmament/deploy directory and execute the following:
+      * firmament p b -i [firmament deployment json filename]
+    * Firmament will execute the commands in the firmament json file and deploy Docker-Machines to the target hypervisor
+    * After creating the machines and joining them all to the Docker Swarm, Firmament will deploy all of the services
+    in the firmament json file to the worker hosts.
+    * The services will download the Docker images to the Docker Machine Hosts and instantiate each container requested
+    * The services might take some time to start up so you can monitor those services by executing docker commands on 
+    the master Docker Machine host
+      * docker-machine ls (take note of the docker machine manager node name)
+      * docker-machine env [manager node name]
+        * run the command that it displays (eval ...)
+      * Once that is done you will be sending all of your Docker commands to the manager node.
+        * docker service ls\
+        This command will list all of the services that have been deployed and display their replication status
+    
   # Positioning Data
   
   ### Creation of Datasets
   * You may create datasets either by using the dataset creation user interface located on the stack management page or
-  you can create them via our data api.  To see the api and use the data api explorer go to [any node ip]:3000
+  you can create them via our data api.  To see the api and use the data api explorer go to [any node ip]:3000/explorer
  
   ### Manual data positioning
   * To manually position data for ingest you place the data in a folder in the /[nfs mount]/merlin/merlin-etl/data directory
@@ -137,5 +165,23 @@
   ingest.
   
   # ETL Execution
+  
   ### Manual ETL Execution
+  * When you begin ETL execution the system will prepare the working area for processing by removing any previously 
+  processed information from disk, the Metadata Info Catalog and the Elasticsearch Cluster.  
+  * Once you have a dataset uploaded and data positioned for ETL you can begin ETL processing.  To do so you will need
+  to ssh into your build server.  Once there, use "docker-machine ls -t 100" to list your docker hosts.  This will provide a
+  list of docker hosts running on the system.  Each host will have an ip associated with it.  Find the staging server ip
+  and "run docker-machine ssh [staging server node name]".  Once you are on the staging server you will need to exec 
+  into the staging server docker container.  To do so, get the id of the docker container by running "docker ps | grep
+  staging".  This will list the docker container running as the staging server.  Exec into that container by running 
+  "docker exec -it [docker container id] /bin/bash".  Once there you can start your ETL process.  Navigate to "/mnt/
+  merlin/merlin-etl/share/bin".  To execute the ETL process on a dataset run "run-etl [dataset id] [number of partitions,
+  default=100]"
+  
   ### Automatic ETL Execution
+  *  An easier way to begin an ingestion is to go to the dataset page at [any node ip]:3000.  Find the dataset you are 
+  wanting to ingest or re-ingest and press the "Process Dataset" button.  The state will move to queued as the system 
+  starts up and will eventually move to processing and then processed.
+  
+   
