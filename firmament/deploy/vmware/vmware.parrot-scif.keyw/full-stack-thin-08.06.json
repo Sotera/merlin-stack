@@ -56,8 +56,8 @@
     ]
   },
   "nfsConfig": {
-    "nfsUser":"jreeme",
-    "nfsPassword":"password",
+    "nfsUser": "jreeme",
+    "nfsPassword": "password",
     "exportBaseDir": "/nfs-public/parrot-scif-jreeme",
     "serverAddr": "nfs.parrot-scif.keyw",
     "options": "rw,proto=tcp,async,soft,nolock"
@@ -162,6 +162,22 @@
       }
     },
     "services": {
+      "esrally": {
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          }
+        },
+        "networks": [
+          "net"
+        ]
+      },
       "newman": {
         "environment": [
           "DEFAULT_USER=elasticsearch"

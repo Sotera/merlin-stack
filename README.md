@@ -1,13 +1,13 @@
 # merlin-stack
 
 # Stack Pre-requisites
-  * The stack in it's current form requires a Hypervisor (Vsphere, Virtualbox, AWS EC2, Openstack)
-  * The stack also requires persistent network attached storage.  Specifically NFS mountable storage (QNAP, NFS Server,
-   AWS Elastic Storage)
-  * Depending on the Hypervisor used you may need to use a specific os image (provided) for the base docker host
-    * AWS and Openstack will need the provided Cloudbuild image
+* The stack in its current form requires a Hypervisor (Vsphere, Virtualbox, AWS EC2, Openstack)
+* The stack also requires persistent network attached storage.  Specifically NFS mountable storage (QNAP, NFS Server,
+AWS Elastic Storage)
+* Depending on the Hypervisor used you may need to use a specific os image (provided) for the base docker host
+    * AWS and Openstack will need the provided cloud-init image
     * Virtualbox and Vsphere will need the provided boot2docker image 
-  * Docker repository containing all Docker images the stack requires (provided)
+* Docker repository containing all Docker images the stack requires (provided)
 
 # Stack Contents
 * ### Services
@@ -27,7 +27,7 @@
       * Dataset ETL Kickoff and status updates      
     * Merlin Data API Explorer
       * location : [any node ip]:3000/explorer
-      * Allows programatic access to all data in the system
+      * Web UI allowing access to all data in the system
     * Elasticsearch Head
       * location : [any node ip]:9100
       * Web UI for management of the Elastic Cluster
@@ -36,12 +36,13 @@
       * Web UI for analysis of Elasticsearch Data
     * Traefik Web Proxy
       * location : [any node ip]:8080
+      * Web UI displaying frontend/backend proxy routes for stack
     * Newman Email Analytics
       * location : [any node ip]:5000
-      * Email analytics user interface
+      * Web UI to query and display email analytics
     * Jupyter
       * location : [any node ip]:9999
-      * Python development environment when wanting to work with data directly using python
+      * Python development environment for writing "on the fly" spark jobs against extracted data
       
   * Data Storage
     *PostgreSQL
@@ -51,19 +52,19 @@
   
   * Other
     * SFTP server for file transfer
-            * location : [any node ip]:2201  
+      * location : [any node ip]:2201  
     
   # Building the Docker Images
     
   # Installation:
   ### Build Machine running on the target hypervisor
     * Build Server
-      *It is recommended that you start up a linux build vm on the target hypervisor.  From the build machine you will
+      * It is recommended that you start up a linux build vm on the target hypervisor.  From the build machine you will
       deploy the host machines and all services that form the Merlin Stack.  The build machine must have access to the 
       Docker repository
-    * Install Docker version <docker version here>
+    * Install Docker version 18.03
     * Parrot Repo
-      * The Parrot repo and Merlin repo need to be next to eachother in the directory structure because there are 
+      * The Parrot repo and Merlin repo need to be next to each other in the directory structure because there are 
       sym-links from the Merlin stack to the Parrot stack.
       * Clone the Parrot repo
       * The Parrot repo is the base stack for the Merlin stack.  All images in the Merlin stack are built from images
@@ -71,17 +72,14 @@
     * Merlin Repo
       * Clone the Merlin repo next to the Parrot repo.
       * Edit or create a new deployment json file. <Link to json editing instructions>
-      * 
     * Firmament install
       * NodeJs install
-      * sudo npm install firmament
+      * sudo npm install -g firmament
       * firmament module i --name docker
-      * firmament module i --name docker-machine
       * If you do not have access to the internet you will need to install Firmament on a computer connected to the
       internet and package it up to be moved to the target system.  Once you have installed Firmament you can use it
       to make a packaged version of itself by running "firmament package tar".  This will create a tar.gz file containing
       the entirety of the firmament application with all dependencies.
-    * 
   
   ### Ensure NFS mounts are available and match the Firmament File
     * "hadoop-datavolume": /merlin-lts\
@@ -91,7 +89,7 @@
       "elasticsearch1": /merlin-lts/db/es2\
       "elasticsearch2": /merlin-lts/db/es3\
       "uploads": /merlin-lts/uploads\
-      "nifi-datavolume": /nifi/data\
+      "nifi-datavolume": /nifi/data
       
     * Directory structure
       * The directory structure should all be chowned to 907:907
@@ -183,5 +181,4 @@
   *  An easier way to begin an ingestion is to go to the dataset page at [any node ip]:3000.  Find the dataset you are 
   wanting to ingest or re-ingest and press the "Process Dataset" button.  The state will move to queued as the system 
   starts up and will eventually move to processing and then processed.
-  
-   
+
