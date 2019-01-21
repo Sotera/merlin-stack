@@ -112,7 +112,10 @@ It is recommended that you create and start a linux **Build Server** VM on the t
 Complete the following steps within the Build Server VM:
 
 [ ] Install Docker version 18.03 
-    **Note:** There have been issues with newer versions of Docker CE that have broken the stack.  To avoid these you should download and install only Docker CE 18.03.  **Note:** doing an apt-get update can inadvertantly update your Docker version which will break things.
+    **Note:** There have been issues with newer versions of Docker CE that have broken the stack.  To avoid these you should download and install only Docker CE 18.03.  **Note:** doing an apt-get update can inadvertantly update your Docker version which will break things. You will need to add your user to the Docker group using the following command, replacing $USER with your username
+        ```
+        sudo usermod -aG docker $USER
+        ```
 
 [ ] Copy/Clone Parrot and Merlin Repos 
     - The Parrot repo is the base stack for the Merlin stack.  All images in the Merlin stack are built from images build in the Parrot repo.
