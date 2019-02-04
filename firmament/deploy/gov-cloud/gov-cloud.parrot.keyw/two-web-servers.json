@@ -1,0 +1,101 @@
+{
+  "stackName": "webserver-test2",
+  "clusterPrefix": "webserver-test2-cp",
+  "defaultDockerRegistry": "172.31.17.218:5000",
+  "defaultDockerImageTag": "0.08.06",
+  "traefikZoneName": "score.keyw",
+  "dockerMachineDriverOptions": {
+    "driver": "amazonec2",
+    "engineInsecureRegistry": "172.31.17.218:5000"
+  },
+  "dockerMachines": {
+    "common": {
+      "amazonec2-endpoint": "ec2.us-gov-west-1.amazonaws.com",
+      "amazonec2-security-group": "docker-machine",
+      "amazonec2-ami": "ami-e18de080",
+      "amazonec2-root-size": "64",
+      "amazonec2-vpc-id": "vpc-5af7c03f",
+      "amazonec2-subnet-id": "subnet-b3fd29d7",
+      "amazonec2-region": "us-gov-west-1",
+      "amazonec2-zone": "us-gov-west-1a",
+      "amazonec2-use-private-address": true
+    },
+    "manager": {
+      "nodeCount": 1,
+      "nodeName": "managerNode",
+      "amazonec2-instance-type": "t2.large",
+      "engineLabels": {
+        "role": "manager"
+      }
+    },
+    "workers": [
+      {
+        "nodeCount": 1,
+        "nodeName": "workerNode",
+        "amazonec2-instance-type": "t2.large",
+        "engineLabels": {
+          "role": "worker",
+          "affinity": "webserverNode"
+        }
+      }
+    ]
+  },
+  "nfsConfig": {
+    "nfsUser": "jreeme",
+    "nfsPassword": "password",
+    "exportBaseDir": "/nfs-public/parrot-scif",
+    "serverAddr": "nfs.parrot-scif.keyw",
+    "options": "rw,proto=tcp,async,soft,nolock"
+  },
+  "dockerComposeYaml": {
+    "version": "3.6",
+    "networks": {
+      "net": null
+    },
+    "configs": {
+    },
+    "volumes": {
+    },
+    "services": {
+      "web-server0": {
+        "image": "web-server",
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          }
+        },
+        "ports": [
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "web-server1": {
+        "image": "web-server",
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==worker"
+            ]
+          }
+        },
+        "ports": [
+        ],
+        "networks": [
+          "net"
+        ]
+      }
+    }
+  }
+}
+
