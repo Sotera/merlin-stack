@@ -1,0 +1,806 @@
+
+{
+  "stackName":"merlin",
+  "clusterPrefix": "merlin-local",
+  "defaultDockerRegistry": "52.0.211.45:5000",
+  "defaultDockerImageTag": "0.08.06",
+  "traefikZoneName": "vbox.keyw",
+  "dockerMachineDriverOptions": {
+    "engineInsecureRegistry": "52.0.211.45:5000",
+    "driver": "virtualbox"
+  },
+  "dockerMachines": {
+    "common": {
+      "virtualboxBoot2dockerUrl": "https://s3.amazonaws.com/merlin-jreeme/boot2docker.iso"
+    },
+    "manager": {
+      "nodeCount": 1,
+      "nodeName": "local-master",
+      "virtualboxCpuCount": 2,
+      "virtualboxMemory": 16384,
+      "engineLabels": {
+        "role": "manager"
+      }
+    },
+    "workers": []
+  },
+  "nfsConfig": {
+    "nfsUser": "nfs",
+    "nfsPassword": "password",
+    "serverAddr": "<LOCAL MACHINE IP>",
+    "exportBaseDir": "/nfs-public/merlin-local",
+    "options": "rw,proto=tcp,async,soft,nolock"
+  },
+  "dockerComposeYaml": {
+    "version": "3.6",
+    "networks": {
+      "net": null
+    },
+    "configs": {
+      "amino3-remote-etl-call-config": {
+        "file": "../../config/remote-etl-call.json"
+      },
+      "nginx-kibana-config": {
+        "file": "../../config/nginx-kibana.conf"
+      },
+      "nginx-elasticsearch-config": {
+        "file": "../../config/nginx-elasticsearch.conf"
+      },
+      "nginx-elasticsearch-head-config": {
+        "file": "../../config/nginx-elasticsearch-head.conf"
+      },
+      "nginx-pgadmin4-config": {
+        "file": "../../config/nginx-pgadmin4.conf"
+      },
+      "nginx-amino3-merlin-config": {
+        "file": "../../config/nginx-amino3-merlin.conf"
+      },
+      "nginx-namenode-config": {
+        "file": "../../config/nginx-namenode.conf"
+      },
+      "nginx-staging-config": {
+        "file": "../../config/nginx-staging.conf"
+      },
+      "nginx-hdfs-config": {
+        "file": "../../config/nginx-hdfs.conf"
+      },
+      "traefik-config": {
+        "file": "../../config/traefik.toml"
+      },
+      "spark-defaults-config": {
+        "file": "../../config/spark-defaults.conf"
+      },
+      "elasticsearch-log4j2-config": {
+        "file": "../../config/log4j2.properties"
+      },
+      "elasticsearch-jvm-config": {
+        "file": "../../config/jvm-vbox.options"
+      },
+      "elasticsearch-yml-config": {
+        "file": "../../config/elasticsearch.yml"
+      },
+      "nginx-config": {
+        "file": "../../config/nginx.conf"
+      },
+      "nginx-newman-config": {
+        "file": "../../config/nginx-newman.conf"
+      }
+    },
+    "volumes": {
+      "hadoop-datavolume": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs"
+        }
+      },
+      "hadoop-logvolume": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs"
+        }
+      },
+      "uploads": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs"
+        }
+      },
+      "postgres": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs"
+        }
+      },
+      "elasticsearch0": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs"
+        }
+      },
+      "elasticsearch1": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs"
+        }
+      },
+      "elasticsearch2": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs"
+        }
+      },
+      "nifi-datavolume": {
+        "driver": "local",
+        "driver_opts": {
+          "type": "nfs"
+        }
+      }
+    },
+    "services": {
+      "pgadmin4": {
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          },
+          "labels": [
+            "traefik.port=5050"
+          ]
+        },
+        "networks": [
+          "net"
+        ]
+      },
+      "postgres": {
+        "environment": [
+          "POSTGRES_PASSWORD=password"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          }
+        },
+        "ports": [
+          "5432:5432"
+        ],
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "postgres",
+            "target": "/var/lib/postgresql/data",
+            "volume": {
+              "nocopy": true
+            }
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "amino3-merlin": {
+        "configs": [
+          {
+            "source": "amino3-remote-etl-call-config",
+            "target": "/src/server-dist/firmament-bash/remote-etl-call.json"
+          }
+        ],
+        "environment": [
+          "AMINO3_REPLACE_BAD_DATA_SOURCE_WITH_MEMORY_DATA_SOURCE=false"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          },
+          "labels": [
+            "traefik.port=3000",
+            "traefik.backend.loadbalancer.stickiness=true"
+          ]
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "uploads",
+            "target": "/mnt/data"
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "traefik": {
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "volumes": [
+          {
+            "type": "bind",
+            "source": "/var/run/docker.sock",
+            "target": "/var/run/docker.sock"
+          }
+        ],
+        "configs": [
+          {
+            "source": "traefik-config",
+            "target": "/etc/traefik/traefik.toml"
+          }
+        ],
+        "ports": [
+          "80:80",
+          "8080:8080"
+        ],
+        "networks": [
+          "net"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=false"
+          ]
+        }
+      },
+      "elasticsearch-head": {
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          },
+          "labels": [
+            "traefik.port=9100"
+          ]
+        },
+        "networks": [
+          "net"
+        ]
+      },
+      "elasticsearch": {
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          },
+          "labels": [
+            "traefik.port=9200"
+          ]
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "elasticsearch0",
+            "target": "/usr/share/elasticsearch/data",
+            "volume": {
+              "nocopy": true
+            }
+          }
+        ],
+        "configs": [
+          {
+            "source": "elasticsearch-yml-config",
+            "target": "/usr/share/elasticsearch/config/elasticsearch.yml"
+          },
+          {
+            "source": "elasticsearch-jvm-config",
+            "target": "/usr/share/elasticsearch/config/jvm.options"
+          },
+          {
+            "source": "elasticsearch-log4j2-config",
+            "target": "/usr/share/elasticsearch/config/log4j2.properties"
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "elasticsearch1": {
+        "image": "elasticsearch",
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          }
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "elasticsearch1",
+            "target": "/usr/share/elasticsearch/data",
+            "volume": {
+              "nocopy": true
+            }
+          }
+        ],
+        "configs": [
+          {
+            "source": "elasticsearch-yml-config",
+            "target": "/usr/share/elasticsearch/config/elasticsearch.yml"
+          },
+          {
+            "source": "elasticsearch-jvm-config",
+            "target": "/usr/share/elasticsearch/config/jvm.options"
+          },
+          {
+            "source": "elasticsearch-log4j2-config",
+            "target": "/usr/share/elasticsearch/config/log4j2.properties"
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "elasticsearch2": {
+        "image": "elasticsearch",
+        "environment": [
+          "HOPE=SpringsEternal"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          }
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "elasticsearch2",
+            "target": "/usr/share/elasticsearch/data",
+            "volume": {
+              "nocopy": true
+            }
+          }
+        ],
+        "configs": [
+          {
+            "source": "elasticsearch-yml-config",
+            "target": "/usr/share/elasticsearch/config/elasticsearch.yml"
+          },
+          {
+            "source": "elasticsearch-jvm-config",
+            "target": "/usr/share/elasticsearch/config/jvm.options"
+          },
+          {
+            "source": "elasticsearch-log4j2-config",
+            "target": "/usr/share/elasticsearch/config/log4j2.properties"
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "namenode": {
+        "image": "hadoop",
+        "environment": [
+          "HADOOP_MACHINE_ROLE=namenode"
+        ],
+        "configs": [
+          {
+            "source": "spark-defaults-config",
+            "target": "/usr/local/spark/conf/spark-defaults.conf"
+          }
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=true",
+            "traefik.namenode.port=8088",
+            "traefik.namenode.frontend.rule=Host:namenode.vbox.keyw",
+            "traefik.hdfs.port=50070",
+            "traefik.hdfs.frontend.rule=Host:hdfs.vbox.keyw"
+          ]
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "hadoop-datavolume",
+            "target": "/mnt/merlin",
+            "volume": {
+              "nocopy": true
+            }
+          },
+          {
+            "type": "volume",
+            "source": "hadoop-logvolume",
+            "target": "/mnt/logs",
+            "volume": {
+              "nocopy": true
+            }
+          },
+          {
+            "type": "volume",
+            "source": "uploads",
+            "target": "/mnt/data"
+          },
+          {
+            "type": "volume",
+            "source": "nifi-datavolume",
+            "target": "/mnt/nifi/data/"
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "datanode": {
+        "image": "hadoop",
+        "environment": [
+          "HADOOP_MACHINE_ROLE=datanode"
+        ],
+        "configs": [
+          {
+            "source": "spark-defaults-config",
+            "target": "/usr/local/spark/conf/spark-defaults.conf"
+          }
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=false"
+          ]
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "hadoop-datavolume",
+            "target": "/mnt/merlin",
+            "volume": {
+              "nocopy": true
+            }
+          },
+          {
+            "type": "volume",
+            "source": "hadoop-logvolume",
+            "target": "/mnt/logs",
+            "volume": {
+              "nocopy": true
+            }
+          },
+          {
+            "type": "volume",
+            "source": "uploads",
+            "target": "/mnt/data"
+          },
+          {
+            "type": "volume",
+            "source": "nifi-datavolume",
+            "target": "/mnt/nifi/data/"
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "sparkworker": {
+        "image": "hadoop",
+        "environment": [
+          "HADOOP_MACHINE_ROLE=sparkworker"
+        ],
+        "configs": [
+          {
+            "source": "spark-defaults-config",
+            "target": "/usr/local/spark/conf/spark-defaults.conf"
+          }
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          },
+          "labels": [
+            "traefik.enable=false"
+          ]
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "hadoop-datavolume",
+            "target": "/mnt/merlin",
+            "volume": {
+              "nocopy": true
+            }
+          },
+          {
+            "type": "volume",
+            "source": "hadoop-logvolume",
+            "target": "/mnt/logs",
+            "volume": {
+              "nocopy": true
+            }
+          },
+          {
+            "type": "volume",
+            "source": "uploads",
+            "target": "/mnt/data"
+          },
+          {
+            "type": "volume",
+            "source": "nifi-datavolume",
+            "target": "/mnt/nifi/data/"
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "stagingserver": {
+        "image": "hadoop",
+        "environment": [
+          "HADOOP_MACHINE_ROLE=stagingserver"
+        ],
+        "configs": [
+          {
+            "source": "spark-defaults-config",
+            "target": "/usr/local/spark/conf/spark-defaults.conf"
+          }
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          },
+          "labels": [
+            "traefik.jupyter.port=9999",
+            "traefik.jupyter.frontend.rule=Host:jupyter.vbox.keyw",
+            "traefik.jupyter.backend.loadbalancer.stickiness=true",
+            "traefik.sparkui.port=4040",
+            "traefik.sparkui.frontend.rule=Host:sparkui.vbox.keyw",
+            "traefik.sparkui.backend.loadbalancer.stickiness=true"
+
+          ]
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "hadoop-datavolume",
+            "target": "/mnt/merlin",
+            "volume": {
+              "nocopy": true
+            }
+          },
+          {
+            "type": "volume",
+            "source": "hadoop-logvolume",
+            "target": "/mnt/logs",
+            "volume": {
+              "nocopy": true
+            }
+          },
+          {
+            "type": "volume",
+            "source": "uploads",
+            "target": "/mnt/data"
+          },
+          {
+            "type": "volume",
+            "source": "nifi-datavolume",
+            "target": "/mnt/nifi/data/"
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "nifi": {
+        "environment": [
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          }
+        },
+        "volumes": [
+          {
+            "type": "volume",
+            "source": "nifi-datavolume",
+            "target": "/home/nifi/data/",
+            "volume": {
+              "nocopy": false
+            }
+          }
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "kibana": {
+        "environment": [
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          },
+          "labels": [
+            "traefik.port=5601"
+          ]
+        },
+        "networks": [
+          "net"
+        ]
+      },
+      "nginx": {
+        "configs": [
+          {
+            "source": "nginx-newman-config",
+            "target": "/etc/nginx/conf.d/nginx-newman.conf"
+          },
+          {
+            "source": "nginx-staging-config",
+            "target": "/etc/nginx/conf.d/nginx-staging.conf"
+          },
+          {
+            "source": "nginx-amino3-merlin-config",
+            "target": "/etc/nginx/conf.d/nginx-amino3-merlin.conf"
+          },
+          {
+            "source": "nginx-elasticsearch-head-config",
+            "target": "/etc/nginx/conf.d/nginx-elasticsearch-head.conf"
+          },
+          {
+            "source": "nginx-elasticsearch-config",
+            "target": "/etc/nginx/conf.d/nginx-elasticsearch.conf"
+          },
+          {
+            "source": "nginx-hdfs-config",
+            "target": "/etc/nginx/conf.d/nginx-hdfs.conf"
+          },
+          {
+            "source": "nginx-namenode-config",
+            "target": "/etc/nginx/conf.d/nginx-namenode.conf"
+          },
+          {
+            "source": "nginx-pgadmin4-config",
+            "target": "/etc/nginx/conf.d/nginx-pgadmin4.conf"
+          },
+          {
+            "source": "nginx-kibana-config",
+            "target": "/etc/nginx/conf.d/nginx-kibana.conf"
+          },
+          {
+            "source": "nginx-config",
+            "target": "/etc/nginx/nginx.conf"
+          }
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          }
+        },
+        "ports": [
+          "9200:9200",
+          "9100:9100",
+          "3000:3000",
+          "8088:8088",
+          "50070:50070",
+          "5050:5050",
+          "4040:4040",
+          "9999:9999",
+          "5601:5601",
+          "5000:5000"
+        ],
+        "networks": [
+          "net"
+        ]
+      },
+      "newman": {
+        "environment": [
+          "DEFAULT_USER=elasticsearch"
+        ],
+        "deploy": {
+          "replicas": 1,
+          "restart_policy": {
+            "condition": "on-failure"
+          },
+          "placement": {
+            "constraints": [
+              "engine.labels.role==manager"
+            ]
+          },
+          "labels": [
+            "traefik.port=5000"
+          ]
+        },
+        "networks": [
+          "net"
+        ]
+      }
+    }
+  }
+}

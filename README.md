@@ -4,6 +4,8 @@ Spark stack tailored your specific hardware or cloud resources with a minimum of
 
 The Parrot-Stack utilizes Firmament, an application we've developed that uses json files to deploy services that comprise our stack.
 
+See the Parrot-Stack readme for more details
+
 # Stack Pre-requisites
 The stack in its current form requires:
 * a Hypervisor (Vsphere, Virtualbox, AWS EC2, Openstack)
@@ -230,7 +232,9 @@ Once you have Firmament installed and the parrot-stack and merlin-stack repos av
   ### Manual data positioning (file copy) - Large datasets
   * To manually position data for ingest, copy or place the data files in a folder in the **/[nfs mount]/merlin/merlin-etl/data directory**
   * Once you have data positioned, use the **Merlin Data API Explorer (Web UI)** to add the relative path to the **file array** property of the dataset.  Relative pathing should follow the following format **/mnt/merlin/merlin-etl/data/[your file or folder]**.
-  **Note:** All containers have the NFS directory mounted at **/mnt/merlin/...**.  Any data placed in these folders will be shared by all containers.  
+  
+  **Note:** All containers have the NFS directory mounted at **/mnt/merlin/...**.  Any data placed in these folders will be shared by all containers that mount the NFS share.  
+
   * Typically this method of data positioning is reserved for very large datasets.  Smaller datasets should be uploaded
   via the **Merlin ETL Dashboard**.
   
