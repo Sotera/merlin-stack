@@ -17,7 +17,7 @@
       "nodeCount": 1,
       "nodeName": "local-master",
       "virtualboxCpuCount": 2,
-      "virtualboxMemory": 16384,
+      "virtualboxMemory": 32768,
       "engineLabels": {
         "role": "manager"
       }
