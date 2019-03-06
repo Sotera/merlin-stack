@@ -17,7 +17,7 @@
       "nodeCount": 1,
       "nodeName": "local-master",
       "virtualboxCpuCount": 2,
-      "virtualboxMemory": 32768,
+      "virtualboxMemory": 16384,
       "engineLabels": {
         "role": "manager"
       }
@@ -27,7 +27,7 @@
   "nfsConfig": {
     "nfsUser": "nfs",
     "nfsPassword": "password",
-    "serverAddr": "<LOCAL MACHINE IP>",
+    "serverAddr": "192.168.104.40",
     "exportBaseDir": "/nfs-public/merlin-local",
     "options": "rw,proto=tcp,async,soft,nolock"
   },
