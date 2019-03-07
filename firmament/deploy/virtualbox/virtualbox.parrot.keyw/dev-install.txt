@@ -1,19 +1,20 @@
-mkdir src
-cd src
-sudo apt-get install git
-git clone https://github.com/Sotera/parrot-stack.git
-git clone https://github.com/Sotera/merlin-stack.git
-cd parrot-stack/ubunt-cloud-init
+# run the provided config shell script also located in parrot-stack/ubunt-cloud-init
 ./_config.sh
 
-exit terminal
+mkdir src
+cd src
+git clone https://github.com/Sotera/parrot-stack.git
+git clone https://github.com/Sotera/merlin-stack.git
+
+#exit terminal
+#start terminal
 
 cd /
 sudo su
 mkdir nfs-public
 cd nfs-public
-cp merlin folder structure tar .
-mv merlin806 merlin-local
+cp /path-to/merlin_folder_structure.tar.gz .
+tar -xvf merlin_folder_structure.tar.gz
 chown -R 907:907 merlin-local
 
 cd ~/src/merlin-stack/firmament/deploy/virtualbox/virtualbox.parrot.keyw
