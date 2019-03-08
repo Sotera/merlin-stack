@@ -16,6 +16,8 @@ cd nfs-public
 cp /path-to/merlin_folder_structure.tar.gz .
 tar -xvf merlin_folder_structure.tar.gz
 chown -R 907:907 merlin-local
+exit
 
 cd ~/src/merlin-stack/firmament/deploy/virtualbox/virtualbox.parrot.keyw
+#open virtualbox-dev-v0-08-06.json and place your machines IP in the nfs config "serverAddr" field
 f p b -i virtualbox-dev-v0-08-06.json
