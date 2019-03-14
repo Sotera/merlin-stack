@@ -4,7 +4,7 @@
   "clusterPrefix": "merlin-local",
   "hostMachineDnsServer": "192.168.104.55",
   "defaultDockerRegistry": "52.0.211.45:5000",
-  "defaultDockerImageTag": "0.08.06",
+  "defaultDockerImageTag": "0.08.07",
   "traefikZoneName": "vbox.keyw",
   "dockerMachineDriverOptions": {
     "engineInsecureRegistry": "52.0.211.45:5000",
@@ -28,7 +28,7 @@
   "nfsConfig": {
     "nfsUser": "",
     "nfsPassword": "",
-    "serverAddr": "192.168.104.32",
+    "serverAddr": "192.168.104.117",
     "exportBaseDir": "/var/nfs/merlin802",
     "options": "rw,proto=tcp,async,soft,nolock"
   },
