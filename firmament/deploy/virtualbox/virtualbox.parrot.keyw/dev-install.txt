@@ -1,12 +1,16 @@
 # run the provided config shell script also located in parrot-stack/ubunt-cloud-init
 ./_config.sh
 
-#Deploy A Docker Repo From A TAR Archive file
-#Copy the TAR archive to the '/tmp' directory on the machine that is to become the docker-registry host
+# Deploy A Docker Repo From A TAR Archive file
+# Copy the provided TAR archive to the '/tmp' directory or create one via the instructions here:
+# https://github.com/Sotera/parrot-stack/tree/master/build-docker-repo-image on the machine that
+# is to become the docker-registry host
+
+# Load the docker registry image into the local Docker image store
 docker load < /tmp/parrot-stack-docker-registry.tar.gz
 
 #Start a docker-registry container from the loaded image using the 'docker run' command and list it using 'docker ps'
-docker run -dt --name docker-registry -h docker-registry -p 5000:5000 localhost/docker-registry:0.08.06
+docker run -dt --name docker-registry -h docker-registry -p 5000:5000 localhost/docker-registry-actual:0.08.06
 
 mkdir src
 cd src
