@@ -1,5 +1,5 @@
 # merlin-stack
-The **merlin-stack** is based upon KeyW's Parrot-Stack, a portable Spark environment. It enables you to quickly deploy a
+The **merlin-stack** is based upon KeyW's Parrot-Stack (now Jacobs Engineering), a portable Spark environment. It enables you to quickly deploy a
 Spark stack tailored your specific hardware or cloud resources with a minimum of DevOps experience or resources.
 
 The Parrot-Stack utilizes Firmament, an application we've developed that uses json files to deploy services that comprise our stack.
